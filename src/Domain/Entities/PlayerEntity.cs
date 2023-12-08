@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Exceptions;
 
 namespace Domain.Entities
 {
@@ -19,7 +20,7 @@ namespace Domain.Entities
             var cardPlayer = CardPlayers.SingleOrDefault(cardPlayer => cardPlayer.Card.Name == featureName);
 
             if (cardPlayer == default)
-                throw new Exception("Card not found.");
+                throw new CardNotFoundException();
 
             CardPlayers.Remove(cardPlayer);
 

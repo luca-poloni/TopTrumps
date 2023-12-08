@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Exceptions;
 
 namespace Domain.Entities
 {
@@ -11,12 +12,42 @@ namespace Domain.Entities
 
         public CardPlayerEntity WinnerCard(string featureName)
         {
-            var winnerCard = CardPlayerRounds.MaxBy(card => card?.CardPlayer?.Card?.Features.SingleOrDefault(feature => feature.Name == featureName)?.Value);
+            var winnerCardPlayer = default(CardPlayerEntity);
+            var winnerFeature = default(FeatureEntity);
 
-            if (winnerCard == default)
-                throw new Exception("Has no winner card.");
+            foreach (var cardPlayerRound in CardPlayerRounds)
+            {
+                var feature = GetCardFeature(cardPlayerRound, featureName);
 
-            return winnerCard.CardPlayer;
+                if (feature == default)
+                    continue;
+
+                if (GetWinnerFeature(winnerFeature, feature))
+                {
+                    winnerFeature = feature;
+                    winnerCardPlayer = cardPlayerRound.CardPlayer;
+                }
+            }
+
+            if (winnerCardPlayer == default || winnerFeature  == default || HasMoreThanOneWinnerCard(winnerFeature))
+                throw new HasNoWinnerCardException();
+
+            return winnerCardPlayer;
+        }
+
+        private static FeatureEntity? GetCardFeature(CardPlayerRoundEntity cardPlayerRound, string featureName)
+        {
+            return cardPlayerRound?.CardPlayer?.Card?.Features.SingleOrDefault(feature => feature.Name == featureName);
+        }
+
+        private static bool GetWinnerFeature(FeatureEntity? winnerFeature, FeatureEntity feature)
+        {
+            return feature.Value != default && (winnerFeature == default || winnerFeature.Value < feature.Value);
+        }
+
+        private bool HasMoreThanOneWinnerCard(FeatureEntity winnerFeature)
+        {
+            return CardPlayerRounds.Count(card => card?.CardPlayer?.Card?.Features.SingleOrDefault(feature => feature.Value == winnerFeature.Value)?.Value > 1) > 1;
         }
     }
 }
