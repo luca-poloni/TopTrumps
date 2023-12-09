@@ -11,18 +11,19 @@ namespace Domain.UnitTests.Entities
         public void GiveCard_Should_NotThrowException()
         {
             #region Arrange
-            var cardName = "Card One";
             var playerMock = new Mock<PlayerEntity>();
-            var cardPlayers = new List<CardPlayerEntity> { new() { Card = new() { Name = cardName } } };
-            playerMock.Setup(x => x.CardPlayers).Returns(cardPlayers);
+            var cardMock = Mock.Of<CardEntity>(x => x.Name == "Card One");
+            var cardPlayerMock = Mock.Of<CardPlayerEntity>(x => x.Card == cardMock && x.Player == playerMock.Object);
+            var cardPlayersMock = new List<CardPlayerEntity> { cardPlayerMock };
+            playerMock.Setup(x => x.CardPlayers).Returns(cardPlayersMock);
             #endregion
 
             #region Action
-            var action = () => { playerMock.Object.GiveCard(cardName); };
+            var action = () => { playerMock.Object.GiveCard("Card One"); };
             #endregion
 
             #region Assert
-            action.Should().NotThrow<CardNotFoundException>(); 
+            action.Should().NotThrow<CardNotFoundException>();
             #endregion
         }
 
@@ -31,8 +32,10 @@ namespace Domain.UnitTests.Entities
         {
             #region Arrange
             var playerMock = new Mock<PlayerEntity>();
-            var cardPlayers = new List<CardPlayerEntity> { new() { Card = new() { Name = "Card One" } } };
-            playerMock.Setup(x => x.CardPlayers).Returns(cardPlayers);
+            var cardMock = Mock.Of<CardEntity>(x => x.Name == "Card One");
+            var cardPlayerMock = Mock.Of<CardPlayerEntity>(x => x.Card == cardMock && x.Player == playerMock.Object);
+            var cardPlayersMock = new List<CardPlayerEntity> { cardPlayerMock };
+            playerMock.Setup(x => x.CardPlayers).Returns(cardPlayersMock);
             #endregion
 
             #region Action
