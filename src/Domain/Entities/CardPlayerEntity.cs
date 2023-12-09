@@ -8,6 +8,5 @@ namespace Domain.Entities
         public uint PlayerId { get; set; }
         public virtual CardEntity Card { get; set; } = null!;
         public virtual PlayerEntity Player { get; set; } = null!;
-        public virtual ICollection<CardPlayerRoundEntity> CardPlayerRounds { get; set; } = new List<CardPlayerRoundEntity>();
     }
 }

@@ -8,7 +8,7 @@ namespace Domain.Entities
         public uint MatchId { get; set; }
         public string Name { get; set; } = null!;
         public virtual MatchEntity Match { get; set; } = null!;
-        public virtual ICollection<CardPlayerEntity> CardPlayers { get; set; } = new List<CardPlayerEntity>();
+        public virtual List<CardPlayerEntity> CardPlayers { get; set; } = new List<CardPlayerEntity>();
 
         public bool IsAvailable()
         {
@@ -27,7 +27,7 @@ namespace Domain.Entities
             return cardPlayer;
         }
 
-        public void TakeCards(ICollection<CardPlayerEntity> cardPlayers)
+        public void TakeCards(List<CardPlayerEntity> cardPlayers)
         {
             foreach (var cardPlayer in cardPlayers)
                 CardPlayers.Add(cardPlayer);
