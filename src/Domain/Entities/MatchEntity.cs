@@ -27,7 +27,7 @@ namespace Domain.Entities
 
         private List<CardEntity> GetShuffledCards()
         {
-            return [.. Game.Cards.OrderBy(card => Guid.NewGuid())];
+            return [.. Game.Cards.OrderBy(card => CardEntity.GetShuffledCards())];
         }
 
         private int CountPlayerCards(List<CardEntity> shuffledCards)

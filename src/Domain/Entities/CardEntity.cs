@@ -11,5 +11,20 @@ namespace Domain.Entities
         public virtual GameEntity Game { get; set; } = null!;
         public virtual List<CardPlayerEntity> CardPlayers { get; set; } = new List<CardPlayerEntity>();
         public virtual List<FeatureEntity> Features { get; set; } = new List<FeatureEntity>();
+
+        public FeatureEntity? GetFeature(string featureName)
+        {
+            return Features.SingleOrDefault(feature => feature.Name == featureName);
+        }
+
+        public FeatureEntity? GetWinnerFeatureByValue(sbyte value)
+        {
+            return Features.SingleOrDefault(feature => feature.Value == value);
+        } 
+
+        public static Guid GetShuffledCards()
+        {
+            return Guid.NewGuid();
+        }
     }
 }
