@@ -47,14 +47,20 @@ namespace Domain.UnitTests.Entities
         {
             #region Arrange
             var playerMock = new PlayerEntity();
-            var cardMock = new CardEntity() { Name = "Card One" };
+            var cardMock = new CardEntity() 
+            { 
+                Features =
+                [
+                    new FeatureEntity { Name = "Feature One" } 
+                ] 
+            };
             var cardPlayerMock = new CardPlayerEntity { Card = cardMock, Player = playerMock };
             var cardPlayersMock = new List<CardPlayerEntity> { cardPlayerMock };
             playerMock.CardPlayers = cardPlayersMock;
             #endregion
 
             #region Action
-            var cardPlayer = playerMock.GiveCard("Card One");
+            var cardPlayer = playerMock.GiveCard("Feature One");
             #endregion
 
             #region Assert
@@ -67,14 +73,20 @@ namespace Domain.UnitTests.Entities
         {
             #region Arrange
             var playerMock = new PlayerEntity();
-            var cardMock = new CardEntity() { Name = "Card One" };
+            var cardMock = new CardEntity()
+            {
+                Features =
+               [
+                   new FeatureEntity { Name = "Feature One" }
+               ]
+            };
             var cardPlayerMock = new CardPlayerEntity { Card = cardMock, Player = playerMock };
             var cardPlayersMock = new List<CardPlayerEntity> { cardPlayerMock };
             playerMock.CardPlayers = cardPlayersMock;
             #endregion
 
             #region Action
-            var action = () => { playerMock.GiveCard("Card Two"); };
+            var action = () => { playerMock.GiveCard("Feature Two"); };
             #endregion
 
             #region Assert
