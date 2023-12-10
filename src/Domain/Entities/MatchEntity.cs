@@ -34,7 +34,7 @@ namespace Domain.Entities
         {
             var cardsForPlayer = shuffledCards.Take(cardsPerPlayer)?.ToList();
 
-            if (cardsForPlayer == default || !cardsForPlayer.Any())
+            if (cardsForPlayer == default || cardsForPlayer.Count == 0)
                 throw new CardsForPlayerNotFoundException();
 
             return cardsForPlayer;
@@ -47,7 +47,7 @@ namespace Domain.Entities
             foreach (var card in cardsForPlayer)
                 playerCards.Add(new CardPlayerEntity { Card = card, Player = player });
 
-            if (playerCards == default || !playerCards.Any())
+            if (playerCards == default || playerCards.Count == 0)
                 throw new PlayerCardsNotFoundException();
 
             return playerCards;

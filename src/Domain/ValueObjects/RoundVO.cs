@@ -3,14 +3,9 @@ using Domain.Exceptions;
 
 namespace Domain.ValueObjects
 {
-    public class RoundVO
+    public class RoundVO(List<CardPlayerEntity> cardPlayers)
     {
-        private readonly List<CardPlayerEntity> _cardPlayers;
-
-        public RoundVO(List<CardPlayerEntity> cardPlayers)
-        {
-            _cardPlayers = cardPlayers;
-        }
+        private readonly List<CardPlayerEntity> _cardPlayers = cardPlayers;
 
         public CardPlayerEntity WinnerCard(string featureName)
         {

@@ -9,8 +9,8 @@ namespace Domain.Entities
         public byte[] Image { get; set; } = null!;
         public bool IsTopTrumps { get; set; }
         public virtual GameEntity Game { get; set; } = null!;
-        public virtual List<CardPlayerEntity> CardPlayers { get; set; } = new List<CardPlayerEntity>();
-        public virtual List<FeatureEntity> Features { get; set; } = new List<FeatureEntity>();
+        public virtual List<CardPlayerEntity> CardPlayers { get; set; } = [];
+        public virtual List<FeatureEntity> Features { get; set; } = [];
 
         public FeatureEntity? FeatureByName(string featureName)
         {

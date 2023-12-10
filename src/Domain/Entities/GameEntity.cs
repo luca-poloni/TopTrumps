@@ -4,8 +4,8 @@ namespace Domain.Entities
 {
     public class GameEntity : BaseEntity<uint>
     {
-        public virtual List<CardEntity> Cards { get; set; } = new List<CardEntity>();
-        public virtual List<MatchEntity> Matches { get; set; } = new List<MatchEntity>();
+        public virtual List<CardEntity> Cards { get; set; } = [];
+        public virtual List<MatchEntity> Matches { get; set; } = [];
 
         public List<CardEntity> ShuffledCards()
         {

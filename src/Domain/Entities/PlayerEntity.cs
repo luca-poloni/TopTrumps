@@ -8,11 +8,11 @@ namespace Domain.Entities
         public uint MatchId { get; set; }
         public string Name { get; set; } = null!;
         public virtual MatchEntity Match { get; set; } = null!;
-        public virtual List<CardPlayerEntity> CardPlayers { get; set; } = new List<CardPlayerEntity>();
+        public virtual List<CardPlayerEntity> CardPlayers { get; set; } = [];
 
         public bool IsAvailable()
         {
-            return CardPlayers.Any();
+            return CardPlayers.Count != 0;
         }
 
         public CardPlayerEntity GiveCard(string featureName)
