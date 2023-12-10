@@ -17,7 +17,7 @@ namespace Domain.Entities
 
         public CardPlayerEntity GiveCard(string featureName)
         {
-            var cardPlayer = CardPlayers.SingleOrDefault(cardPlayer => cardPlayer.Card.Name == featureName);
+            var cardPlayer = CardPlayers.SingleOrDefault(cardPlayer => cardPlayer.Card.FeatureByName(featureName) != default);
 
             if (cardPlayer == default)
                 throw new CardNotFoundException();
