@@ -6,5 +6,10 @@ namespace Domain.Entities
     {
         public virtual List<CardEntity> Cards { get; set; } = new List<CardEntity>();
         public virtual List<MatchEntity> Matches { get; set; } = new List<MatchEntity>();
+
+        public List<CardEntity> GetShuffledCards()
+        {
+            return [.. Cards.OrderBy(card => Guid.NewGuid())];
+        }
     }
 }

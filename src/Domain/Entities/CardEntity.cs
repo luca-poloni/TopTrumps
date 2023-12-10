@@ -21,10 +21,5 @@ namespace Domain.Entities
         {
             return Features.SingleOrDefault(feature => feature.Value == value);
         } 
-
-        public static Guid GetShuffledCards()
-        {
-            return Guid.NewGuid();
-        }
     }
 }

@@ -12,7 +12,7 @@ namespace Domain.Entities
 
         public void Play()
         {
-            var shuffledCards = GetShuffledCards();
+            var shuffledCards = Game.GetShuffledCards();
             var cardsPerPlayer = CountPlayerCards(shuffledCards);
 
             foreach (var player in Players)
@@ -23,11 +23,6 @@ namespace Domain.Entities
                 player.TakeCards(playerCards);
                 shuffledCards.RemoveAll(cardsForPlayer.Contains);
             }
-        }
-
-        private List<CardEntity> GetShuffledCards()
-        {
-            return [.. Game.Cards.OrderBy(card => CardEntity.GetShuffledCards())];
         }
 
         private int CountPlayerCards(List<CardEntity> shuffledCards)
