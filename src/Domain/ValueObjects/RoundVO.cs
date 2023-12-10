@@ -19,7 +19,7 @@ namespace Domain.ValueObjects
 
             foreach (var cardPlayer in _cardPlayers)
             {
-                var feature = cardPlayer.Card?.GetFeature(featureName);
+                var feature = cardPlayer.Card?.FeatureByName(featureName);
 
                 if (feature == default)
                     continue;
@@ -46,7 +46,7 @@ namespace Domain.ValueObjects
 
             foreach (var cardPlayer in _cardPlayers)
             {
-                var winnerFeatureCard = cardPlayer.Card.GetWinnerFeatureByValue(winnerFeature.Value);
+                var winnerFeatureCard = cardPlayer.Card.WinnerFeatureByValue(winnerFeature.Value);
 
                 if (winnerFeatureCard != default)
                     cardWinnerCount++;

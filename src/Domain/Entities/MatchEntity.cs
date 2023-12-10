@@ -12,13 +12,13 @@ namespace Domain.Entities
 
         public void Play()
         {
-            var shuffledCards = Game.GetShuffledCards();
+            var shuffledCards = Game.ShuffledCards();
             var cardsPerPlayer = CountPlayerCards(shuffledCards);
 
             foreach (var player in Players)
             {
-                var cardsForPlayer = GetCardsForPlayer(shuffledCards, cardsPerPlayer);
-                var playerCards = GetPlayerCards(cardsForPlayer, player);
+                var cardsForPlayer = CardsForPlayer(shuffledCards, cardsPerPlayer);
+                var playerCards = PlayerCards(cardsForPlayer, player);
 
                 player.TakeCards(playerCards);
                 shuffledCards.RemoveAll(cardsForPlayer.Contains);
@@ -30,7 +30,7 @@ namespace Domain.Entities
             return shuffledCards.Count / Players.Count;
         }
 
-        private static List<CardEntity> GetCardsForPlayer(List<CardEntity> shuffledCards, int cardsPerPlayer)
+        private static List<CardEntity> CardsForPlayer(List<CardEntity> shuffledCards, int cardsPerPlayer)
         {
             var cardsForPlayer = shuffledCards.Take(cardsPerPlayer)?.ToList();
 
@@ -40,7 +40,7 @@ namespace Domain.Entities
             return cardsForPlayer;
         }
 
-        private static List<CardPlayerEntity> GetPlayerCards(List<CardEntity> cardsForPlayer, PlayerEntity player)
+        private static List<CardPlayerEntity> PlayerCards(List<CardEntity> cardsForPlayer, PlayerEntity player)
         {
             var playerCards = new List<CardPlayerEntity>();
 
@@ -55,7 +55,7 @@ namespace Domain.Entities
 
         public void Move(string featureName)
         {
-            var availablePlayers = GetAvailablePlayers();
+            var availablePlayers = AvailablePlayers();
             var playerCards = new List<CardPlayerEntity>();
 
             foreach (var player in availablePlayers)
@@ -75,7 +75,7 @@ namespace Domain.Entities
             }
         }
 
-        private List<PlayerEntity> GetAvailablePlayers()
+        private List<PlayerEntity> AvailablePlayers()
         {
             var availablePlayers = Players.Where(player => player.IsAvailable())?.ToList();
 
