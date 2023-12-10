@@ -2,56 +2,105 @@
 using Domain.Exceptions;
 using Domain.ValueObjects;
 using FluentAssertions;
-using Moq;
 
 namespace Domain.UnitTests.ValueObjects
 {
     public class RoundVOTest
     {
         [Fact]
-        public void WinnerCard_Should_NotThrowException()
+        public void WinnerCard_Should_CardPlayer()
         {
             #region Arrange
-            var featureName = "Feature One";
-            var cardPlayers = new List<CardPlayerEntity>
+            var cardPlayersMock = new List<CardPlayerEntity>
             {
-                Mock.Of<CardPlayerEntity>(x=> x.Card.Features == new List<FeatureEntity> 
+                new() 
                 { 
-                    Mock.Of<FeatureEntity>(x=> x.Name == featureName && x.Value == 10) 
-                })
+                    Card = new CardEntity 
+                    { 
+                        Features =
+                        [
+                            new FeatureEntity { Name = "FeatureByName One", Value = 10 } 
+                        ] 
+                    } 
+                }
             };
-            var roundMock = new RoundVO(cardPlayers);
+            var roundMock = new RoundVO(cardPlayersMock);
             #endregion
 
             #region Action
-            var action = () => { roundMock.WinnerCard(featureName); };
+            var winnerCard =  roundMock.WinnerCard("FeatureByName One");
             #endregion
 
             #region Assert
-            action.Should().NotThrow<HasNoWinnerCardException>();
+            winnerCard.Should().BeOfType<CardPlayerEntity>();
             #endregion
         }
 
         [Fact]
-        public void WinnerCard_Should_ThrowException()
+        public void WinnerCard_Should_ThrowHasNoWinnerCardException()
         {
             #region Arrange
-            var cardPlayers = new List<CardPlayerEntity>
+            var cardPlayersMock = new List<CardPlayerEntity>
             {
-                Mock.Of<CardPlayerEntity>(x=> x.Card.Features == new List<FeatureEntity>
+                new() 
                 {
-                    Mock.Of<FeatureEntity>(x=> x.Name == "Feature One" && x.Value == 10)
-                })
+                    Card = new CardEntity
+                    {
+                        Features =
+                        [
+                            new FeatureEntity { Name = "FeatureByName One", Value = 10 }
+                        ]
+                    }
+                }
             };
-            var roundMock = new RoundVO(cardPlayers);
+            var roundMock = new RoundVO(cardPlayersMock);
             #endregion
 
             #region Action
-            var action = () => { roundMock.WinnerCard("Feature Two"); };
+            var action = () => { roundMock.WinnerCard("FeatureByName Two"); };
             #endregion
 
             #region Assert
             action.Should().Throw<HasNoWinnerCardException>();
+            #endregion
+        }
+
+        [Fact]
+        public void WinnerCard_Should_ThrowHasMoreThanOneWinnerCardException()
+        {
+            #region Arrange
+            var cardPlayersMock = new List<CardPlayerEntity>
+            {
+                new() 
+                {
+                    Card = new CardEntity
+                    {
+                        Features =
+                        [
+                            new FeatureEntity { Name = "FeatureByName One", Value = 10 }
+                        ]
+                    }
+                },
+                new() 
+                {
+                    Card = new CardEntity
+                    {
+                        Features =
+                        [
+                            new FeatureEntity { Name = "FeatureByName One", Value = 10 }
+                        ]
+                    }
+                }
+            };
+            var roundMock = new RoundVO(cardPlayersMock);
+            #endregion
+
+            #region Action
+            var action = () => { roundMock.WinnerCard("FeatureByName One"); };
+            #endregion
+
+            #region Assert
+            action.Should().Throw<HasMoreThanOneWinnerCardException>();
             #endregion
         }
     }
