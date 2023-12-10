@@ -32,12 +32,7 @@ namespace Domain.Entities
 
         private static List<CardEntity> CardsForPlayer(List<CardEntity> shuffledCards, int cardsPerPlayer)
         {
-            var cardsForPlayer = shuffledCards.Take(cardsPerPlayer)?.ToList();
-
-            if (cardsForPlayer == default || cardsForPlayer.Count == 0)
-                throw new CardsForPlayerNotFoundException();
-
-            return cardsForPlayer;
+            return shuffledCards.Take(cardsPerPlayer).ToList();
         }
 
         private static List<CardPlayerEntity> PlayerCards(List<CardEntity> cardsForPlayer, PlayerEntity player)
@@ -46,9 +41,6 @@ namespace Domain.Entities
 
             foreach (var card in cardsForPlayer)
                 playerCards.Add(new CardPlayerEntity { Card = card, Player = player });
-
-            if (playerCards == default || playerCards.Count == 0)
-                throw new PlayerCardsNotFoundException();
 
             return playerCards;
         }
