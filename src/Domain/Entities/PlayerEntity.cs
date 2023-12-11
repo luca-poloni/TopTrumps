@@ -12,7 +12,7 @@ namespace Domain.Entities
 
         public bool IsAvailable()
         {
-            return CardPlayers.Count != 0;
+            return CardPlayers.Count > 0;
         }
 
         public CardPlayerEntity GiveCard(string featureName)
