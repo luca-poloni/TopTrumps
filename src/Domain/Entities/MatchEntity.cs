@@ -7,6 +7,7 @@ namespace Domain.Entities
     public class MatchEntity : BaseEntity<uint>
     {
         public uint GameId { get; set; }
+        public bool IsFinish { get; set; }
         public virtual GameEntity Game { get; set; } = null!;
         public virtual List<PlayerEntity> Players { get; set; } = [];
 
@@ -47,6 +48,9 @@ namespace Domain.Entities
 
         public void Move(string featureName)
         {
+            if (IsFinish)
+                throw new MatchIsFinishException();
+
             var availablePlayers = AvailablePlayers();
             var playerCards = new List<CardPlayerEntity>();
 
@@ -65,16 +69,20 @@ namespace Domain.Entities
                 if (player.CardPlayers.Contains(winnerCard))
                     player.TakeCards(playerCards);
             }
+
+            IsFinish = MatchIsFinish();
         }
 
         private List<PlayerEntity> AvailablePlayers()
         {
-            var availablePlayers = Players.Where(player => player.IsAvailable())?.ToList();
+            return Players.Where(player => player.IsAvailable()).ToList();
+        }
 
-            if (availablePlayers == default || availablePlayers.Count == 1)
-                throw new MatchIsFinishException();
+        private bool MatchIsFinish()
+        {
+            var availablePlayers = AvailablePlayers();
 
-            return availablePlayers;
+            return availablePlayers == default || availablePlayers.Count == 1;
         }
     }
 }
