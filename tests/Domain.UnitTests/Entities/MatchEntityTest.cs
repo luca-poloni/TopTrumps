@@ -95,37 +95,11 @@ namespace Domain.UnitTests.Entities
         public void Move_Should_ThrowMatchIsFinishException()
         {
             #region Arrange
-            var gameMock = new GameEntity
-            {
-                Cards =
-                [
-                    new CardEntity()
-                ]
-            };
-            var playersMock = new List<PlayerEntity>
-            {
-                new()
-                {
-                    CardPlayers  =
-                    [
-                        new CardPlayerEntity
-                        {
-                            Card = new CardEntity
-                            {
-                                Features =
-                                [
-                                    new FeatureEntity { Name = "Feature One", Value = 10 }
-                                ]
-                            }
-                        }
-                    ]
-                }
-            };
-            var matchMock = new MatchEntity { Game = gameMock, Players = playersMock };
+            var matchMock = new MatchEntity { IsFinish = true };
             #endregion
 
             #region Action
-            var action = () => { matchMock.Move("Feature One"); };
+            var action = () => { matchMock.Move(string.Empty); };
             #endregion
 
             #region Assert
