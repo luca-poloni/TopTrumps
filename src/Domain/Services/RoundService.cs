@@ -1,9 +1,9 @@
 ﻿using Domain.Entities;
 using Domain.Exceptions;
 
-namespace Domain.ValueObjects
+namespace Domain.Services
 {
-    public class RoundVO(List<CardPlayerEntity> cardPlayers)
+    public class RoundService(List<CardPlayerEntity> cardPlayers)
     {
         private readonly List<CardPlayerEntity> _cardPlayers = cardPlayers;
 

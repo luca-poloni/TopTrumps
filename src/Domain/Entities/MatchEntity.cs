@@ -1,6 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Exceptions;
-using Domain.ValueObjects;
+using Domain.Services;
 
 namespace Domain.Entities
 {
@@ -61,7 +61,7 @@ namespace Domain.Entities
                 playerCards.Add(playerCard);
             }
 
-            var round = new RoundVO(playerCards);
+            var round = new RoundService(playerCards);
             var winnerCard = round.WinnerCard(featureName);
 
             foreach (var player in Players)

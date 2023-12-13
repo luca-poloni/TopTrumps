@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Exceptions;
-using Domain.ValueObjects;
+using Domain.Services;
 using FluentAssertions;
 
 namespace Domain.UnitTests.ValueObjects
@@ -24,7 +24,7 @@ namespace Domain.UnitTests.ValueObjects
                     } 
                 }
             };
-            var roundMock = new RoundVO(cardPlayersMock);
+            var roundMock = new RoundService(cardPlayersMock);
             #endregion
 
             #region Action
@@ -53,7 +53,7 @@ namespace Domain.UnitTests.ValueObjects
                     }
                 }
             };
-            var roundMock = new RoundVO(cardPlayersMock);
+            var roundMock = new RoundService(cardPlayersMock);
             #endregion
 
             #region Action
@@ -92,7 +92,7 @@ namespace Domain.UnitTests.ValueObjects
                     }
                 }
             };
-            var roundMock = new RoundVO(cardPlayersMock);
+            var roundMock = new RoundService(cardPlayersMock);
             #endregion
 
             #region Action
