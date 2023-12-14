@@ -1,5 +1,6 @@
 ﻿using Application.Handlers.Match.Commands.CreateMatch;
 using Application.Handlers.Match.Commands.UpdateMatch;
+using Application.Handlers.Match.Queries.GetMatchById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,13 @@ namespace WebAPI.Controllers
         [Route("Update")]
         [HttpPost]
         public async Task<ActionResult<UpdateMatchCommandResponse>> Update([FromQuery] UpdateMatchCommandRequest request)
+        {
+            return await _mediator.Send(request);
+        }
+
+        [Route("GetById")]
+        [HttpGet]
+        public async Task<ActionResult<GetMatchByIdQueryResponse>> GetById([FromQuery] GetMatchByIdQueryRequest request)
         {
             return await _mediator.Send(request);
         }
