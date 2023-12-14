@@ -2,7 +2,7 @@
 
 namespace Application.Handlers.Match.Commands.CreateMatch
 {
-    public record CreateMatchCommandRequest : IRequest<CreateMatchCommandResponse>
+    public record CreateMatchRequest : IRequest<CreateMatchResponse>
     {
         public uint GameId { get; init; }
     }
