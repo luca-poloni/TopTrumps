@@ -21,14 +21,14 @@ namespace WebAPI.Controllers
         }
 
         [Route("Play")]
-        [HttpPost]
+        [HttpPut]
         public async Task<ActionResult<PlayMatchResponse>> Play([FromQuery] PlayMatchRequest request)
         {
             return await _mediator.Send(request);
         }
 
         [Route("Move")]
-        [HttpPost]
+        [HttpPut]
         public async Task<ActionResult<MoveMatchResponse>> Move([FromQuery] MoveMatchRequest request)
         {
             return await _mediator.Send(request);
