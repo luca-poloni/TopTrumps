@@ -14,13 +14,13 @@ namespace Infrastructure.Configurations
                    .WithMany(c => c.CardPlayers)
                    .HasForeignKey(cp => cp.CardId)
                    .IsRequired()
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(cp => cp.Player)
                    .WithMany(p => p.CardPlayers)
                    .HasForeignKey(cp => cp.PlayerId)
                    .IsRequired()
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
