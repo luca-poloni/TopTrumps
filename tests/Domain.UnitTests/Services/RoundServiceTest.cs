@@ -3,9 +3,9 @@ using Domain.Exceptions;
 using Domain.Services;
 using FluentAssertions;
 
-namespace Domain.UnitTests.ValueObjects
+namespace Domain.UnitTests.Services
 {
-    public class RoundVOTest
+    public class RoundServiceTest
     {
         [Fact]
         public void WinnerCard_Should_CardPlayer()
