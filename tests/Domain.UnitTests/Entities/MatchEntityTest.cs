@@ -44,6 +44,7 @@ namespace Domain.UnitTests.Entities
                     new CardEntity()
                 ]
             };
+
             var playersMock = new List<PlayerEntity>
             {
                 new() 
@@ -79,6 +80,11 @@ namespace Domain.UnitTests.Entities
                     ]
                 }
             };
+
+            foreach (var playerMock in playersMock)
+                foreach (var cardPlayerMock in playerMock.CardPlayers)
+                    cardPlayerMock.Player = playerMock;
+
             var matchMock = new MatchEntity { Game = gameMock, Players = playersMock };
             #endregion
 
