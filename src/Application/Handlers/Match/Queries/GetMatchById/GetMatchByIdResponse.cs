@@ -1,6 +1,6 @@
 ﻿namespace Application.Handlers.Match.Queries.GetMatchById
 {
-    public record GetMatchByIdQueryResponse
+    public record GetMatchByIdResponse
     {
         public uint Id { get; init; }
         public uint GameId { get; init; }

@@ -3,19 +3,23 @@ using Ardalis.GuardClauses;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Handlers.Match.Queries.GetMatchById
+namespace Application.Handlers.Match.Commands.PlayMatch
 {
-    internal class GetMatchByIdQueryHandler(IApplicationDbContext applicationDbContext) : IRequestHandler<GetMatchByIdQueryRequest, GetMatchByIdQueryResponse>
+    internal class PlayMatchHandler(IApplicationDbContext applicationDbContext) : IRequestHandler<PlayMatchRequest, PlayMatchResponse>
     {
         private readonly IApplicationDbContext _applicationDbContext = applicationDbContext;
 
-        public async Task<GetMatchByIdQueryResponse> Handle(GetMatchByIdQueryRequest request, CancellationToken cancellationToken)
+        public async Task<PlayMatchResponse> Handle(PlayMatchRequest request, CancellationToken cancellationToken)
         {
             var match = await _applicationDbContext.Matches.SingleOrDefaultAsync(match => match.Id == request.Id, cancellationToken);
 
             Guard.Against.Null(match, nameof(match), "Match cannot be found.");
 
-            var response = new GetMatchByIdQueryResponse
+            match.Play();
+
+            await _applicationDbContext.SaveChangesAsync(cancellationToken);
+
+            var response = new PlayMatchResponse
             {
                 Id = match.Id,
                 GameId = match.GameId,

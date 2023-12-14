@@ -2,7 +2,7 @@
 
 namespace Application.Handlers.Match.Queries.GetMatchById
 {
-    public record GetMatchByIdQueryRequest : IRequest<GetMatchByIdQueryResponse>
+    public record GetMatchByIdRequest : IRequest<GetMatchByIdResponse>
     {
         public uint Id { get; init; }
     }

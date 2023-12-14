@@ -26,39 +26,41 @@ namespace WebAPI.Middlewares
 
         private static async Task HandleError(HttpContext context, Exception exception)
         {
-            var response = GetResponse(context);
-            var result = GetResult(exception, response);
+            var response = GetResponse(context, exception);
+            var result = GetResult(response, exception);
 
             await response.WriteAsync(result);
         }
 
-        private static HttpResponse GetResponse(HttpContext context)
+        private static HttpResponse GetResponse(HttpContext context, Exception exception)
         {
             var response = context.Response;
             response.ContentType = "application/json";
-            response.StatusCode = (ushort)HttpStatusCode.InternalServerError;
+            response.StatusCode = GetStatusCode(exception);
             return response;
         }
 
-        private static string GetResult(Exception exception, HttpResponse response)
+        private static int GetStatusCode(Exception exception)
+        {
+            return exception switch
+            {
+                ArgumentException => (int)HttpStatusCode.BadRequest,
+                _ => (int)HttpStatusCode.InternalServerError,
+            };
+        }
+
+        private static string GetResult(HttpResponse response, Exception exception)
         {
             var errorResponse = new ErrorResponse(response.StatusCode, response.HttpContext.Request.Path, exception.Message);
             var result = JsonSerializer.Serialize(errorResponse);
             return result;
         }
 
-        public class ErrorResponse
+        public class ErrorResponse(int httpStatusCode, string endpoint, string message)
         {
-            public int HttpStatusCode { get; }
-            public string Endpoint { get; }
-            public string Message { get; }
-
-            public ErrorResponse(int httpStatusCode, string endpoint, string message)
-            {
-                HttpStatusCode = httpStatusCode;
-                Endpoint = endpoint;
-                Message = message;
-            }
+            public int HttpStatusCode { get; } = httpStatusCode;
+            public string Endpoint { get; } = endpoint;
+            public string Message { get; } = message;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Application.Handlers.Match.Commands.PlayMatch
 {
-    public record PlayMatchCommandRequest : IRequest<PlayMatchCommandResponse>
+    public record PlayMatchRequest : IRequest<PlayMatchResponse>
     {
         public uint Id { get; init; }
     }

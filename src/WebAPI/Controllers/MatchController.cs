@@ -22,21 +22,21 @@ namespace WebAPI.Controllers
 
         [Route("Play")]
         [HttpPost]
-        public async Task<ActionResult<PlayMatchCommandResponse>> Play([FromQuery] PlayMatchCommandRequest request)
+        public async Task<ActionResult<PlayMatchResponse>> Play([FromQuery] PlayMatchRequest request)
         {
             return await _mediator.Send(request);
         }
 
         [Route("Move")]
         [HttpPost]
-        public async Task<ActionResult<MoveMatchCommandResponse>> Move([FromQuery] MoveMatchCommandRequest request)
+        public async Task<ActionResult<MoveMatchResponse>> Move([FromQuery] MoveMatchRequest request)
         {
             return await _mediator.Send(request);
         }
 
         [Route("GetById")]
         [HttpGet]
-        public async Task<ActionResult<GetMatchByIdQueryResponse>> GetById([FromQuery] GetMatchByIdQueryRequest request)
+        public async Task<ActionResult<GetMatchByIdResponse>> GetById([FromQuery] GetMatchByIdRequest request)
         {
             return await _mediator.Send(request);
         }
