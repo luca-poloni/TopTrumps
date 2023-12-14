@@ -66,7 +66,7 @@ namespace Domain.Entities
 
             foreach (var player in Players)
             {
-                if (player.CardPlayers.Contains(winnerCard))
+                if (winnerCard.Player.Equals(player))
                     player.TakeCards(playerCards);
             }
 
