@@ -2,6 +2,7 @@
 using Domain.Exceptions;
 using Domain.Services;
 using FluentAssertions;
+using Moq;
 
 namespace Domain.UnitTests.Services
 {
@@ -13,17 +14,20 @@ namespace Domain.UnitTests.Services
             #region Arrange
             var cardPlayersMock = new List<CardPlayerEntity>
             {
-                new() 
-                { 
-                    Card = new CardEntity 
-                    { 
-                        Features =
-                        [
-                            new FeatureEntity { Name = "FeatureByName One", Value = 10 } 
-                        ] 
-                    } 
-                }
+                new(
+                    card: new CardEntity(
+                        gameId: It.IsAny<uint>(),
+                        name: It.IsAny<string>(),
+                        image: It.IsAny<byte[]>(),
+                        isTopTrumps: It.IsAny<bool>(),
+                        game: It.IsAny<GameEntity>(),
+                        cardPlayers: It.IsAny<List<CardPlayerEntity>>(),
+                        features: [new FeatureEntity(cardId: It.IsAny<uint>(), name: "FeatureByName One", value: 10)]),
+                    player: new PlayerEntity(
+                        matchId: It.IsAny<uint>(),
+                        name: It.IsAny<string>()))
             };
+
             var roundMock = new RoundService(cardPlayersMock);
             #endregion
 
@@ -42,17 +46,20 @@ namespace Domain.UnitTests.Services
             #region Arrange
             var cardPlayersMock = new List<CardPlayerEntity>
             {
-                new() 
-                {
-                    Card = new CardEntity
-                    {
-                        Features =
-                        [
-                            new FeatureEntity { Name = "FeatureByName One", Value = 10 }
-                        ]
-                    }
-                }
+                new(
+                    card: new CardEntity(
+                        gameId: It.IsAny<uint>(),
+                        name: It.IsAny<string>(),
+                        image: It.IsAny<byte[]>(),
+                        isTopTrumps: It.IsAny<bool>(),
+                        game: It.IsAny<GameEntity>(),
+                        cardPlayers: It.IsAny<List<CardPlayerEntity>>(),
+                        features: [new FeatureEntity(cardId: It.IsAny<uint>(), name: "FeatureByName One", value: 10)]),
+                    player: new PlayerEntity(
+                        matchId: It.IsAny<uint>(),
+                        name: It.IsAny<string>()))
             };
+
             var roundMock = new RoundService(cardPlayersMock);
             #endregion
 
@@ -71,27 +78,32 @@ namespace Domain.UnitTests.Services
             #region Arrange
             var cardPlayersMock = new List<CardPlayerEntity>
             {
-                new() 
-                {
-                    Card = new CardEntity
-                    {
-                        Features =
-                        [
-                            new FeatureEntity { Name = "FeatureByName One", Value = 10 }
-                        ]
-                    }
-                },
-                new() 
-                {
-                    Card = new CardEntity
-                    {
-                        Features =
-                        [
-                            new FeatureEntity { Name = "FeatureByName One", Value = 10 }
-                        ]
-                    }
-                }
+                new(
+                    card: new CardEntity(
+                        gameId: It.IsAny<uint>(),
+                        name: It.IsAny<string>(),
+                        image: It.IsAny<byte[]>(),
+                        isTopTrumps: It.IsAny<bool>(),
+                        game: It.IsAny<GameEntity>(),
+                        cardPlayers: It.IsAny<List<CardPlayerEntity>>(),
+                        features: [new FeatureEntity(cardId: It.IsAny<uint>(), name: "FeatureByName One", value: 10)]),
+                    player: new PlayerEntity(
+                        matchId: It.IsAny<uint>(),
+                        name: It.IsAny<string>())),
+                new(
+                    card: new CardEntity(
+                        gameId: It.IsAny<uint>(),
+                        name: It.IsAny<string>(),
+                        image: It.IsAny<byte[]>(),
+                        isTopTrumps: It.IsAny<bool>(),
+                        game: It.IsAny<GameEntity>(),
+                        cardPlayers: It.IsAny<List<CardPlayerEntity>>(),
+                        features: [new FeatureEntity(cardId: It.IsAny<uint>(), name: "FeatureByName One", value: 10)]),
+                    player: new PlayerEntity(
+                        matchId: It.IsAny<uint>(),
+                        name: It.IsAny<string>()))
             };
+
             var roundMock = new RoundService(cardPlayersMock);
             #endregion
 

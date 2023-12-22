@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Exceptions;
 using FluentAssertions;
+using Moq;
 
 namespace Domain.UnitTests.Entities
 {
@@ -10,11 +11,23 @@ namespace Domain.UnitTests.Entities
         public void IsAvailable_Should_True()
         {
             #region Arrange
-            var playerMock = new PlayerEntity();
-            var cardMock = new CardEntity();
-            var cardPlayerMock = new CardPlayerEntity { Card = cardMock, Player = playerMock };
-            var cardPlayersMock = new List<CardPlayerEntity> { cardPlayerMock };
-            playerMock.CardPlayers = cardPlayersMock;
+            var playerMock = new PlayerEntity(
+                 matchId: It.IsAny<uint>(),
+                 name: It.IsAny<string>(),
+                 match: It.IsAny<MatchEntity>(),
+                 cardPlayers: [new(
+                     card: new CardEntity(
+                         gameId: It.IsAny<uint>(),
+                         name: It.IsAny<string>(),
+                         image: It.IsAny<byte[]>(),
+                         isTopTrumps: It.IsAny<bool>(),
+                         game: It.IsAny<GameEntity>(),
+                         cardPlayers: It.IsAny<List<CardPlayerEntity>>(),
+                         features: It.IsAny<List<FeatureEntity>>()),
+                     player: new PlayerEntity(
+                         matchId: It.IsAny<uint>(),
+                         name: It.IsAny<string>()))]);
+
             #endregion
 
             #region Action
@@ -30,7 +43,11 @@ namespace Domain.UnitTests.Entities
         public void IsAvailable_Should_False()
         {
             #region Arrange
-            var playerMock = new PlayerEntity();
+            var playerMock = new PlayerEntity(
+                matchId: It.IsAny<uint>(),
+                name: It.IsAny<string>(),
+                match: It.IsAny<MatchEntity>(),
+                cardPlayers: []);
             #endregion
 
             #region Action
@@ -46,17 +63,22 @@ namespace Domain.UnitTests.Entities
         public void GiveCard_Should_CardPlayer()
         {
             #region Arrange
-            var playerMock = new PlayerEntity();
-            var cardMock = new CardEntity() 
-            { 
-                Features =
-                [
-                    new FeatureEntity { Name = "Feature One" } 
-                ] 
-            };
-            var cardPlayerMock = new CardPlayerEntity { Card = cardMock, Player = playerMock };
-            var cardPlayersMock = new List<CardPlayerEntity> { cardPlayerMock };
-            playerMock.CardPlayers = cardPlayersMock;
+            var playerMock = new PlayerEntity(
+                matchId: It.IsAny<uint>(),
+                name: It.IsAny<string>(),
+                match: It.IsAny<MatchEntity>(),
+                cardPlayers: [new CardPlayerEntity(
+                    card: new CardEntity(
+                        gameId: It.IsAny<uint>(),
+                        name: It.IsAny<string>(),
+                        image: It.IsAny<byte[]>(),
+                        isTopTrumps: It.IsAny<bool>(),
+                        game: It.IsAny<GameEntity>(),
+                        cardPlayers: It.IsAny<List<CardPlayerEntity>>(),
+                        features: [new(cardId: It.IsAny<uint>(), name: "Feature One", value: It.IsAny<sbyte>())]),
+                    player: new PlayerEntity(
+                        matchId: It.IsAny<uint>(),
+                        name: It.IsAny<string>()))]);
             #endregion
 
             #region Action
@@ -72,17 +94,22 @@ namespace Domain.UnitTests.Entities
         public void GiveCard_Should_ThrowCardNotFoundException()
         {
             #region Arrange
-            var playerMock = new PlayerEntity();
-            var cardMock = new CardEntity()
-            {
-                Features =
-               [
-                   new FeatureEntity { Name = "Feature One" }
-               ]
-            };
-            var cardPlayerMock = new CardPlayerEntity { Card = cardMock, Player = playerMock };
-            var cardPlayersMock = new List<CardPlayerEntity> { cardPlayerMock };
-            playerMock.CardPlayers = cardPlayersMock;
+            var playerMock = new PlayerEntity(
+                matchId: It.IsAny<uint>(),
+                name: It.IsAny<string>(),
+                match: It.IsAny<MatchEntity>(),
+                cardPlayers: [new CardPlayerEntity(
+                    card: new CardEntity(
+                        gameId: It.IsAny<uint>(),
+                        name: It.IsAny<string>(),
+                        image: It.IsAny<byte[]>(),
+                        isTopTrumps: It.IsAny<bool>(),
+                        game: It.IsAny<GameEntity>(),
+                        cardPlayers: It.IsAny<List<CardPlayerEntity>>(),
+                        features: [new(cardId: It.IsAny<uint>(), name: "Feature One", value: It.IsAny<sbyte>())]),
+                    player: new PlayerEntity(
+                        matchId: It.IsAny<uint>(),
+                        name: It.IsAny<string>()))]);
             #endregion
 
             #region Action
@@ -98,11 +125,27 @@ namespace Domain.UnitTests.Entities
         public void TakeCards_Should_NotThrowCardNotFoundException()
         {
             #region Arrange
-            var playerMock = new PlayerEntity();
-            var cardMock = new CardEntity();
-            var cardPlayerMock = new CardPlayerEntity { Card = cardMock, Player = playerMock };
-            var cardPlayersMock = new List<CardPlayerEntity> { cardPlayerMock };
-            playerMock.CardPlayers = cardPlayersMock;
+            var playerMock = new PlayerEntity(
+                matchId: It.IsAny<uint>(),
+                name: It.IsAny<string>(),
+                match: It.IsAny<MatchEntity>(),
+                cardPlayers: It.IsAny<List<CardPlayerEntity>>());
+
+            var cardPlayersMock = new List<CardPlayerEntity>
+            {
+                new(
+                    card: new CardEntity(
+                        gameId: It.IsAny<uint>(),
+                        name: It.IsAny<string>(),
+                        image: It.IsAny<byte[]>(),
+                        isTopTrumps: It.IsAny<bool>(),
+                        game: It.IsAny<GameEntity>(),
+                        cardPlayers: It.IsAny<List<CardPlayerEntity>>(),
+                        features: It.IsAny<List<FeatureEntity>>()),
+                    player: new PlayerEntity(
+                        matchId: It.IsAny<uint>(),
+                        name: It.IsAny<string>()))
+            };
             #endregion
 
             #region Action

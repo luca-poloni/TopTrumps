@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using FluentAssertions;
+using Moq;
 
 namespace Domain.UnitTests.Entities
 {
@@ -9,8 +10,15 @@ namespace Domain.UnitTests.Entities
         public void IsHigher_Should_True()
         {
             #region Arrange
-            var featureMock = new FeatureEntity { Value = 10 };
-            var anotherFeatureMock = new FeatureEntity { Value = 5 };
+            var featureMock = new FeatureEntity(
+                cardId: It.IsAny<uint>(), 
+                name: It.IsAny<string>(), 
+                value: 10);
+
+            var anotherFeatureMock = new FeatureEntity(
+                cardId: It.IsAny<uint>(),
+                name: It.IsAny<string>(),
+                value: 5);
             #endregion
 
             #region Action
@@ -26,8 +34,15 @@ namespace Domain.UnitTests.Entities
         public void IsHigher_Should_False()
         {
             #region Arrange
-            var featureMock = new FeatureEntity { Value = 5 };
-            var anotherFeatureMock = new FeatureEntity { Value = 10 };
+            var featureMock = new FeatureEntity(
+                cardId: It.IsAny<uint>(),
+                name: It.IsAny<string>(),
+                value: 5);
+
+            var anotherFeatureMock = new FeatureEntity(
+                cardId: It.IsAny<uint>(),
+                name: It.IsAny<string>(),
+                value: 10);
             #endregion
 
             #region Action
