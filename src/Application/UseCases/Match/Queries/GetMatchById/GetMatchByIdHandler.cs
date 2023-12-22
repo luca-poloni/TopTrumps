@@ -3,7 +3,7 @@ using Ardalis.GuardClauses;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Handlers.Match.Queries.GetMatchById
+namespace Application.UseCases.Match.Queries.GetMatchById
 {
     internal class GetMatchByIdHandler(IApplicationDbContext applicationDbContext) : IRequestHandler<GetMatchByIdRequest, GetMatchByIdResponse>
     {

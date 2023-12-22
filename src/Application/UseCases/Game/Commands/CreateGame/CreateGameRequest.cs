@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Handlers.Game.Commands.CreateGame
+namespace Application.UseCases.Game.Commands.CreateGame
 {
     public record CreateGameRequest : IRequest<CreateGameResponse>
     {

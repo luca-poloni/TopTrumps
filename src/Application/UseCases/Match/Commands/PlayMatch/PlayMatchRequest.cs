@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Handlers.Match.Commands.PlayMatch
+namespace Application.UseCases.Match.Commands.PlayMatch
 {
     public record PlayMatchRequest : IRequest<PlayMatchResponse>
     {

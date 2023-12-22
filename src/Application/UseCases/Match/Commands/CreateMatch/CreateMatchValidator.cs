@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Handlers.Match.Commands.CreateMatch
+namespace Application.UseCases.Match.Commands.CreateMatch
 {
     public class CreateMatchValidator : AbstractValidator<CreateMatchRequest>
     {

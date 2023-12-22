@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Handlers.Match.Commands.PlayMatch
+namespace Application.UseCases.Match.Commands.PlayMatch
 {
     public class PlayMatchValidator : AbstractValidator<PlayMatchRequest>
     {

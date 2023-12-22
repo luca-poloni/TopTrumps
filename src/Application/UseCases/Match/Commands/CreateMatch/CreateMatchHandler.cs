@@ -3,7 +3,7 @@ using Ardalis.GuardClauses;
 using Domain.Entities;
 using MediatR;
 
-namespace Application.Handlers.Match.Commands.CreateMatch
+namespace Application.UseCases.Match.Commands.CreateMatch
 {
     internal class CreateMatchHandler(IApplicationDbContext applicationDbContext) : IRequestHandler<CreateMatchRequest, CreateMatchResponse>
     {

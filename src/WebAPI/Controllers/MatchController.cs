@@ -1,7 +1,7 @@
-﻿using Application.Handlers.Match.Commands.CreateMatch;
-using Application.Handlers.Match.Commands.MoveMatch;
-using Application.Handlers.Match.Commands.PlayMatch;
-using Application.Handlers.Match.Queries.GetMatchById;
+﻿using Application.UseCases.Match.Commands.CreateMatch;
+using Application.UseCases.Match.Commands.MoveMatch;
+using Application.UseCases.Match.Commands.PlayMatch;
+using Application.UseCases.Match.Queries.GetMatchById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,4 +1,4 @@
-﻿using Application.Handlers.Game.Commands.CreateGame;
+﻿using Application.UseCases.Game.Commands.CreateGame;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

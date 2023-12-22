@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Handlers.Match.Commands.MoveMatch
+namespace Application.UseCases.Match.Commands.MoveMatch
 {
     public class MoveMatchValidator : AbstractValidator<MoveMatchRequest>
     {
