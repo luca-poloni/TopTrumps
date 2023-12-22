@@ -11,11 +11,7 @@ namespace Application.Handlers.Game.Commands.CreateGame
 
         public async Task<CreateGameResponse> Handle(CreateGameRequest request, CancellationToken cancellationToken)
         {
-            var game = new GameEntity
-            {
-                Name = request.Name,
-                Description = request.Description
-            };
+            var game = new GameEntity(request.Name, request.Description);
 
             await _applicationDbContext.Games.AddAsync(game, cancellationToken);
             var affectedRows = await _applicationDbContext.SaveChangesAsync(cancellationToken);

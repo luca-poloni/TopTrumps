@@ -11,8 +11,7 @@ namespace Application.Handlers.Match.Commands.CreateMatch
 
         public async Task<CreateMatchResponse> Handle(CreateMatchRequest request, CancellationToken cancellationToken)
         {
-            var match = new MatchEntity { GameId = request.GameId };
-
+            var match = new MatchEntity(request.GameId);
             await _applicationDbContext.Matches.AddAsync(match, cancellationToken);
             var affectedRows = await _applicationDbContext.SaveChangesAsync(cancellationToken);
 

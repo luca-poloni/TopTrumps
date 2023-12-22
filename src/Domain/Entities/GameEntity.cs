@@ -2,12 +2,18 @@
 
 namespace Domain.Entities
 {
-    public class GameEntity : BaseEntity<uint>
+    public class GameEntity(string name, string description) : BaseEntity<uint>
     {
-        public string Name { get; set; } = null!;
-        public string Description { get; set; } = null!;
-        public virtual List<CardEntity> Cards { get; set; } = [];
-        public virtual List<MatchEntity> Matches { get; set; } = [];
+        public string Name { get; private set; } = name;
+        public string Description { get; private set; } = description;
+        public virtual List<CardEntity> Cards { get; private set; } = [];
+        public virtual List<MatchEntity> Matches { get; private set; } = [];
+
+        public GameEntity(string name, string description, List<CardEntity> cards, List<MatchEntity> matches) : this(name, description)
+        {
+            Cards = cards;
+            Matches = matches;
+        }
 
         public List<CardEntity> ShuffledCards()
         {

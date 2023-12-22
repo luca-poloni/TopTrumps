@@ -4,12 +4,18 @@ using Domain.Services;
 
 namespace Domain.Entities
 {
-    public class MatchEntity : BaseEntity<uint>
+    public class MatchEntity(uint gameId) : BaseEntity<uint>
     {
-        public uint GameId { get; set; }
-        public bool IsFinish { get; set; }
-        public virtual GameEntity Game { get; set; } = null!;
-        public virtual List<PlayerEntity> Players { get; set; } = [];
+        public uint GameId { get; private set; } = gameId;
+        public bool IsFinish { get; private set; }
+        public virtual GameEntity Game { get; private set; } = null!;
+        public virtual List<PlayerEntity> Players { get; private set; } = [];
+
+        public MatchEntity(uint gameId, GameEntity game, List<PlayerEntity> players) : this(gameId)
+        {
+            Game = game;
+            Players = players;
+        }
 
         public void Play()
         {
@@ -41,7 +47,7 @@ namespace Domain.Entities
             var playerCards = new List<CardPlayerEntity>();
 
             foreach (var card in cardsForPlayer)
-                playerCards.Add(new CardPlayerEntity { Card = card, Player = player });
+                playerCards.Add(new CardPlayerEntity(card, player));
 
             return playerCards;
         }
