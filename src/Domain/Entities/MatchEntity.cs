@@ -1,6 +1,5 @@
 ﻿using Domain.Common;
 using Domain.Exceptions;
-using Domain.Services;
 
 namespace Domain.Entities
 {
@@ -67,8 +66,7 @@ namespace Domain.Entities
                 playerCards.Add(playerCard);
             }
 
-            var round = new RoundService(playerCards);
-            var winnerCard = round.WinnerCard(featureName);
+            var winnerCard = WinnerCard(playerCards, featureName);
 
             foreach (var player in Players)
             {
@@ -82,6 +80,49 @@ namespace Domain.Entities
         private List<PlayerEntity> AvailablePlayers()
         {
             return Players.Where(player => player.IsAvailable()).ToList();
+        }
+
+        private CardPlayerEntity WinnerCard(List<CardPlayerEntity> cardPlayers, string featureName)
+        {
+            var winnerCardPlayer = default(CardPlayerEntity);
+            var winnerFeature = default(FeatureEntity);
+
+            foreach (var cardPlayer in cardPlayers)
+            {
+                var feature = cardPlayer.Card?.FeatureByName(featureName);
+
+                if (feature == default)
+                    continue;
+
+                if (feature.IsHigher(winnerFeature))
+                {
+                    winnerFeature = feature;
+                    winnerCardPlayer = cardPlayer;
+                }
+            }
+
+            if (winnerCardPlayer == default || winnerFeature == default)
+                throw new HasNoWinnerCardException();
+
+            if (HasMoreThanOneWinnerCard(cardPlayers, winnerFeature))
+                throw new HasMoreThanOneWinnerCardException();
+
+            return winnerCardPlayer;
+        }
+
+        private static bool HasMoreThanOneWinnerCard(List<CardPlayerEntity> cardPlayers, FeatureEntity winnerFeature)
+        {
+            var cardWinnerCount = 0;
+
+            foreach (var cardPlayer in cardPlayers)
+            {
+                var winnerFeatureCard = cardPlayer.Card.WinnerFeatureByValue(winnerFeature.Value);
+
+                if (winnerFeatureCard != default)
+                    cardWinnerCount++;
+            }
+
+            return cardWinnerCount > 1;
         }
 
         private bool MatchIsFinish()
