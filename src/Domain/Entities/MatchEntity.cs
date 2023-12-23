@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Exceptions;
+using Domain.Services;
 
 namespace Domain.Entities
 {
@@ -21,6 +22,16 @@ namespace Domain.Entities
             var shuffledCards = Game.ShuffledCards();
             var cardsPerPlayer = CountPlayerCards(shuffledCards);
 
+            GiveCardsForPlayers(shuffledCards, cardsPerPlayer);
+        }
+
+        private int CountPlayerCards(List<CardEntity> shuffledCards)
+        {
+            return shuffledCards.Count / Players.Count;
+        }
+
+        private void GiveCardsForPlayers(List<CardEntity> shuffledCards, int cardsPerPlayer)
+        {
             foreach (var player in Players)
             {
                 var cardsForPlayer = CardsForPlayer(shuffledCards, cardsPerPlayer);
@@ -31,9 +42,47 @@ namespace Domain.Entities
             }
         }
 
-        private int CountPlayerCards(List<CardEntity> shuffledCards)
+        public void Move(string featureName)
         {
-            return shuffledCards.Count / Players.Count;
+            if (IsFinish)
+                throw new MatchIsFinishException();
+
+            var cardPlayers = TakeCardsOfPlayers(featureName);
+            var host = new HostService(cardPlayers);
+            var winnerCard = host.WinnerCard(featureName);
+
+            GiveCardsForWinnerPlayer(cardPlayers, winnerCard);
+
+            IsFinish = MatchIsFinish();
+        }
+
+        private List<CardPlayerEntity> TakeCardsOfPlayers(string featureName)
+        {
+            var playerCards = new List<CardPlayerEntity>();
+
+            foreach (var player in AvailablePlayers())
+            {
+                var playerCard = player.GiveCard(featureName);
+                playerCards.Add(playerCard);
+            }
+
+            return playerCards;
+        }
+
+        private void GiveCardsForWinnerPlayer(List<CardPlayerEntity> playerCards, CardPlayerEntity winnerCard)
+        {
+            foreach (var player in Players)
+            {
+                if (winnerCard.Player.Equals(player))
+                    player.TakeCards(playerCards);
+            }
+        }
+
+        private bool MatchIsFinish()
+        {
+            var availablePlayers = AvailablePlayers();
+
+            return availablePlayers == default || availablePlayers.Count == 1;
         }
 
         private static List<CardEntity> CardsForPlayer(List<CardEntity> shuffledCards, int cardsPerPlayer)
@@ -51,85 +100,9 @@ namespace Domain.Entities
             return playerCards;
         }
 
-        public void Move(string featureName)
-        {
-            if (IsFinish)
-                throw new MatchIsFinishException();
-
-            var availablePlayers = AvailablePlayers();
-            var playerCards = new List<CardPlayerEntity>();
-
-            foreach (var player in availablePlayers)
-            {
-                var playerCard = player.GiveCard(featureName);
-
-                playerCards.Add(playerCard);
-            }
-
-            var winnerCard = WinnerCard(playerCards, featureName);
-
-            foreach (var player in Players)
-            {
-                if (winnerCard.Player.Equals(player))
-                    player.TakeCards(playerCards);
-            }
-
-            IsFinish = MatchIsFinish();
-        }
-
         private List<PlayerEntity> AvailablePlayers()
         {
             return Players.Where(player => player.IsAvailable()).ToList();
-        }
-
-        private CardPlayerEntity WinnerCard(List<CardPlayerEntity> cardPlayers, string featureName)
-        {
-            var winnerCardPlayer = default(CardPlayerEntity);
-            var winnerFeature = default(FeatureEntity);
-
-            foreach (var cardPlayer in cardPlayers)
-            {
-                var feature = cardPlayer.Card?.FeatureByName(featureName);
-
-                if (feature == default)
-                    continue;
-
-                if (feature.IsHigher(winnerFeature))
-                {
-                    winnerFeature = feature;
-                    winnerCardPlayer = cardPlayer;
-                }
-            }
-
-            if (winnerCardPlayer == default || winnerFeature == default)
-                throw new HasNoWinnerCardException();
-
-            if (HasMoreThanOneWinnerCard(cardPlayers, winnerFeature))
-                throw new HasMoreThanOneWinnerCardException();
-
-            return winnerCardPlayer;
-        }
-
-        private static bool HasMoreThanOneWinnerCard(List<CardPlayerEntity> cardPlayers, FeatureEntity winnerFeature)
-        {
-            var cardWinnerCount = 0;
-
-            foreach (var cardPlayer in cardPlayers)
-            {
-                var winnerFeatureCard = cardPlayer.Card.WinnerFeatureByValue(winnerFeature.Value);
-
-                if (winnerFeatureCard != default)
-                    cardWinnerCount++;
-            }
-
-            return cardWinnerCount > 1;
-        }
-
-        private bool MatchIsFinish()
-        {
-            var availablePlayers = AvailablePlayers();
-
-            return availablePlayers == default || availablePlayers.Count == 1;
         }
     }
 }
