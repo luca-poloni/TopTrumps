@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.UseCases.Match.Commands.MoveMatch
+namespace Application.UseCases.Match.Commands
 {
     public record MoveMatchRequest : IRequest<MoveMatchResponse>
     {

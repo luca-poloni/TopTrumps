@@ -1,6 +1,6 @@
-﻿namespace Application.UseCases.Match.Queries.GetMatchById
+﻿namespace Application.UseCases.Match.Queries
 {
-    public record GetMatchByIdResponse
+    public class GetMatchByIdResponse
     {
         public uint Id { get; init; }
         public uint GameId { get; init; }

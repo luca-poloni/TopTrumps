@@ -1,23 +1,21 @@
 ﻿using Application.Common.Interfaces;
-using Ardalis.GuardClauses;
+using Domain.Repositores;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
-namespace Application.UseCases.Match.Commands.PlayMatch
+namespace Application.UseCases.Match.Commands
 {
-    internal class PlayMatchHandler(IApplicationDbContext applicationDbContext) : IRequestHandler<PlayMatchRequest, PlayMatchResponse>
+    internal class PlayMatchHandler(IApplicationDbContext context, IMatchRepository matchRepository) : IRequestHandler<PlayMatchRequest, PlayMatchResponse>
     {
-        private readonly IApplicationDbContext _applicationDbContext = applicationDbContext;
+        private readonly IMatchRepository _matchRepository = matchRepository;
+        private readonly IApplicationDbContext _context = context;
 
         public async Task<PlayMatchResponse> Handle(PlayMatchRequest request, CancellationToken cancellationToken)
         {
-            var match = await _applicationDbContext.Matches.SingleOrDefaultAsync(match => match.Id == request.Id, cancellationToken);
-
-            Guard.Against.Null(match, nameof(match), "Match cannot be found.");
+            var match = await _matchRepository.GetById(request.Id, cancellationToken);
 
             match.Play();
 
-            await _applicationDbContext.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
             var response = new PlayMatchResponse
             {

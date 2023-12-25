@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.UseCases.Match.Queries.GetMatchById
+namespace Application.UseCases.Match.Queries
 {
     public record GetMatchByIdRequest : IRequest<GetMatchByIdResponse>
     {

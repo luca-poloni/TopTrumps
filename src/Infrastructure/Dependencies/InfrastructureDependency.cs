@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
-using Ardalis.GuardClauses;
+using Domain.Repositores;
 using Infrastructure.Context;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,8 @@ namespace Infrastructure.Dependencies
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddContext(configuration);
+            services.AddRepositories();
+
             return services;
         }
 
@@ -20,7 +23,8 @@ namespace Infrastructure.Dependencies
             var connectionStringName = "DefaultConnection";
             var connectionString = configuration.GetConnectionString(connectionStringName);
 
-            Guard.Against.Null(connectionString, message: $"Connection string '{connectionStringName}' not found.");
+            if (string.IsNullOrWhiteSpace(connectionString))
+                throw new ArgumentException("Connection string '{connectionStringName}' not found.");
 
             services.AddDbContext<IApplicationDbContext, ApplicationDbContext>((sp, options) =>
             {
@@ -28,6 +32,13 @@ namespace Infrastructure.Dependencies
                 .UseSqlServer(connectionString)
                 .UseLazyLoadingProxies();
             });
+
+            return services;
+        }
+
+        private static IServiceCollection AddRepositories(this IServiceCollection services)
+        {
+            services.AddTransient<IMatchRepository, MatchRepository>();
 
             return services;
         }

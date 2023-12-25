@@ -1,21 +1,19 @@
 ﻿using Application.Common.Interfaces;
-using Ardalis.GuardClauses;
 using Domain.Entities;
 using MediatR;
 
-namespace Application.UseCases.Match.Commands.CreateMatch
+namespace Application.UseCases.Match.Commands
 {
-    internal class CreateMatchHandler(IApplicationDbContext applicationDbContext) : IRequestHandler<CreateMatchRequest, CreateMatchResponse>
+    internal class CreateMatchHandler(IApplicationDbContext context) : IRequestHandler<CreateMatchRequest, CreateMatchResponse>
     {
-        private readonly IApplicationDbContext _applicationDbContext = applicationDbContext;
+        private readonly IApplicationDbContext _context = context;
 
         public async Task<CreateMatchResponse> Handle(CreateMatchRequest request, CancellationToken cancellationToken)
         {
             var match = new MatchEntity(request.GameId);
-            await _applicationDbContext.Matches.AddAsync(match, cancellationToken);
-            var affectedRows = await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
-            Guard.Against.NegativeOrZero(affectedRows, nameof(match), "Match cannot be created.");
+            await _context.Matches.AddAsync(match, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
             var response = new CreateMatchResponse 
             {

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.UseCases.Match.Commands.CreateMatch
+namespace Application.UseCases.Match.Commands
 {
     public record CreateMatchRequest : IRequest<CreateMatchResponse>
     {

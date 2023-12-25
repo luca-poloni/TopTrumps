@@ -1,22 +1,19 @@
 ﻿using Application.Common.Interfaces;
-using Ardalis.GuardClauses;
 using Domain.Entities;
 using MediatR;
 
-namespace Application.UseCases.Game.Commands.CreateGame
+namespace Application.UseCases.Game.Commands
 {
-    internal class CreateGameHandler(IApplicationDbContext applicationDbContext) : IRequestHandler<CreateGameRequest, CreateGameResponse>
+    internal class CreateGameHandler(IApplicationDbContext context) : IRequestHandler<CreateGameRequest, CreateGameResponse>
     {
-        private readonly IApplicationDbContext _applicationDbContext = applicationDbContext;
+        private readonly IApplicationDbContext _context = context;
 
         public async Task<CreateGameResponse> Handle(CreateGameRequest request, CancellationToken cancellationToken)
         {
             var game = new GameEntity(request.Name, request.Description);
 
-            await _applicationDbContext.Games.AddAsync(game, cancellationToken);
-            var affectedRows = await _applicationDbContext.SaveChangesAsync(cancellationToken);
-
-            Guard.Against.NegativeOrZero(affectedRows);
+            await _context.Games.AddAsync(game, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
             var response = new CreateGameResponse
             {

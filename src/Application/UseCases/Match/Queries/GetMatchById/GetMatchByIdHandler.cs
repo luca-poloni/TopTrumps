@@ -1,19 +1,15 @@
-﻿using Application.Common.Interfaces;
-using Ardalis.GuardClauses;
+﻿using Domain.Repositores;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
-namespace Application.UseCases.Match.Queries.GetMatchById
+namespace Application.UseCases.Match.Queries
 {
-    internal class GetMatchByIdHandler(IApplicationDbContext applicationDbContext) : IRequestHandler<GetMatchByIdRequest, GetMatchByIdResponse>
+    internal class GetMatchByIdHandler(IMatchRepository matchRepository) : IRequestHandler<GetMatchByIdRequest, GetMatchByIdResponse>
     {
-        private readonly IApplicationDbContext _applicationDbContext = applicationDbContext;
+        private readonly IMatchRepository _matchRepository = matchRepository;
 
         public async Task<GetMatchByIdResponse> Handle(GetMatchByIdRequest request, CancellationToken cancellationToken)
         {
-            var match = await _applicationDbContext.Matches.SingleOrDefaultAsync(match => match.Id == request.Id, cancellationToken);
-
-            Guard.Against.Null(match, nameof(match), "Match cannot be found.");
+            var match = await _matchRepository.GetById(request.Id, cancellationToken);
 
             var response = new GetMatchByIdResponse
             {

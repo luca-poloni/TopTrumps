@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.UseCases.Match.Queries.GetMatchById
+namespace Application.UseCases.Match.Queries
 {
     public class GetMatchByIdValidator : AbstractValidator<GetMatchByIdRequest>
     {

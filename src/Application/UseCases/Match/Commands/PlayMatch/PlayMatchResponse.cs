@@ -1,4 +1,4 @@
-﻿namespace Application.UseCases.Match.Commands.PlayMatch
+﻿namespace Application.UseCases.Match.Commands
 {
     public record PlayMatchResponse
     {
