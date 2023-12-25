@@ -23,3 +23,5 @@ app.UseAuthorization();
 app.UseMiddlewares();
 app.MapControllers();
 app.Run();
+
+public partial class Program { }
