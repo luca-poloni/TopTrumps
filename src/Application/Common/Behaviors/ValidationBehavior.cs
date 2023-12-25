@@ -47,7 +47,7 @@ namespace Application.Common.Behaviors
         private static List<ValidationFailure> Failures(ValidationResult[] validationResults)
         {
             return validationResults
-                .Where(r => r.Errors.Any())
+                .Where(r => r.Errors.Count > 0)
                 .SelectMany(r => r.Errors)
                 .ToList();
         }
