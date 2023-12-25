@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Infrastructure.Context
 {
-    internal class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options), IApplicationDbContext
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options), IApplicationDbContext
     {
         public DbSet<CardEntity> Cards => Set<CardEntity>();
         public DbSet<CardPlayerEntity> CardPlayers => Set<CardPlayerEntity>();
