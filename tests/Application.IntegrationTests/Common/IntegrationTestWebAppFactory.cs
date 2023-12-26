@@ -30,6 +30,11 @@ namespace Application.IntegrationTests.Common
             });
         }
 
+        public string GetConnectionString()
+        {
+            return _dbContainer.GetConnectionString();
+        }
+
         public Task InitializeAsync()
         {
             return _dbContainer.StartAsync();
