@@ -24,7 +24,7 @@ namespace Domain.Entities
             return Features.SingleOrDefault(feature => feature.Name == featureName);
         }
 
-        public FeatureEntity? WinnerFeatureByValue(sbyte value)
+        public FeatureEntity? WinnerFeatureByValue(uint value)
         {
             return Features.SingleOrDefault(feature => feature.Value == value);
         } 

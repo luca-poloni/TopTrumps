@@ -11,9 +11,10 @@ namespace Application.IntegrationTests.UseCases.Match.Queries
         public async Task GetMatchById_With_ValidParameters_Should_ValidMatchResponse()
         {
             #region Arrange
-            DbContext.Matches.Add(new MatchEntity(1, new GameEntity("Animals", "Animals of the world."), []));
+            var match = new MatchEntity(new GameEntity("Animals", "Animals of the world."));
+            DbContext.Matches.Add(match);
             DbContext.SaveChanges();
-            var request = new GetMatchByIdRequest { Id = 1 };
+            var request = new GetMatchByIdRequest { Id = match.Id };
             #endregion
 
             #region Action
@@ -29,7 +30,7 @@ namespace Application.IntegrationTests.UseCases.Match.Queries
         }
 
         [Fact]
-        public async Task GetMatchById_With_InvalidGameId_Should_ThrowArgumentException()
+        public async Task GetMatchById_With_InvalidId_Should_ThrowArgumentException()
         {
             #region Arrange
             var request = new GetMatchByIdRequest { Id = 0 };
@@ -45,7 +46,7 @@ namespace Application.IntegrationTests.UseCases.Match.Queries
         }
 
         [Fact]
-        public async Task GetMatchById_With_NonexistentGameId_Should_ThrowArgumentException()
+        public async Task GetMatchById_With_NonexistentId_Should_ThrowArgumentException()
         {
             #region Arrange
             var request = new GetMatchByIdRequest { Id = 1 };

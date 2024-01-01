@@ -1,18 +1,18 @@
-﻿using Application.UseCases.Game.Commands;
+﻿using Application.UseCases.Feature.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [Route("Game")]
+    [Route("Feature")]
     [ApiController]
-    public class GameController(IMediator mediator)
+    public class FeatureController(IMediator mediator)
     {
         private readonly IMediator _mediator = mediator;
 
         [Route("Create")]
         [HttpPost]
-        public async Task<ActionResult<CreateGameResponse>> Create([FromBody] CreateGameRequest request)
+        public async Task<ActionResult<CreateFeatureResponse>> Create([FromBody] CreateFeatureRequest request)
         {
             return await _mediator.Send(request);
         }

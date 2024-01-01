@@ -39,6 +39,9 @@ namespace Infrastructure.Dependencies
         private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddTransient<IMatchRepository, MatchRepository>();
+            services.AddTransient<IGameRepository, GameRepository>();
+            services.AddTransient<ICardPlayerRepository, CardPlayerRepository>();
+            services.AddTransient<IRoundRepository, RoundRepository>();
 
             return services;
         }

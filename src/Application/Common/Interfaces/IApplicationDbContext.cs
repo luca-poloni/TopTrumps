@@ -11,6 +11,8 @@ namespace Application.Common.Interfaces
         public DbSet<GameEntity> Games { get; }
         public DbSet<MatchEntity> Matches { get; }
         public DbSet<PlayerEntity> Players { get; }
+        public DbSet<RoundEntity> Rounds { get; }
+        public DbSet<CardPlayerRoundEntity> CardPlayerRounds { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

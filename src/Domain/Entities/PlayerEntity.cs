@@ -1,5 +1,4 @@
 ﻿using Domain.Common;
-using Domain.Exceptions;
 
 namespace Domain.Entities
 {
@@ -21,22 +20,21 @@ namespace Domain.Entities
             return CardPlayers.Count > 0;
         }
 
-        public CardPlayerEntity GiveCard(string featureName)
+        public CardPlayerEntity? GiveCard(uint cardPlayerId)
         {
-            var cardPlayer = CardPlayers.SingleOrDefault(cardPlayer => cardPlayer.Card.FeatureByName(featureName) != default);
-
-            if (cardPlayer == default)
-                throw new CardNotFoundException();
-
-            CardPlayers.Remove(cardPlayer);
-
-            return cardPlayer;
+            return CardPlayers.SingleOrDefault(cardPlayer => cardPlayer.Id == cardPlayerId);
         }
 
         public void TakeCards(List<CardPlayerEntity> cardPlayers)
         {
             foreach (var cardPlayer in cardPlayers)
                 CardPlayers.Add(cardPlayer);
+        }
+
+        public void TakeRoundCards(List<CardPlayerEntity> cardPlayers)
+        {
+            foreach (var cardPlayer in cardPlayers)
+                cardPlayer.Player = this;
         }
     }
 }

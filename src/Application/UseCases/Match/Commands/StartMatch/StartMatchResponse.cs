@@ -1,6 +1,6 @@
 ﻿namespace Application.UseCases.Match.Commands
 {
-    public record PlayMatchResponse
+    public record StartMatchResponse
     {
         public uint Id { get; init; }
         public uint GameId { get; init; }

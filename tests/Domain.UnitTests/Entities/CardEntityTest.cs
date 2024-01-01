@@ -17,7 +17,7 @@ namespace Domain.UnitTests.Tests.Entities
                 isTopTrumps: It.IsAny<bool>(),
                 game: It.IsAny<GameEntity>(),
                 cardPlayers: It.IsAny<List<CardPlayerEntity>>(),
-                features: [new(It.IsAny<uint>(), "Feature One", It.IsAny<sbyte>())]);
+                features: [new(It.IsAny<uint>(), "Feature One", It.IsAny<uint>())]);
             #endregion
 
             #region Action

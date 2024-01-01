@@ -4,20 +4,20 @@ using MediatR;
 
 namespace Application.UseCases.Match.Commands
 {
-    internal class PlayMatchHandler(IApplicationDbContext context, IMatchRepository matchRepository) : IRequestHandler<PlayMatchRequest, PlayMatchResponse>
+    internal class StartMatchHandler(IMatchRepository matchRepository, IApplicationDbContext context) : IRequestHandler<StartMatchRequest, StartMatchResponse>
     {
         private readonly IMatchRepository _matchRepository = matchRepository;
         private readonly IApplicationDbContext _context = context;
 
-        public async Task<PlayMatchResponse> Handle(PlayMatchRequest request, CancellationToken cancellationToken)
+        public async Task<StartMatchResponse> Handle(StartMatchRequest request, CancellationToken cancellationToken)
         {
             var match = await _matchRepository.GetById(request.Id, cancellationToken);
 
-            match.Play();
+            match.Start();
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            var response = new PlayMatchResponse
+            var response = new StartMatchResponse
             {
                 Id = match.Id,
                 GameId = match.GameId,

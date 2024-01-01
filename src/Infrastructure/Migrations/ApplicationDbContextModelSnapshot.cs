@@ -17,6 +17,9 @@ namespace Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -73,6 +76,29 @@ namespace Infrastructure.Migrations
                     b.ToTable("CardPlayers");
                 });
 
+            modelBuilder.Entity("Domain.Entities.CardPlayerRoundEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CardPlayerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RoundId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CardPlayerId");
+
+                    b.HasIndex("RoundId");
+
+                    b.ToTable("CardPlayerRounds");
+                });
+
             modelBuilder.Entity("Domain.Entities.FeatureEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -88,8 +114,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<short>("Value")
-                        .HasColumnType("smallint");
+                    b.Property<long>("Value")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -162,6 +188,29 @@ namespace Infrastructure.Migrations
                     b.ToTable("Players");
                 });
 
+            modelBuilder.Entity("Domain.Entities.RoundEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("MatchId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("WinnerPlayerId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MatchId");
+
+                    b.HasIndex("WinnerPlayerId");
+
+                    b.ToTable("Rounds");
+                });
+
             modelBuilder.Entity("Domain.Entities.CardEntity", b =>
                 {
                     b.HasOne("Domain.Entities.GameEntity", "Game")
@@ -190,6 +239,25 @@ namespace Infrastructure.Migrations
                     b.Navigation("Card");
 
                     b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("Domain.Entities.CardPlayerRoundEntity", b =>
+                {
+                    b.HasOne("Domain.Entities.CardPlayerEntity", "CardPlayer")
+                        .WithMany("CardPlayerRounds")
+                        .HasForeignKey("CardPlayerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.RoundEntity", "Round")
+                        .WithMany("CardPlayerRounds")
+                        .HasForeignKey("RoundId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CardPlayer");
+
+                    b.Navigation("Round");
                 });
 
             modelBuilder.Entity("Domain.Entities.FeatureEntity", b =>
@@ -225,11 +293,34 @@ namespace Infrastructure.Migrations
                     b.Navigation("Match");
                 });
 
+            modelBuilder.Entity("Domain.Entities.RoundEntity", b =>
+                {
+                    b.HasOne("Domain.Entities.MatchEntity", "Match")
+                        .WithMany("Rounds")
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.PlayerEntity", "WinnerPlayer")
+                        .WithMany()
+                        .HasForeignKey("WinnerPlayerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Match");
+
+                    b.Navigation("WinnerPlayer");
+                });
+
             modelBuilder.Entity("Domain.Entities.CardEntity", b =>
                 {
                     b.Navigation("CardPlayers");
 
                     b.Navigation("Features");
+                });
+
+            modelBuilder.Entity("Domain.Entities.CardPlayerEntity", b =>
+                {
+                    b.Navigation("CardPlayerRounds");
                 });
 
             modelBuilder.Entity("Domain.Entities.GameEntity", b =>
@@ -242,11 +333,18 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.MatchEntity", b =>
                 {
                     b.Navigation("Players");
+
+                    b.Navigation("Rounds");
                 });
 
             modelBuilder.Entity("Domain.Entities.PlayerEntity", b =>
                 {
                     b.Navigation("CardPlayers");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RoundEntity", b =>
+                {
+                    b.Navigation("CardPlayerRounds");
                 });
 #pragma warning restore 612, 618
         }

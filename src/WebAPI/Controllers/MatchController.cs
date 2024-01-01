@@ -13,21 +13,14 @@ namespace WebAPI.Controllers
 
         [Route("Create")]
         [HttpPost]
-        public async Task<ActionResult<CreateMatchResponse>> Create([FromQuery] CreateMatchRequest request)
+        public async Task<ActionResult<CreateMatchResponse>> Create([FromBody] CreateMatchRequest request)
         {
             return await _mediator.Send(request);
         }
 
-        [Route("Play")]
+        [Route("Start")]
         [HttpPut]
-        public async Task<ActionResult<PlayMatchResponse>> Play([FromQuery] PlayMatchRequest request)
-        {
-            return await _mediator.Send(request);
-        }
-
-        [Route("Move")]
-        [HttpPut]
-        public async Task<ActionResult<MoveMatchResponse>> Move([FromQuery] MoveMatchRequest request)
+        public async Task<ActionResult<StartMatchResponse>> Start([FromBody] StartMatchRequest request)
         {
             return await _mediator.Send(request);
         }

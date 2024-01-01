@@ -2,7 +2,7 @@
 
 namespace Application.UseCases.Match.Commands
 {
-    public record PlayMatchRequest : IRequest<PlayMatchResponse>
+    public record StartMatchRequest : IRequest<StartMatchResponse>
     {
         public uint Id { get; init; }
     }

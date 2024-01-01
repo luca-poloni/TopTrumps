@@ -13,6 +13,8 @@ namespace Infrastructure.Context
         public DbSet<GameEntity> Games => Set<GameEntity>();
         public DbSet<MatchEntity> Matches => Set<MatchEntity>();
         public DbSet<PlayerEntity> Players => Set<PlayerEntity>();
+        public DbSet<RoundEntity> Rounds => Set<RoundEntity>();
+        public DbSet<CardPlayerRoundEntity> CardPlayerRounds => Set<CardPlayerRoundEntity>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

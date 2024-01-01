@@ -1,18 +1,18 @@
-﻿using Application.UseCases.Game.Commands;
+﻿using Application.UseCases.Player.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [Route("Game")]
+    [Route("Player")]
     [ApiController]
-    public class GameController(IMediator mediator)
+    public class PlayerController(IMediator mediator)
     {
         private readonly IMediator _mediator = mediator;
 
         [Route("Create")]
         [HttpPost]
-        public async Task<ActionResult<CreateGameResponse>> Create([FromBody] CreateGameRequest request)
+        public async Task<ActionResult<CreatePlayerResponse>> Create([FromBody] CreatePlayerRequest request)
         {
             return await _mediator.Send(request);
         }
