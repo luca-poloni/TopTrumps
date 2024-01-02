@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Exceptions;
 
 namespace Domain.Entities
 {
@@ -24,6 +25,9 @@ namespace Domain.Entities
 
         public void Start()
         {
+            if (IsFinish)
+                throw new MatchIsFinishException();
+
             var shuffledCards = Game.ShuffledCards();
             var cardsPerPlayer = CountPlayerCards(shuffledCards);
 

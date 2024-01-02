@@ -36,13 +36,24 @@ namespace Domain.Entities
             if (cardPlayer == default)
                 throw new CardNotFoundException();
 
+            if (PlayerIsRepeated(cardPlayer))
+                throw new RepeatedPlayerException();
+
             CardPlayerRounds.Add(new CardPlayerRoundEntity(cardPlayer, this));
+        }
+
+        private bool PlayerIsRepeated(CardPlayerEntity cardPlayer)
+        {
+            return CardPlayerRounds.Any(cardPlayerRound => cardPlayerRound.CardPlayer.Player == cardPlayer.Player);
         }
 
         public void Play(string featureName)
         {
             if (IsRoundNotPlayable())
                 throw new RoundNotPlayableException();
+
+            if (IsInsufficientNumberCards())
+                throw new InsufficientNumberCardsException();
 
             var winnerCard = WinnerCard(featureName);
 
@@ -61,6 +72,11 @@ namespace Domain.Entities
         private bool IsRoundNotPlayable()
         {
             return Match.IsFinish || WinnerPlayerId != default;
+        }
+
+        private bool IsInsufficientNumberCards()
+        {
+            return CardPlayerRounds.Count <= 1;
         }
 
         private CardPlayerEntity WinnerCard(string featureName)
