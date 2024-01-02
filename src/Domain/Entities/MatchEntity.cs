@@ -66,7 +66,7 @@ namespace Domain.Entities
             return playerCards;
         }
 
-        public void MatchIsFinish()
+        public void VerifyMatchIsFinish()
         {
             var availablePlayers = AvailablePlayers();
 

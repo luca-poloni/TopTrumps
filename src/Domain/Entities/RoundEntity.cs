@@ -66,7 +66,7 @@ namespace Domain.Entities
                 }
             }
 
-            Match.MatchIsFinish();
+            Match.VerifyMatchIsFinish();
         }
 
         private bool IsRoundNotPlayable()
