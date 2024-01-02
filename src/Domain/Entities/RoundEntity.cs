@@ -20,6 +20,9 @@ namespace Domain.Entities
 
         public void TakeCard(uint cardPlayerId)
         {
+            if (IsRoundNotPlayable())
+                throw new RoundNotPlayableException();
+
             var cardPlayer = default(CardPlayerEntity);
 
             foreach (var player in Match.Players)
@@ -38,6 +41,9 @@ namespace Domain.Entities
 
         public void Play(string featureName)
         {
+            if (IsRoundNotPlayable())
+                throw new RoundNotPlayableException();
+
             var winnerCard = WinnerCard(featureName);
 
             foreach (var player in Match.Players)
@@ -50,6 +56,11 @@ namespace Domain.Entities
             }
 
             Match.MatchIsFinish();
+        }
+
+        private bool IsRoundNotPlayable()
+        {
+            return Match.IsFinish || WinnerPlayerId != default;
         }
 
         private CardPlayerEntity WinnerCard(string featureName)

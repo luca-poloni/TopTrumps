@@ -39,6 +39,7 @@ namespace WebAPI.Middlewares
         {
             return exception switch
             {
+                ApplicationException => (int)HttpStatusCode.BadRequest,
                 ArgumentException => (int)HttpStatusCode.BadRequest,
                 _ => (int)HttpStatusCode.InternalServerError,
             };
