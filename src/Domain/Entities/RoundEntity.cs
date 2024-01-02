@@ -18,23 +18,10 @@ namespace Domain.Entities
             WinnerPlayer = winnerPlayer;
         }
 
-        public void TakeCard(uint cardPlayerId)
+        public void TakeCard(CardPlayerEntity cardPlayer)
         {
             if (IsRoundNotPlayable())
                 throw new RoundNotPlayableException();
-
-            var cardPlayer = default(CardPlayerEntity);
-
-            foreach (var player in Match.Players)
-            {
-                cardPlayer = player.GiveCard(cardPlayerId);
-
-                if (cardPlayer != default)
-                    break;
-            }
-
-            if (cardPlayer == default)
-                throw new CardNotFoundException();
 
             if (PlayerIsRepeated(cardPlayer))
                 throw new RepeatedPlayerException();

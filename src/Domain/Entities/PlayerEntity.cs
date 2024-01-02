@@ -20,12 +20,7 @@ namespace Domain.Entities
             return CardPlayers.Count > 0;
         }
 
-        public CardPlayerEntity? GiveCard(uint cardPlayerId)
-        {
-            return CardPlayers.SingleOrDefault(cardPlayer => cardPlayer.Id == cardPlayerId);
-        }
-
-        public void TakeCards(List<CardPlayerEntity> cardPlayers)
+        public void TakeInitialCards(List<CardPlayerEntity> cardPlayers)
         {
             foreach (var cardPlayer in cardPlayers)
                 CardPlayers.Add(cardPlayer);

@@ -46,7 +46,7 @@ namespace Domain.Entities
                 var cardsForPlayer = CardsForPlayer(shuffledCards, cardsPerPlayer);
                 var playerCards = PlayerCards(cardsForPlayer, player);
 
-                player.TakeCards(playerCards);
+                player.TakeInitialCards(playerCards);
                 shuffledCards.RemoveAll(cardsForPlayer.Contains);
             }
         }
