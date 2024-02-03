@@ -16,5 +16,22 @@ namespace Domain.Player
             Match = match;
             CardDecks = cardDecks;
         }
+
+        public bool IsAvailable()
+        {
+            return CardDecks.Count > 0;
+        }
+
+        public void TakeInitialCards(List<CardDeckEntity> cardDecks)
+        {
+            foreach (var cardDeck in cardDecks)
+                CardDecks.Add(cardDeck);
+        }
+
+        public void TakeRoundCards(List<CardDeckEntity> cardDecks)
+        {
+            foreach (var cardDeck in cardDecks)
+                cardDeck.Player = this;
+        }
     }
 }

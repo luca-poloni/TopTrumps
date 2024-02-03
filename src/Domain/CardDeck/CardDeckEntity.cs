@@ -10,7 +10,7 @@ namespace Domain.CardDeck
         public uint CardId { get; } = cardId;
         public uint PlayerId { get; } = playerId;
         public CardEntity Card { get; } = null!;
-        public PlayerEntity Player { get; } = null!;
+        public PlayerEntity Player { get; set; } = null!;
         public List<CardRoundEntity> CardRounds { get; } = [];
 
         public CardDeckEntity(uint cardId, uint playerId, CardEntity card, PlayerEntity player, List<CardRoundEntity> cardRounds) : this(cardId, playerId)
