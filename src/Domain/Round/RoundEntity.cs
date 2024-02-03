@@ -4,7 +4,7 @@ namespace Domain.Round
 {
     public sealed class RoundEntity(uint matchId, uint? winnerPlayerId = default) : BaseEntity<uint>
     {
-        public uint MatchId { get; private set; } = matchId;
-        public uint? WinnerPlayerId { get; private set; } = winnerPlayerId;
+        public uint MatchId { get; } = matchId;
+        public uint? WinnerPlayerId { get; } = winnerPlayerId;
     }
 }

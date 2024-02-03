@@ -5,7 +5,7 @@ namespace Domain.Card
 {
     public sealed class CardEntity(uint gameId, string name, byte[] image, bool isTopTrumps) : BaseEntity<uint>
     {
-        public uint GameId { get; private set; } = gameId;
+        public uint GameId { get; } = gameId;
         public string Name { get; private set; } = name;
         public byte[] Image { get; private set; } = image;
         public bool IsTopTrumps { get; private set; } = isTopTrumps;
