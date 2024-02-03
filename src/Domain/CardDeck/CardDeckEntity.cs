@@ -19,5 +19,11 @@ namespace Domain.CardDeck
             Player = player;
             CardRounds = cardRounds;
         }
+
+        public CardDeckEntity(CardEntity card, PlayerEntity player) : this(card.Id, player.Id)
+        {
+            Card = card;
+            Player = player;
+        }
     }
 }
