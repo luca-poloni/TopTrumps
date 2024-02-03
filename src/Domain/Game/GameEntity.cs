@@ -19,5 +19,10 @@ namespace Domain.Game
             Features = features;
             Matches = matches;
         }
+
+        public List<CardEntity> ShuffledCards()
+        {
+            return [.. Cards.OrderBy(card => Guid.NewGuid())];
+        }
     }
 }
