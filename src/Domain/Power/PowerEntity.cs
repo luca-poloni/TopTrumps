@@ -17,5 +17,10 @@ namespace Domain.Power
             Card = card;
             Feature = feature;
         }
+
+        public bool IsHigher(PowerEntity? anotherPower)
+        {
+            return Value != default && (anotherPower == default || anotherPower.Value < Value);
+        }
     }
 }
