@@ -12,8 +12,8 @@ namespace Domain.Match
         public uint GameId { get; } = gameId;
         public bool IsFinish { get; private set; }
         public GameEntity Game { get; } = null!;
-        public List<PlayerEntity> Players { get; set; } = [];
-        public List<RoundEntity> Rounds { get; set; } = [];
+        public List<PlayerEntity> Players { get; } = [];
+        public List<RoundEntity> Rounds { get; } = [];
 
         public MatchEntity(uint gameId, bool isFinish, GameEntity game, List<PlayerEntity> players, List<RoundEntity> rounds) : this(gameId)
         {
