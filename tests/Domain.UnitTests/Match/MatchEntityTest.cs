@@ -45,5 +45,26 @@ namespace Domain.UnitTests.Match
             action.Should().Throw<MatchIsFinishException>();
             #endregion
         }
+
+        [Fact]
+        public void VerifyMatchIsFinish_Should_NotThrowException()
+        {
+            #region Arrange
+            var match = new MatchEntity(
+                gameId: It.IsAny<uint>(),
+                isFinish: true,
+                game: It.IsAny<GameEntity>(),
+                players: [new(matchId: It.IsAny<uint>(), name: It.IsAny<string>())],
+                rounds: It.IsAny<List<RoundEntity>>());
+            #endregion
+
+            #region Action
+            var action = match.VerifyMatchIsFinish;
+            #endregion
+
+            #region Assert
+            action.Should().NotThrow();
+            #endregion
+        }
     }
 }
