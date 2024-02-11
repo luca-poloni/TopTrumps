@@ -1,7 +1,9 @@
-﻿using Domain.Match;
+﻿using Domain.CardDeck;
+using Domain.Match;
 using Domain.Player;
 using FluentAssertions;
 using Moq;
+using System.Text.RegularExpressions;
 
 namespace Domain.UnitTests.Player
 {
@@ -45,6 +47,48 @@ namespace Domain.UnitTests.Player
 
             #region Assert
             isAvailable.Should().BeFalse();
+            #endregion
+        }
+
+        [Fact]
+        public void TakeInitialCards_Should_NotThrow()
+        {
+            #region Arrange
+            var playerMock = new PlayerEntity(
+                matchId: It.IsAny<uint>(),
+                name: It.IsAny<string>(),
+                match: It.IsAny<MatchEntity>(),
+                cardDecks: []);
+            var cardDecksMock = new List<CardDeckEntity> { new(cardId: It.IsAny<uint>(), playerId: It.IsAny<uint>()) };
+            #endregion
+
+            #region Action
+            var action = () => playerMock.TakeInitialCards(cardDecksMock);
+            #endregion
+
+            #region Assert
+            action.Should().NotThrow();
+            #endregion
+        }
+
+        [Fact]
+        public void TakeRoundCards_Should_NotThrow()
+        {
+            #region Arrange
+            var playerMock = new PlayerEntity(
+                matchId: It.IsAny<uint>(),
+                name: It.IsAny<string>(),
+                match: It.IsAny<MatchEntity>(),
+                cardDecks: []);
+            var cardDecksMock = new List<CardDeckEntity> { new(cardId: It.IsAny<uint>(), playerId: It.IsAny<uint>()) };
+            #endregion
+
+            #region Action
+            var action = () => playerMock.TakeRoundCards(cardDecksMock);
+            #endregion
+
+            #region Assert
+            action.Should().NotThrow();
             #endregion
         }
     }
