@@ -16,5 +16,11 @@ namespace Domain.CardRound
             CardDeck = cardDeck;
             Round = round;
         }
+
+        public CardRoundEntity(CardDeckEntity cardDeck, RoundEntity round) : this(cardDeck.Id, round.Id)
+        {
+            CardDeck = cardDeck;
+            Round = round;
+        }
     }
 }

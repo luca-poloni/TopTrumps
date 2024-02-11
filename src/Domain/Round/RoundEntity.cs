@@ -1,4 +1,5 @@
-﻿using Domain.CardRound;
+﻿using Domain.CardDeck;
+using Domain.CardRound;
 using Domain.Core;
 using Domain.Match;
 using Domain.Player;
@@ -18,6 +19,27 @@ namespace Domain.Round
             Match = match;
             CardRounds = cardRounds;
             WinnerPlayer = winnerPlayer;
+        }
+
+        public void TakeCard(CardDeckEntity cardDeck)
+        {
+            if (IsRoundNotPlayable())
+                throw new RoundNotPlayableException();
+
+            if (PlayerIsRepeated(cardDeck))
+                throw new RepeatedPlayerException();
+
+            CardRounds.Add(new CardRoundEntity(cardDeck, this));
+        }
+
+        private bool IsRoundNotPlayable()
+        {
+            return Match.IsFinish || WinnerPlayerId != default;
+        }
+
+        private bool PlayerIsRepeated(CardDeckEntity cardDeck)
+        {
+            return CardRounds.Any(cardRound => cardRound.CardDeck.Player == cardDeck.Player);
         }
     }
 }
