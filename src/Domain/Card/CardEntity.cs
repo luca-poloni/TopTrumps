@@ -21,5 +21,10 @@ namespace Domain.Card
             CardDecks = cardDecks;
             Powers = powers;
         }
+
+        public PowerEntity? WinnerPowerByValue(uint value)
+        {
+            return Powers.SingleOrDefault(power => power.Value == value);
+        }
     }
 }

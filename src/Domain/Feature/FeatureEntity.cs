@@ -1,4 +1,5 @@
-﻿using Domain.Core;
+﻿using Domain.Card;
+using Domain.Core;
 using Domain.Game;
 using Domain.Power;
 
@@ -15,6 +16,11 @@ namespace Domain.Feature
         {
             Game = game;
             Powers = powers;
+        }
+
+        public PowerEntity? PowerByCard(CardEntity card)
+        {
+            return Powers.SingleOrDefault(power => power.Card == card);
         }
     }
 }
