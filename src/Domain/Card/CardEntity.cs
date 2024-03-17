@@ -1,30 +1,23 @@
-﻿using Domain.CardDeck;
-using Domain.Core;
+﻿using Domain.Core;
+using Domain.Feature;
 using Domain.Game;
+using Domain.Player;
 using Domain.Power;
 
 namespace Domain.Card
 {
-    public sealed class CardEntity(uint gameId, string name, byte[] image, bool isTopTrumps) : BaseEntity<uint>
+    public class CardEntity : BaseAuditableEntity<uint>
     {
-        public uint GameId { get; } = gameId;
-        public string Name { get; private set; } = name;
-        public byte[] Image { get; private set; } = image;
-        public bool IsTopTrumps { get; private set; } = isTopTrumps;
-        public GameEntity Game { get; } = null!;
-        public List<CardDeckEntity> CardDecks { get; } = [];
-        public List<PowerEntity> Powers { get; } = [];
+        public uint GameId { get; set; } = default;
+        public string Name { get; set; } = string.Empty;
+        public bool IsTopTrumps { get; set; } = default;
+        public GameEntity Game { get; set; } = null!;
+        public List<PowerEntity> Powers { get; set; } = [];
+        public List<PlayerEntity.PlayerCardEntity> CardPlayers { get; set; } = [];
 
-        public CardEntity(uint gameId, string name, byte[] image, bool isTopTrumps, GameEntity game, List<CardDeckEntity> cardDecks, List<PowerEntity> powers) : this(gameId, name, image, isTopTrumps)
+        public uint? PowerValueByFeature(FeatureEntity feature)
         {
-            Game = game;
-            CardDecks = cardDecks;
-            Powers = powers;
-        }
-
-        public PowerEntity? WinnerPowerByValue(uint value)
-        {
-            return Powers.SingleOrDefault(power => power.Value == value);
+            return Powers.SingleOrDefault(power => power.Feature == feature)?.Value;
         }
     }
 }

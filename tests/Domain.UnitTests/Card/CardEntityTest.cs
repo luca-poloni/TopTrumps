@@ -1,57 +1,44 @@
 ﻿using Domain.Card;
-using Domain.CardDeck;
-using Domain.Game;
+using Domain.Feature;
 using Domain.Power;
 using FluentAssertions;
-using Moq;
 
 namespace Domain.UnitTests.Card
 {
     public class CardEntityTest
     {
         [Fact]
-        public void WinnerPowerByValue_Should_ValidPower()
+        public void PowerValueByFeature_Should_Be_PowerValue()
         {
             #region Arrange
-            var card = new CardEntity(
-                gameId: It.IsAny<uint>(), 
-                name: It.IsAny<string>(), 
-                image: It.IsAny<byte[]>(), 
-                isTopTrumps: It.IsAny<bool>(), 
-                game: It.IsAny<GameEntity>(), 
-                cardDecks: It.IsAny<List<CardDeckEntity>>(), 
-                powers: [new(cardId: It.IsAny<uint>(), featureId: It.IsAny<uint>(), value: 100)]);
+            var featureMock = new FeatureEntity();
+            var powerMock = new PowerEntity() { Feature = featureMock };
+            var cardMock = new CardEntity() { Powers = [powerMock] };
             #endregion
 
             #region Action
-            var winnerPowerByValue = card.WinnerPowerByValue(100);
+            var powerValue = cardMock.PowerValueByFeature(featureMock);
             #endregion
 
             #region Assert
-            winnerPowerByValue.Should().BeOfType<PowerEntity>();
+            powerValue.Should().Be(powerMock.Value);
             #endregion
         }
 
         [Fact]
-        public void WinnerPowerByValue_Should_NoPower()
+        public void PowerValueByFeature_Should_Be_Null()
         {
             #region Arrange
-            var card = new CardEntity(
-                gameId: It.IsAny<uint>(),
-                name: It.IsAny<string>(),
-                image: It.IsAny<byte[]>(),
-                isTopTrumps: It.IsAny<bool>(),
-                game: It.IsAny<GameEntity>(),
-                cardDecks: It.IsAny<List<CardDeckEntity>>(),
-                powers: [new(cardId: It.IsAny<uint>(), featureId: It.IsAny<uint>(), value: 100)]);
+            var featureMock = new FeatureEntity();
+            var cardMock = new CardEntity();
             #endregion
 
             #region Action
-            var winnerPowerByValue = card.WinnerPowerByValue(50);
+            var powerValue = cardMock.PowerValueByFeature(featureMock);
             #endregion
 
             #region Assert
-            winnerPowerByValue.Should().BeNull();
+            powerValue.Should().BeNull();
             #endregion
         }
     }

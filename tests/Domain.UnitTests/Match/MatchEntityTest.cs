@@ -1,65 +1,114 @@
 ﻿using Domain.Game;
 using Domain.Match;
 using Domain.Player;
-using Domain.Round;
 using FluentAssertions;
-using Moq;
 
 namespace Domain.UnitTests.Match
 {
     public class MatchEntityTest
     {
         [Fact]
-        public void Start_Should_NotThrowMatchIsFinishException()
+        public void TakeShuffledCards_Should_NotThrow()
         {
             #region Arrange
-            var match = new MatchEntity(gameId: It.IsAny<uint>());
+            var matchMock = new MatchEntity()
+            {
+                Game = new GameEntity()
+                {
+                    Cards = [new()]
+                }
+            };
             #endregion
 
             #region Action
-            var action = match.Start;
+            var action = matchMock.TakeShuffledCards;
             #endregion
 
             #region Assert
-            action.Should().NotThrow<MatchIsFinishException>();
+            action.Should().NotThrow();
             #endregion
         }
 
         [Fact]
-        public void Start_Should_ThrowMatchIsFinishException()
+        public void GiveMatchCards_Should_NotThrow()
         {
             #region Arrange
-            var match = new MatchEntity(
-                gameId: It.IsAny<uint>(), 
-                isFinish: true, 
-                game: It.IsAny<GameEntity>(), 
-                players: It.IsAny<List<PlayerEntity>>(), 
-                rounds: It.IsAny<List<RoundEntity>>());
+            var matchMock = new MatchEntity()
+            {
+                Players = [new()],
+                MatchCards = [new()]
+            };
             #endregion
 
             #region Action
-            var action = match.Start;
+            var action = matchMock.GiveMatchCards;
             #endregion
 
             #region Assert
-            action.Should().Throw<MatchIsFinishException>();
+            action.Should().NotThrow();
             #endregion
         }
 
         [Fact]
-        public void VerifyMatchIsFinish_Should_NotThrowException()
+        public void GiveMatchCards_Should_ThrowExactly_HasNoMoreCardsToGiveException()
         {
             #region Arrange
-            var match = new MatchEntity(
-                gameId: It.IsAny<uint>(),
-                isFinish: true,
-                game: It.IsAny<GameEntity>(),
-                players: [new(matchId: It.IsAny<uint>(), name: It.IsAny<string>())],
-                rounds: It.IsAny<List<RoundEntity>>());
+            var matchMock = new MatchEntity() { Players = [new()] };
             #endregion
 
             #region Action
-            var action = match.VerifyMatchIsFinish;
+            var action = matchMock.GiveMatchCards;
+            #endregion
+
+            #region Assert
+            action.Should().ThrowExactly<HasNoMoreCardsToGiveException>();
+            #endregion
+        }
+
+        [Fact]
+        public void WinnerPlayerByCard_Should_NotBeNull()
+        {
+            #region Arrange
+            var matchCardMock = new MatchEntity.MatchCardEntity();
+            var playerMock = new PlayerEntity() { PlayerCards = [new() { MatchCard = matchCardMock }] };
+            var matchMock = new MatchEntity() { Players = [playerMock] };
+            #endregion
+
+            #region Action
+            var winnerPlayer = matchMock.WinnerPlayerByCard(matchCardMock);
+            #endregion
+
+            #region Assert
+            winnerPlayer.Should().NotBeNull();
+            #endregion
+        }
+
+        [Fact]
+        public void WinnerPlayerByCard_Should_ThrowExactly_HasNoWinnerPlayerException()
+        {
+            #region Arrange
+            var matchCardMock = new MatchEntity.MatchCardEntity();
+            var matchMock = new MatchEntity() { Players = [new()] };
+            #endregion
+
+            #region Action
+            var action = () => matchMock.WinnerPlayerByCard(matchCardMock);
+            #endregion
+
+            #region Assert
+            action.Should().ThrowExactly<HasNoWinnerPlayerException>();
+            #endregion
+        }
+
+        [Fact]
+        public void VerifyMatchIsFinish_Should_NotThrow()
+        {
+            #region Arrange
+            var matchMock = new MatchEntity() { Players = [new PlayerEntity() { PlayerCards = [new() { MatchCard = new() }] }] };
+            #endregion
+
+            #region Action
+            var action = matchMock.VerifyMatchIsFinish;
             #endregion
 
             #region Assert

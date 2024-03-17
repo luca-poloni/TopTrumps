@@ -4,23 +4,12 @@ using Domain.Feature;
 
 namespace Domain.Power
 {
-    public sealed class PowerEntity(uint cardId, uint featureId, uint value) : BaseEntity<uint>
+    public class PowerEntity : BaseAuditableEntity<uint>
     {
-        public uint CardId { get; } = cardId;
-        public uint FeatureId { get; } = featureId;
-        public uint Value { get; private set; } = value;
-        public CardEntity Card { get; } = null!;
-        public FeatureEntity Feature { get; } = null!;
-
-        public PowerEntity(uint cardId, uint featureId, uint value, CardEntity card, FeatureEntity feature) : this(cardId, featureId, value)
-        {
-            Card = card;
-            Feature = feature;
-        }
-
-        public bool IsHigher(PowerEntity? anotherPower)
-        {
-            return Value != default && (anotherPower == default || anotherPower.Value < Value);
-        }
+        public uint CardId { get; set; } = default;
+        public uint FeatureId { get; set; } = default;
+        public uint Value { get; set; } = default;
+        public CardEntity Card { get; set; } = null!;
+        public FeatureEntity Feature { get; set; } = null!;
     }
 }

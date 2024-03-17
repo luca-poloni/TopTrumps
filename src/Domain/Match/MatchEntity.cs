@@ -1,5 +1,4 @@
 ﻿using Domain.Card;
-using Domain.CardDeck;
 using Domain.Core;
 using Domain.Game;
 using Domain.Player;
@@ -7,75 +6,79 @@ using Domain.Round;
 
 namespace Domain.Match
 {
-    public sealed class MatchEntity(uint gameId) : BaseEntity<uint>
+    public class MatchEntity : BaseAuditableEntity<uint>
     {
-        public uint GameId { get; } = gameId;
-        public bool IsFinish { get; private set; }
-        public GameEntity Game { get; } = null!;
-        public List<PlayerEntity> Players { get; } = [];
-        public List<RoundEntity> Rounds { get; } = [];
+        public uint GameId { get; } = default;
+        public bool IsFinish { get; set; } = default;
+        public GameEntity Game { get; set; } = null!;
+        public List<PlayerEntity> Players { get; set; } = [];
+        public List<RoundEntity> Rounds { get; set; } = [];
+        public List<MatchCardEntity> MatchCards { get; set; } = [];
 
-        public MatchEntity(uint gameId, bool isFinish, GameEntity game, List<PlayerEntity> players, List<RoundEntity> rounds) : this(gameId)
+        public void TakeShuffledCards()
         {
-            IsFinish = isFinish;
-            Game = game;
-            Players = players;
-            Rounds = rounds;
+            Game.ShuffledCards().ForEach(card => MatchCards.Add(new MatchCardEntity(this, card)));
         }
 
-        public void Start()
+        public void GiveMatchCards()
         {
-            if (IsFinish)
-                throw new MatchIsFinishException();
+            var matchCardsPerPlayer = MatchCardsPerPlayer();
 
-            var scrambledCards = Game.ShuffledCards();
-            var cardsPerPlayer = CardsPerPlayer(scrambledCards);
-
-            GiveCardsToPlayers(scrambledCards, cardsPerPlayer);
+            Players.ForEach(player => player.TakeCards(GiveMatchCardsToPlayer(matchCardsPerPlayer)));
         }
 
-        private int CardsPerPlayer(List<CardEntity> shuffledCards)
+        private int MatchCardsPerPlayer()
         {
-            return shuffledCards.Count / Players.Count;
+            return MatchCards.Count / Players.Count;
         }
 
-        private void GiveCardsToPlayers(List<CardEntity> shuffledCards, int cardsPerPlayer)
+        private List<MatchCardEntity> GiveMatchCardsToPlayer(int matchCardsPerPlayer)
         {
-            foreach (var player in Players)
-            {
-                var cardsForPlayer = CardsForPlayer(shuffledCards, cardsPerPlayer);
-                var playerCards = PlayerCards(cardsForPlayer, player);
+            var matchCardsToGive = MatchCards.Where(matchCard => !matchCard.Used)?.Take(matchCardsPerPlayer)?.ToList();
 
-                player.TakeInitialCards(playerCards);
-                shuffledCards.RemoveAll(cardsForPlayer.Contains);
-            }
+            if (matchCardsToGive == default || matchCardsToGive.Count == default)
+                throw new HasNoMoreCardsToGiveException();
+
+            matchCardsToGive.ForEach(matchCardToGive => matchCardToGive.Used = true);
+
+            return matchCardsToGive;
         }
 
-        private static List<CardEntity> CardsForPlayer(List<CardEntity> shuffledCards, int cardsPerPlayer)
+        public PlayerEntity WinnerPlayerByCard(MatchCardEntity matchCard)
         {
-            return shuffledCards.Take(cardsPerPlayer).ToList();
-        }
+            var winnerPlayer = Players.SingleOrDefault(player => player.IsWinnerCardBelongPlayer(matchCard));
 
-        private static List<CardDeckEntity> PlayerCards(List<CardEntity> cardsForPlayer, PlayerEntity player)
-        {
-            var playerCards = new List<CardDeckEntity>();
+            if (winnerPlayer == default)
+                throw new HasNoWinnerPlayerException();
 
-            foreach (var card in cardsForPlayer)
-                playerCards.Add(new CardDeckEntity(card, player));
-
-            return playerCards;
+            return winnerPlayer;
         }
 
         public void VerifyMatchIsFinish()
         {
             var availablePlayers = AvailablePlayers();
 
-            IsFinish = availablePlayers == default || availablePlayers.Count == 1;
+            IsFinish = availablePlayers != default && availablePlayers.Count == 1;
         }
 
         private List<PlayerEntity> AvailablePlayers()
         {
             return Players.Where(player => player.IsAvailable()).ToList();
+        }
+
+        public class MatchCardEntity() : BaseEntity<uint>
+        {
+            public uint MatchId { get; set; } = default;
+            public uint PlayerCardId { get; set; } = default;
+            public bool Used { get; set; } = default;
+            public MatchEntity Match { get; set; } = null!;
+            public CardEntity Card { get; set; } = null!;
+
+            public MatchCardEntity(MatchEntity match, CardEntity card) : this()
+            {
+                Match = match;
+                Card = card;
+            }
         }
     }
 }

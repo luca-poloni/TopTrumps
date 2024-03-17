@@ -5,22 +5,21 @@ using Domain.Power;
 
 namespace Domain.Feature
 {
-    public sealed class FeatureEntity(uint gameId, string name) : BaseEntity<uint>
+    public class FeatureEntity : BaseAuditableEntity<uint>
     {
-        public uint GameId { get; } = gameId;
-        public string Name { get; private set; } = name;
-        public GameEntity Game { get; } = null!;
-        public List<PowerEntity> Powers { get; } = [];
+        public uint GameId { get; set; } = default;
+        public string Name { get; set; } = string.Empty;
+        public GameEntity Game { get; set; } = null!;
+        public List<PowerEntity> Powers { get; set; } = [];
 
-        public FeatureEntity(uint gameId, string name, GameEntity game, List<PowerEntity> powers) : this(gameId, name)
+        public PowerEntity PowerByCard(CardEntity card)
         {
-            Game = game;
-            Powers = powers;
-        }
+            var power = Powers.SingleOrDefault(power => power.Card == card);
 
-        public PowerEntity? PowerByCard(CardEntity card)
-        {
-            return Powers.SingleOrDefault(power => power.Card == card);
+            if (power == default)
+                throw new PowerByCardNotFoundException();
+
+            return power;
         }
     }
 }

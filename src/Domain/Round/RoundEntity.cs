@@ -1,117 +1,48 @@
-﻿using Domain.CardDeck;
-using Domain.CardRound;
-using Domain.Core;
+﻿using Domain.Core;
 using Domain.Feature;
 using Domain.Match;
 using Domain.Player;
-using Domain.Power;
 
 namespace Domain.Round
 {
-    public sealed class RoundEntity(uint matchId, uint? winnerPlayerId = default) : BaseEntity<uint>
+    public class RoundEntity : BaseAuditableEntity<uint>
     {
-        public uint MatchId { get; } = matchId;
-        public uint? WinnerPlayerId { get; private set; } = winnerPlayerId;
-        public MatchEntity Match { get; } = null!;
-        public List<CardRoundEntity> CardRounds { get; } = [];
-        public PlayerEntity? WinnerPlayer { get; private set; } = null;
+        public uint MatchId { get; set; } = default;
+        public MatchEntity Match { get; set; } = null!;
+        public List<RoundCardEntity> RoundCards { get; set; } = [];
 
-        public RoundEntity(uint matchId, uint? winnerPlayerId, MatchEntity match, List<CardRoundEntity> cardRounds, PlayerEntity? winnerPlayer) : this(matchId, winnerPlayerId)
+        public void TakeCards(List<PlayerEntity.PlayerCardEntity> playerCards)
         {
-            Match = match;
-            CardRounds = cardRounds;
-            WinnerPlayer = winnerPlayer;
+            playerCards.ForEach(playerCard => RoundCards.Add(new RoundCardEntity(playerCard, this)));
         }
 
-        public void TakeCard(CardDeckEntity cardDeck)
+        public PlayerEntity WinnerPlayerByFeature(FeatureEntity feature)
         {
-            if (IsRoundNotPlayable())
-                throw new RoundNotPlayableException();
+            var winnerRoundCard = RoundCards.MaxBy(roundCard => roundCard.PlayerCard.MatchCard.Card.PowerValueByFeature(feature));
 
-            if (PlayerIsRepeated(cardDeck))
-                throw new RepeatedPlayerException();
+            if (winnerRoundCard == default)
+                throw new HasNoWinnerRoundCardException();
 
-            CardRounds.Add(new CardRoundEntity(cardDeck, this));
+            return winnerRoundCard.PlayerCard.Player;
         }
 
-        public void Play(FeatureEntity feature)
+        public void GiveCardsToWinnerPlayer(PlayerEntity winnerPlayer)
         {
-            if (IsRoundNotPlayable())
-                throw new RoundNotPlayableException();
+            winnerPlayer.TakePlayerCards(RoundCards.Select(roundCard => roundCard.PlayerCard).ToList());
+        }
 
-            if (IsInsufficientNumberCards())
-                throw new InsufficientNumberCardsException();
+        public class RoundCardEntity() : BaseEntity<uint>
+        {
+            public uint RoundId { get; set; } = default;
+            public uint PlayerCardId { get; set; } = default;
+            public RoundEntity Round { get; set; } = null!;
+            public PlayerEntity.PlayerCardEntity PlayerCard { get; set; } = null!;
 
-            var winnerCard = WinnerCard(feature);
-
-            foreach (var player in Match.Players)
+            public RoundCardEntity(PlayerEntity.PlayerCardEntity playerCard, RoundEntity round) : this()
             {
-                if (winnerCard.Player.Equals(player))
-                {
-                    player.TakeRoundCards(CardRounds.Select(cardPlayerRound => cardPlayerRound.CardDeck).ToList());
-                    WinnerPlayer = player;
-                }
+                PlayerCard = playerCard;
+                Round = round;
             }
-
-            Match.VerifyMatchIsFinish();
-        }
-
-        private bool IsRoundNotPlayable()
-        {
-            return Match.IsFinish || WinnerPlayerId != default;
-        }
-
-        private bool IsInsufficientNumberCards()
-        {
-            return CardRounds.Count <= 1;
-        }
-
-        private bool PlayerIsRepeated(CardDeckEntity cardDeck)
-        {
-            return CardRounds.Any(cardRound => cardRound.CardDeck.Player == cardDeck.Player);
-        }
-
-        private CardDeckEntity WinnerCard(FeatureEntity feature)
-        {
-            var winnerCardDeck = default(CardDeckEntity);
-            var winnerPower = default(PowerEntity);
-
-            foreach (var playedCard in CardRounds)
-            {
-                var power = feature.PowerByCard(playedCard.CardDeck.Card);
-
-                if (power == default)
-                    continue;
-
-                if (power.IsHigher(winnerPower))
-                {
-                    winnerPower = power;
-                    winnerCardDeck = playedCard.CardDeck;
-                }
-            }
-
-            if (winnerCardDeck == default || winnerPower == default)
-                throw new HasNoWinnerCardException();
-
-            if (HasMoreThanOneWinnerCard(winnerPower))
-                throw new HasMoreThanOneWinnerCardException();
-
-            return winnerCardDeck;
-        }
-
-        private bool HasMoreThanOneWinnerCard(PowerEntity winnerPower)
-        {
-            var cardWinnerCount = 0;
-
-            foreach (var cardPlayer in CardRounds)
-            {
-                var winnerPowerCard = cardPlayer.CardDeck.Card.WinnerPowerByValue(winnerPower.Value);
-
-                if (winnerPowerCard != default)
-                    cardWinnerCount++;
-            }
-
-            return cardWinnerCount > 1;
         }
     }
 }

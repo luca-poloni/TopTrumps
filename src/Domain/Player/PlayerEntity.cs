@@ -1,37 +1,54 @@
-﻿using Domain.CardDeck;
-using Domain.Core;
+﻿using Domain.Core;
 using Domain.Match;
+using Domain.Round;
 
 namespace Domain.Player
 {
-    public sealed class PlayerEntity(uint matchId, string name) : BaseEntity<uint>
+    public class PlayerEntity : BaseAuditableEntity<uint>
     {
-        public uint MatchId { get; } = matchId;
-        public string Name { get; private set; } = name;
-        public MatchEntity Match { get; } = null!;
-        public List<CardDeckEntity> CardDecks { get; } = [];
-
-        public PlayerEntity(uint matchId, string name, MatchEntity match, List<CardDeckEntity> cardDecks) : this(matchId, name)
-        {
-            Match = match;
-            CardDecks = cardDecks;
-        }
+        public uint MatchId { get; set; } = default;
+        public string Name { get; set; } = string.Empty;
+        public MatchEntity Match { get; set; } = null!;
+        public List<PlayerCardEntity> PlayerCards { get; set; } = [];
 
         public bool IsAvailable()
         {
-            return CardDecks.Count > 0;
+            return PlayerCards.Count > 0;
         }
 
-        public void TakeInitialCards(List<CardDeckEntity> cardDecks)
+        public bool IsWinnerCardBelongPlayer(MatchEntity.MatchCardEntity matchCard)
         {
-            foreach (var cardDeck in cardDecks)
-                CardDecks.Add(cardDeck);
+            return PlayerCards.Any(cardPlayer => cardPlayer.MatchCard == matchCard);
         }
 
-        public void TakeRoundCards(List<CardDeckEntity> cardDecks)
+        public void TakeCards(List<MatchEntity.MatchCardEntity> matchCards)
         {
-            foreach (var cardDeck in cardDecks)
-                cardDeck.Player = this;
+            matchCards.ForEach(card => PlayerCards.Add(new PlayerCardEntity(this, card)));
+        }
+
+        public void TakePlayerCards(List<PlayerCardEntity> playerCards)
+        {
+            playerCards.ForEach(cardPlayer => cardPlayer.ChangePlayerTo(this));
+        }
+
+        public class PlayerCardEntity() : BaseEntity<uint>
+        {
+            public uint PlayerId { get; set; } = default;
+            public uint CardId { get; set; } = default;
+            public PlayerEntity Player { get; set; } = null!;
+            public MatchEntity.MatchCardEntity MatchCard { get; set; } = null!;
+            public List<RoundEntity.RoundCardEntity> RoundCards { get; set; } = [];
+
+            public PlayerCardEntity(PlayerEntity player, MatchEntity.MatchCardEntity matchCard) : this()
+            {
+                Player = player;
+                MatchCard = matchCard;
+            }
+
+            public void ChangePlayerTo(PlayerEntity player)
+            {
+                Player = player;
+            }
         }
     }
 }
