@@ -8,7 +8,7 @@ namespace Domain.Match
 {
     public class MatchEntity : BaseAuditableEntity<uint>
     {
-        public uint GameId { get; } = default;
+        public ushort GameId { get; set; } = default;
         public bool IsFinish { get; set; } = default;
         public GameEntity Game { get; set; } = null!;
         public List<PlayerEntity> Players { get; set; } = [];
@@ -69,10 +69,11 @@ namespace Domain.Match
         public class MatchCardEntity() : BaseEntity<uint>
         {
             public uint MatchId { get; set; } = default;
-            public uint PlayerCardId { get; set; } = default;
+            public ushort CardId { get; set; } = default;
             public bool Used { get; set; } = default;
             public MatchEntity Match { get; set; } = null!;
             public CardEntity Card { get; set; } = null!;
+            public List<PlayerEntity.PlayerCardEntity> PlayerCards { get; set; } = [];
 
             public MatchCardEntity(MatchEntity match, CardEntity card) : this()
             {

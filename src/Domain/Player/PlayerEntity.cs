@@ -34,7 +34,7 @@ namespace Domain.Player
         public class PlayerCardEntity() : BaseEntity<uint>
         {
             public uint PlayerId { get; set; } = default;
-            public uint CardId { get; set; } = default;
+            public uint MatchCardId { get; set; } = default;
             public PlayerEntity Player { get; set; } = null!;
             public MatchEntity.MatchCardEntity MatchCard { get; set; } = null!;
             public List<RoundEntity.RoundCardEntity> RoundCards { get; set; } = [];

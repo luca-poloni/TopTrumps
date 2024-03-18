@@ -1,0 +1,53 @@
+﻿using Domain.Match;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Infrastructure.Configurations
+{
+    public class MatchEntityConfiguration : IEntityTypeConfiguration<MatchEntity>
+    {
+        public void Configure(EntityTypeBuilder<MatchEntity> builder)
+        {
+            #region Primary Key
+            builder.HasKey(m => m.Id);
+            #endregion
+
+            #region Properties
+            builder.Property(m => m.IsFinish)
+                .IsRequired();
+
+            builder.Property(m => m.Created)
+                .IsRequired();
+
+            builder.Property(m => m.CreatedBy);
+
+            builder.Property(m => m.LastModified)
+                .IsRequired();
+
+            builder.Property(m => m.LastModifiedBy);
+            #endregion
+
+            #region Relationships
+            builder.HasOne(m => m.Game)
+                .WithMany(g => g.Matches)
+                .HasForeignKey(m => m.GameId)
+                .IsRequired();
+
+            builder.HasMany(m => m.Players)
+                .WithOne(p => p.Match)
+                .HasForeignKey(p => p.MatchId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(m => m.Rounds)
+                .WithOne(r => r.Match)
+                .HasForeignKey(r => r.MatchId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(m => m.MatchCards)
+                .WithOne(mc => mc.Match)
+                .HasForeignKey(mc => mc.MatchId)
+                .OnDelete(DeleteBehavior.Cascade);
+            #endregion
+        }
+    }
+}
