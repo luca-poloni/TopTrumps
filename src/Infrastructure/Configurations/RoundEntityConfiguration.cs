@@ -33,7 +33,7 @@ namespace Infrastructure.Configurations
             builder.HasMany(r => r.RoundCards)
                 .WithOne(rc => rc.Round)
                 .HasForeignKey(rc => rc.RoundId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             #endregion
         }
     }

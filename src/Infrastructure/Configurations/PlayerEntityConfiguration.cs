@@ -36,7 +36,7 @@ namespace Infrastructure.Configurations
             builder.HasMany(p => p.PlayerCards)
                 .WithOne(pc => pc.Player)
                 .HasForeignKey(pc => pc.PlayerId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             #endregion
         }
     }

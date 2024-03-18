@@ -46,7 +46,7 @@ namespace Infrastructure.Configurations
             builder.HasMany(m => m.MatchCards)
                 .WithOne(mc => mc.Match)
                 .HasForeignKey(mc => mc.MatchId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             #endregion
         }
     }

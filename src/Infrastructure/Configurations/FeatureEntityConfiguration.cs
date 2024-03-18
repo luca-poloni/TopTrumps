@@ -37,7 +37,7 @@ namespace Infrastructure.Configurations
             builder.HasMany(f => f.Powers)
                 .WithOne(p => p.Feature)
                 .HasForeignKey(p => p.FeatureId)
-                .OnDelete(DeleteBehavior.Cascade); 
+                .OnDelete(DeleteBehavior.Restrict); 
             #endregion
         }
     }

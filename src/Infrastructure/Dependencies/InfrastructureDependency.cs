@@ -23,10 +23,9 @@ namespace Infrastructure.Dependencies
             if (string.IsNullOrWhiteSpace(connectionString))
                 throw new ArgumentException($"Connection string '{connectionStringName}' not found.");
 
-            services.AddDbContext<IApplicationDbContext, ApplicationDbContext>((sp, options) =>
+            services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
             {
-                options
-                .UseSqlServer(connectionString);
+                options.UseSqlServer(connectionString);
             });
 
             return services;
