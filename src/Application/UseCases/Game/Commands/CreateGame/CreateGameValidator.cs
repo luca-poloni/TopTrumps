@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.UseCases.Game.Commands
+namespace Application.UseCases.Game.Commands.CreateGame
 {
     public class CreateGameValidator : AbstractValidator<CreateGameRequest>
     {

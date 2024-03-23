@@ -1,5 +1,5 @@
 ﻿using Application.IntegrationTests.Core;
-using Application.UseCases.Game.Commands;
+using Application.UseCases.Game.Commands.CreateGame;
 using FluentAssertions;
 
 namespace Application.IntegrationTests.UseCases.Game.Commands

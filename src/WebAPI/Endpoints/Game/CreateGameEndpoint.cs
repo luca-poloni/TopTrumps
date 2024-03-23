@@ -1,4 +1,4 @@
-﻿using Application.UseCases.Game.Commands;
+﻿using Application.UseCases.Game.Commands.CreateGame;
 using Ardalis.ApiEndpoints;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

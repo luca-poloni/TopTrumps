@@ -1,6 +1,6 @@
-﻿namespace Application.UseCases.Game.Commands
+﻿namespace Application.UseCases.Game.Commands.CreateGame
 {
-    public record CreateGameResponse 
+    public record CreateGameResponse
     {
         public Guid Id { get; set; } = default;
         public string Name { get; set; } = null!;

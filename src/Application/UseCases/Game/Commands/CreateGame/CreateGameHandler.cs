@@ -2,7 +2,7 @@
 using Domain.Game;
 using MediatR;
 
-namespace Application.UseCases.Game.Commands
+namespace Application.UseCases.Game.Commands.CreateGame
 {
     internal class CreateGameHandler(IApplicationDbContext context) : IRequestHandler<CreateGameRequest, CreateGameResponse>
     {
@@ -10,10 +10,10 @@ namespace Application.UseCases.Game.Commands
 
         public async Task<CreateGameResponse> Handle(CreateGameRequest request, CancellationToken cancellationToken)
         {
-            var game = new GameEntity 
-            { 
+            var game = new GameEntity
+            {
                 Name = request.Name,
-                Description = request.Description 
+                Description = request.Description
             };
 
             await _context.Games.AddAsync(game, cancellationToken);
