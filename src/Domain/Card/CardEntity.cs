@@ -6,9 +6,9 @@ using Domain.Power;
 
 namespace Domain.Card
 {
-    public class CardEntity : BaseAuditableEntity<ushort>
+    public class CardEntity : BaseAuditableEntity
     {
-        public ushort GameId { get; set; } = default;
+        public Guid GameId { get; set; } = default;
         public string Name { get; set; } = string.Empty;
         public bool IsTopTrumps { get; set; } = default;
         public GameEntity Game { get; set; } = null!;

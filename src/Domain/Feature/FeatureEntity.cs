@@ -5,9 +5,9 @@ using Domain.Power;
 
 namespace Domain.Feature
 {
-    public class FeatureEntity : BaseAuditableEntity<ushort>
+    public class FeatureEntity : BaseAuditableEntity
     {
-        public ushort GameId { get; set; } = default;
+        public Guid GameId { get; set; } = default;
         public string Name { get; set; } = string.Empty;
         public GameEntity Game { get; set; } = null!;
         public List<PowerEntity> Powers { get; set; } = [];

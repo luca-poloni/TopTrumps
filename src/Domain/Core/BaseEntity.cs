@@ -1,7 +1,7 @@
 ﻿namespace Domain.Core
 {
-    public abstract class BaseEntity<T> where T : IComparable
+    public abstract class BaseEntity
     {
-        public T? Id { get; protected set; }
+        public Guid Id { get; protected set; }
     }
 }

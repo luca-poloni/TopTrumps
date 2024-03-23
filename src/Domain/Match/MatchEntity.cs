@@ -6,9 +6,9 @@ using Domain.Round;
 
 namespace Domain.Match
 {
-    public class MatchEntity : BaseAuditableEntity<uint>
+    public class MatchEntity : BaseAuditableEntity
     {
-        public ushort GameId { get; set; } = default;
+        public Guid GameId { get; set; } = default;
         public bool IsFinish { get; set; } = default;
         public GameEntity Game { get; set; } = null!;
         public List<PlayerEntity> Players { get; set; } = [];
@@ -66,10 +66,10 @@ namespace Domain.Match
             return Players.Where(player => player.IsAvailable()).ToList();
         }
 
-        public class MatchCardEntity() : BaseEntity<uint>
+        public class MatchCardEntity() : BaseEntity
         {
-            public uint MatchId { get; set; } = default;
-            public ushort CardId { get; set; } = default;
+            public Guid MatchId { get; set; } = default;
+            public Guid CardId { get; set; } = default;
             public bool Used { get; set; } = default;
             public MatchEntity Match { get; set; } = null!;
             public CardEntity Card { get; set; } = null!;

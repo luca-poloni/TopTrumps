@@ -4,9 +4,9 @@ using Domain.Round;
 
 namespace Domain.Player
 {
-    public class PlayerEntity : BaseAuditableEntity<uint>
+    public class PlayerEntity : BaseAuditableEntity
     {
-        public uint MatchId { get; set; } = default;
+        public Guid MatchId { get; set; } = default;
         public string Name { get; set; } = string.Empty;
         public MatchEntity Match { get; set; } = null!;
         public List<PlayerCardEntity> PlayerCards { get; set; } = [];
@@ -31,10 +31,10 @@ namespace Domain.Player
             playerCards.ForEach(cardPlayer => cardPlayer.ChangePlayerTo(this));
         }
 
-        public class PlayerCardEntity() : BaseEntity<uint>
+        public class PlayerCardEntity() : BaseEntity
         {
-            public uint PlayerId { get; set; } = default;
-            public uint MatchCardId { get; set; } = default;
+            public Guid PlayerId { get; set; } = default;
+            public Guid MatchCardId { get; set; } = default;
             public PlayerEntity Player { get; set; } = null!;
             public MatchEntity.MatchCardEntity MatchCard { get; set; } = null!;
             public List<RoundEntity.RoundCardEntity> RoundCards { get; set; } = [];

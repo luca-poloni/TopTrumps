@@ -6,12 +6,14 @@ using Domain.Match;
 using Domain.Player;
 using Domain.Power;
 using Domain.Round;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Infrastructure.Context
 {
-    public class ApplicationDbContext(DbContextOptions options) : DbContext(options), IApplicationDbContext
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options), IApplicationDbContext
     {
         public DbSet<CardEntity> Cards => Set<CardEntity>();
         public DbSet<FeatureEntity> Features => Set<FeatureEntity>();
@@ -26,9 +28,9 @@ namespace Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
             base.OnModelCreating(builder);
+
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

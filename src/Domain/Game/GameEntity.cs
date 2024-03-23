@@ -4,7 +4,8 @@ using Domain.Feature;
 using Domain.Match;
 
 namespace Domain.Game
-{ public class GameEntity : BaseAuditableEntity<ushort>
+{
+    public class GameEntity : BaseAuditableEntity
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
@@ -17,5 +18,4 @@ namespace Domain.Game
             return [.. Cards.OrderBy(card => Guid.NewGuid())];
         }
     }
-   
 }

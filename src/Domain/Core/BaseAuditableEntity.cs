@@ -1,6 +1,6 @@
 ﻿namespace Domain.Core
 {
-    public abstract class BaseAuditableEntity<T> : BaseEntity<T> where T : IComparable
+    public abstract class BaseAuditableEntity : BaseEntity
     {
         public DateTimeOffset Created { get; set; }
         public string? CreatedBy { get; set; }
