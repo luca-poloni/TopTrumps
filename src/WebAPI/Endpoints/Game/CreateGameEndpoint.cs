@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Endpoints.Game
 {
-    public class CreateGameEndpoint(IMediator mediator) : EndpointBaseAsync.WithRequest<CreateGameRequest>.WithResult<ActionResult<CreateGameResponse>>
+    public class CreateGameEndpoint(IMediator mediator) : EndpointBaseAsync.WithRequest<CreateGameRequest>.WithActionResult<CreateGameResponse>
     {
         private readonly IMediator _mediator = mediator;
 

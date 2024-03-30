@@ -12,7 +12,7 @@ namespace Application.UseCases.Game.Commands.UpdateGame
             var game = await _unitOfWork.GameRepository.GetByIdAsync(request.Id, cancellationToken);
 
             if (game == default)
-                throw new ArgumentException("Game not found.");
+                throw new ArgumentException("Game not found to update.");
 
             game.Update(request.Name, request.Description);
 
