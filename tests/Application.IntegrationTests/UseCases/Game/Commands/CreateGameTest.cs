@@ -20,13 +20,13 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
             #region Assert
             response.Should().NotBeNull();
             response.Id.Should().NotBeEmpty();
-            response.Name.Should().NotBeNullOrEmpty();
-            response.Description.Should().NotBeNullOrEmpty();
+            response.Name.Should().Be("Animals");
+            response.Description.Should().Be("All animals of the world.");
             #endregion
         }
 
         [Fact]
-        public async Task CreateGame_With_InvalidName_Should_ThrowArgumentException()
+        public async Task CreateGame_With_EmptyName_Should_ThrowArgumentException()
         {
             #region Arrange
             var request = new CreateGameRequest { Name = string.Empty, Description = "All animals of the world." };
@@ -37,12 +37,15 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
             #endregion
 
             #region Assert
-            await action.Should().ThrowAsync<ArgumentException>();
+            await action
+                .Should()
+                .ThrowAsync<ArgumentException>()
+                .WithMessage("The name can't be empty.");
             #endregion
         }
 
         [Fact]
-        public async Task CreateGame_With_InvalidDescription_Should_ThrowArgumentException()
+        public async Task CreateGame_With_EmptyDescription_Should_ThrowArgumentException()
         {
             #region Arrange
             var request = new CreateGameRequest { Name = "Animals", Description = string.Empty };
@@ -53,7 +56,10 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
             #endregion
 
             #region Assert
-            await action.Should().ThrowAsync<ArgumentException>();
+            await action
+                .Should()
+                .ThrowAsync<ArgumentException>()
+                .WithMessage("The description can't be empty."); ;
             #endregion
         }
     }

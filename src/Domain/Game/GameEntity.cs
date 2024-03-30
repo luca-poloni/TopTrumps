@@ -17,5 +17,11 @@ namespace Domain.Game
         {
             return [.. Cards.OrderBy(card => Guid.NewGuid())];
         }
+
+        public void Update(string name, string description)
+        {
+            Name = name;
+            Description = description;
+        }
     }
 }
