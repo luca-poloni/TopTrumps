@@ -11,15 +11,15 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
         public async Task DeleteGame_WithValidId_Should_DeletedGame()
         {
             #region Arrange
-            var gameMock = new GameEntity { Name = "Animals", Description = "All animals of the world." };
-            DbContext.Games.Add(gameMock);
+            var game = new GameEntity();
+            DbContext.Games.Add(game);
             await DbContext.SaveChangesAsync();
-            var deleteRequest = new DeleteGameRequest { Id = gameMock.Id };
+            var deleteRequest = new DeleteGameRequest { Id = game.Id };
             #endregion
 
             #region Action
             await Sender.Send(deleteRequest);
-            var gameDeleted = DbContext.Games.SingleOrDefault(game => game.Id == gameMock.Id);
+            var gameDeleted = DbContext.Games.SingleOrDefault(game => game.Id == game.Id);
             #endregion
 
             #region Assert

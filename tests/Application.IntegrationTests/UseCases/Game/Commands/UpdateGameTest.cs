@@ -1,6 +1,6 @@
 ﻿using Application.IntegrationTests.Core;
-using Application.UseCases.Game.Commands.CreateGame;
 using Application.UseCases.Game.Commands.UpdateGame;
+using Domain.Game;
 using FluentAssertions;
 
 namespace Application.IntegrationTests.UseCases.Game.Commands
@@ -11,20 +11,21 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
         public async Task UpdateGame_With_ValidParameters_Should_UpdatedGameProperties()
         {
             #region Arrange
-            var createRequest = new CreateGameRequest { Name = "Animals", Description = "All animals of the world." };
-            var createResponse = await Sender.Send(createRequest);
-            var updateRequest = new UpdateGameRequest { Id = createResponse.Id, Name = "Cars", Description = "All cars of the world." };
+            var game = new GameEntity();
+            DbContext.Games.Add(game);
+            await DbContext.SaveChangesAsync();
+            var request = new UpdateGameRequest { Id = game.Id, Name = "Cars", Description = "All cars of the world." };
             #endregion
 
             #region Action
-            var updateResponse = await Sender.Send(updateRequest);
+            var response = await Sender.Send(request);
             #endregion
 
             #region Assert
-            updateResponse.Should().NotBeNull();
-            updateResponse.Id.Should().NotBeEmpty();
-            updateResponse.Name.Should().Be("Cars");
-            updateResponse.Description.Should().Be("All cars of the world.");
+            response.Should().NotBeNull();
+            response.Id.Should().NotBeEmpty();
+            response.Name.Should().Be("Cars");
+            response.Description.Should().Be("All cars of the world.");
             #endregion
         }
 
@@ -62,7 +63,7 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
             await action
                 .Should()
                 .ThrowAsync<ArgumentException>()
-                .WithMessage("Game not found.");
+                .WithMessage("Game not found to update.");
             #endregion
         }
 
