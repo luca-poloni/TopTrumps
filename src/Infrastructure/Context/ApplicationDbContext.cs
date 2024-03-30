@@ -1,5 +1,4 @@
-﻿using Application.Common.Interfaces;
-using Domain.Card;
+﻿using Domain.Card;
 using Domain.Feature;
 using Domain.Game;
 using Domain.Match;
@@ -13,7 +12,7 @@ using System.Reflection;
 
 namespace Infrastructure.Context
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options), IApplicationDbContext
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
     {
         public DbSet<CardEntity> Cards => Set<CardEntity>();
         public DbSet<FeatureEntity> Features => Set<FeatureEntity>();

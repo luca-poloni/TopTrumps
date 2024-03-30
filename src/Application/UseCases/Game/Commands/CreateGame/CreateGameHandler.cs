@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Application.UseCases.Game.Commands.CreateGame
 {
-    internal class CreateGameHandler(IApplicationDbContext context) : IRequestHandler<CreateGameRequest, CreateGameResponse>
+    internal class CreateGameHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateGameRequest, CreateGameResponse>
     {
-        private readonly IApplicationDbContext _context = context;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         public async Task<CreateGameResponse> Handle(CreateGameRequest request, CancellationToken cancellationToken)
         {
@@ -16,8 +16,9 @@ namespace Application.UseCases.Game.Commands.CreateGame
                 Description = request.Description
             };
 
-            await _context.Games.AddAsync(game, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            _unitOfWork.GameRepository.Add(game);
+
+            await _unitOfWork.CommitAsync(cancellationToken);
 
             var response = new CreateGameResponse
             {

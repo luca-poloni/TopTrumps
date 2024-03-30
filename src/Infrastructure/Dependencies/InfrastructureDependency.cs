@@ -1,8 +1,10 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Constants;
+using Domain.Game;
 using Infrastructure.Context;
 using Infrastructure.Identity;
 using Infrastructure.Interceptors;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -17,6 +19,7 @@ namespace Infrastructure.Dependencies
         {
             services.AddContext(configuration);
             services.AddIdentity();
+            services.AddUnitOfWork();
 
             return services;
         }
@@ -31,7 +34,7 @@ namespace Infrastructure.Dependencies
 
             services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
 
-            services.AddDbContext<IApplicationDbContext, ApplicationDbContext>((sp, options) => 
+            services.AddDbContext<ApplicationDbContext>((sp, options) => 
                 options.UseSqlServer(connectionString)
                     .AddInterceptors(sp.GetRequiredService<ISaveChangesInterceptor>()));
 
@@ -51,6 +54,14 @@ namespace Infrastructure.Dependencies
             services.AddAuthorization(options =>
                 options.AddPolicy(Policies.CanPurge, policy =>
                     policy.RequireRole(Roles.Administrator)));
+
+            return services;
+        }
+
+        private static IServiceCollection AddUnitOfWork(this IServiceCollection services)
+        {
+            services.AddTransient<IGameRepository, GameRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             return services;
         }
