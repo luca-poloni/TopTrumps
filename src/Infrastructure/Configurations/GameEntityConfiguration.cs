@@ -1,4 +1,4 @@
-﻿using Domain.Game;
+﻿using Domain.Core.Game;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

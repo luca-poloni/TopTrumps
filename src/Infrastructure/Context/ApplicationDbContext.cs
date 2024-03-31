@@ -1,10 +1,10 @@
-﻿using Domain.Card;
-using Domain.Feature;
-using Domain.Game;
-using Domain.Match;
-using Domain.Player;
-using Domain.Power;
-using Domain.Round;
+﻿using Domain.Core.Card;
+using Domain.Core.Feature;
+using Domain.Core.Game;
+using Domain.Core.Match;
+using Domain.Core.Player;
+using Domain.Core.Power;
+using Domain.Core.Round;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

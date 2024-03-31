@@ -1,4 +1,4 @@
-﻿using Domain.Game;
+﻿using Domain.Core.Game;
 
 namespace Application.Common.Interfaces
 {

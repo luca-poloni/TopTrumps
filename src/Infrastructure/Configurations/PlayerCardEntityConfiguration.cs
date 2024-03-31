@@ -1,6 +1,6 @@
-﻿using Domain.Player;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Domain.Core.Player;
 
 namespace Infrastructure.Configurations
 {

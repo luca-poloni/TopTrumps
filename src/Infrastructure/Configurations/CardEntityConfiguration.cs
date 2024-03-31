@@ -1,4 +1,4 @@
-﻿using Domain.Card;
+﻿using Domain.Core.Card;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

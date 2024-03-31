@@ -1,4 +1,4 @@
-﻿using Application.IntegrationTests.Core;
+﻿using Application.IntegrationTests.Common;
 using Application.UseCases.Game.Commands.CreateGame;
 using FluentAssertions;
 

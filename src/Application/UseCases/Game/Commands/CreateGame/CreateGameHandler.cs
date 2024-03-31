@@ -1,5 +1,5 @@
 ﻿using Application.Common.Interfaces;
-using Domain.Game;
+using Domain.Core.Game;
 using MediatR;
 
 namespace Application.UseCases.Game.Commands.CreateGame

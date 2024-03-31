@@ -1,4 +1,4 @@
-﻿using Domain.Match;
+﻿using Domain.Core.Match;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,4 +1,4 @@
-﻿using Domain.Game;
+﻿using Domain.Core.Game;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 

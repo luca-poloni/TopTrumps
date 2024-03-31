@@ -1,6 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Constants;
-using Domain.Game;
+using Domain.Core.Game;
 using Infrastructure.Context;
 using Infrastructure.Identity;
 using Infrastructure.Interceptors;

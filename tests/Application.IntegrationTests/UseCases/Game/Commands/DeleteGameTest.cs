@@ -1,6 +1,6 @@
-﻿using Application.IntegrationTests.Core;
+﻿using Application.IntegrationTests.Common;
 using Application.UseCases.Game.Commands.DeleteGame;
-using Domain.Game;
+using Domain.Core.Game;
 using FluentAssertions;
 
 namespace Application.IntegrationTests.UseCases.Game.Commands
