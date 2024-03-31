@@ -8,17 +8,17 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
     public class DeleteGameTest(IntegrationTestWebAppFactory factory) : BaseIntegrationTest(factory)
     {
         [Fact]
-        public async Task DeleteGame_WithValidId_Should_DeletedGame()
+        public async Task DeleteGame_With_ValidId_Should_DeletedGame()
         {
             #region Arrange
             var game = new GameEntity();
             DbContext.Games.Add(game);
             await DbContext.SaveChangesAsync();
-            var deleteRequest = new DeleteGameRequest { Id = game.Id };
+            var request = new DeleteGameRequest { Id = game.Id };
             #endregion
 
             #region Action
-            await Sender.Send(deleteRequest);
+            await Sender.Send(request);
             var gameDeleted = DbContext.Games.SingleOrDefault(game => game.Id == game.Id);
             #endregion
 
