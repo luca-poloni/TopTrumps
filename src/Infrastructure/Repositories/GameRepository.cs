@@ -28,7 +28,7 @@ namespace Infrastructure.Repositories
             return await _context.Games.SingleOrDefaultAsync(game => game.Id == id, cancellationToken);
         }
 
-        public async Task<IEnumerable<GameEntity>?> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<GameEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.Games.ToListAsync(cancellationToken);
         }
