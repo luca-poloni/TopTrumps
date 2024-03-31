@@ -2,6 +2,7 @@
 using Ardalis.ApiEndpoints;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Endpoints.Game
 {
@@ -9,7 +10,8 @@ namespace WebAPI.Endpoints.Game
     {
         private readonly IMediator _mediator = mediator;
 
-        [HttpDelete("/game")]
+        [HttpDelete("games/delete")]
+        [SwaggerOperation(OperationId = "Games.Delete", Tags = ["Games"])]
         public override async Task HandleAsync([FromQuery] DeleteGameRequest request, CancellationToken cancellationToken = default)
         {
             await _mediator.Send(request, cancellationToken);

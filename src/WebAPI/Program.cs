@@ -8,17 +8,13 @@ builder.Services.AddWebServices();
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerServices();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+app.UseSwaggerWebApplication();
 app.UseHttpsRedirection();
+app.UseMiddlewares();
 app.MapControllers();
 app.Run();
 
