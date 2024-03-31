@@ -10,7 +10,7 @@ namespace WebAPI.Endpoints.Game
         private readonly IMediator _mediator = mediator;
 
         [HttpDelete("/game")]
-        public override async Task HandleAsync(DeleteGameRequest request, CancellationToken cancellationToken = default)
+        public override async Task HandleAsync([FromQuery] DeleteGameRequest request, CancellationToken cancellationToken = default)
         {
             await _mediator.Send(request, cancellationToken);
         }
