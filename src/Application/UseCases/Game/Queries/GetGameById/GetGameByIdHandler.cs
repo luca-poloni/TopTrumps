@@ -9,7 +9,7 @@ namespace Application.UseCases.Game.Queries.GetGameById
 
         public async Task<GetGameByIdResponse> Handle(GetGameByIdRequest request, CancellationToken cancellationToken)
         {
-            var game = await _unitOfWork.GameRepository.GetByIdAsync(request.Id, cancellationToken);
+            var game = await _unitOfWork.GameRepository.GetByIdAsNoTrackingAsync(request.Id, cancellationToken);
 
             if (game == default)
                 throw new ArgumentException("Game not found.");

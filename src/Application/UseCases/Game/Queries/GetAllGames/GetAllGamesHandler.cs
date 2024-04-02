@@ -9,7 +9,7 @@ namespace Application.UseCases.Game.Queries.GetAllGames
 
         public async Task<IEnumerable<GetAllGamesResponse>> Handle(GetAllGamesRequest request, CancellationToken cancellationToken)
         {
-            var games = await _unitOfWork.GameRepository.GetAllAsync(cancellationToken);
+            var games = await _unitOfWork.GameRepository.GetAllAsNoTrackingAsync(cancellationToken);
 
             var responses = new List<GetAllGamesResponse>();
 

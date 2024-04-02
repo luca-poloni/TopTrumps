@@ -25,10 +25,15 @@ namespace Infrastructure.Repositories
 
         public async Task<GameEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
+            return await _context.Games.SingleOrDefaultAsync(game => game.Id == id, cancellationToken);
+        }
+
+        public async Task<GameEntity?> GetByIdAsNoTrackingAsync(Guid id, CancellationToken cancellationToken)
+        {
             return await _context.Games.AsNoTracking().SingleOrDefaultAsync(game => game.Id == id, cancellationToken);
         }
 
-        public async Task<IEnumerable<GameEntity>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<GameEntity>> GetAllAsNoTrackingAsync(CancellationToken cancellationToken)
         {
             return await _context.Games.AsNoTracking().ToListAsync(cancellationToken);
         }
