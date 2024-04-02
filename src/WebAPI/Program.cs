@@ -1,4 +1,4 @@
-using Application.Common.Dependencies;
+using Application.Dependencies;
 using Infrastructure.Dependencies;
 using WebAPI.Dependencies;
 

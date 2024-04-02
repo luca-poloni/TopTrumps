@@ -3,7 +3,7 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Application.Common.Dependencies
+namespace Application.Dependencies
 {
     public static class ApplicationDependency
     {
