@@ -19,5 +19,11 @@ namespace Domain.Core.Card
         {
             return Powers.SingleOrDefault(power => power.Feature == feature)?.Value;
         }
+
+        public void Update(string name, bool isTopTrumps)
+        {
+            Name = name;
+            IsTopTrumps = isTopTrumps;
+        }
     }
 }
