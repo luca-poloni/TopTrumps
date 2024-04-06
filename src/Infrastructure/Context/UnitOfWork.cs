@@ -1,11 +1,18 @@
 ﻿using Application.Common.Interfaces;
+using Domain.Core.Card;
 using Domain.Core.Game;
 
 namespace Infrastructure.Context
 {
-    internal class UnitOfWork(ApplicationDbContext context, IGameRepository gameRepository) : IUnitOfWork
+    internal class UnitOfWork(
+        ApplicationDbContext context, 
+        ICardRepository cardRepository, 
+        IGameRepository gameRepository) 
+        : IUnitOfWork
     {
         private readonly ApplicationDbContext _context = context;
+
+        public ICardRepository CardRepository { get; } = cardRepository;
         public IGameRepository GameRepository { get; } = gameRepository;
 
         public async Task<int> CommitAsync(CancellationToken cancellationToken)

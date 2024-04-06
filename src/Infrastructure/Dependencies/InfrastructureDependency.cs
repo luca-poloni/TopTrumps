@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Constants;
+using Domain.Core.Card;
 using Domain.Core.Game;
 using Infrastructure.Context;
 using Infrastructure.Identity;
@@ -19,6 +20,7 @@ namespace Infrastructure.Dependencies
         {
             services.AddContext(configuration);
             services.AddIdentity();
+            services.AddRepositories();
             services.AddUnitOfWork();
 
             return services;
@@ -58,9 +60,16 @@ namespace Infrastructure.Dependencies
             return services;
         }
 
+        private static IServiceCollection AddRepositories(this IServiceCollection services)
+        {
+            services.AddTransient<ICardRepository, CardRepository>();
+            services.AddTransient<IGameRepository, GameRepository>();
+
+            return services;
+        }
+
         private static IServiceCollection AddUnitOfWork(this IServiceCollection services)
         {
-            services.AddTransient<IGameRepository, GameRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             return services;
