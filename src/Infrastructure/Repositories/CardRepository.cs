@@ -1,5 +1,7 @@
-﻿using Domain.Core.Card;
+﻿using Ardalis.Specification.EntityFrameworkCore;
+using Domain.Core.Card;
 using Infrastructure.Context;
+using Infrastructure.Specifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
@@ -25,17 +27,24 @@ namespace Infrastructure.Repositories
 
         public async Task<CardEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _context.Cards.SingleOrDefaultAsync(card => card.Id == id, cancellationToken);
+            return await _context.Cards
+                .WithSpecification(new CardByIdSpecification(id))
+                .SingleOrDefaultAsync(cancellationToken);
         }
 
         public async Task<CardEntity?> GetByIdAsNoTrackingAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _context.Cards.AsNoTracking().SingleOrDefaultAsync(card => card.Id == id, cancellationToken);
+            return await _context.Cards
+                .AsNoTracking()
+                .WithSpecification(new CardByIdSpecification(id))
+                .SingleOrDefaultAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<CardEntity>> GetAllAsNoTrackingAsync(CancellationToken cancellationToken)
         {
-            return await _context.Cards.AsNoTracking().ToListAsync(cancellationToken);
+            return await _context.Cards
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
         }
     }
 }

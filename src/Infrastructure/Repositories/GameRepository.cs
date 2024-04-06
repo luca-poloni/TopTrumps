@@ -1,5 +1,8 @@
-﻿using Domain.Core.Game;
+﻿using Ardalis.Specification;
+using Ardalis.Specification.EntityFrameworkCore;
+using Domain.Core.Game;
 using Infrastructure.Context;
+using Infrastructure.Specifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
@@ -25,17 +28,24 @@ namespace Infrastructure.Repositories
 
         public async Task<GameEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _context.Games.SingleOrDefaultAsync(game => game.Id == id, cancellationToken);
+            return await _context.Games
+                .WithSpecification(new GameByIdSpecification(id))
+                .SingleOrDefaultAsync(cancellationToken);
         }
 
         public async Task<GameEntity?> GetByIdAsNoTrackingAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _context.Games.AsNoTracking().SingleOrDefaultAsync(game => game.Id == id, cancellationToken);
+            return await _context.Games
+                .AsNoTracking()
+                .WithSpecification(new GameByIdSpecification(id))
+                .SingleOrDefaultAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<GameEntity>> GetAllAsNoTrackingAsync(CancellationToken cancellationToken)
         {
-            return await _context.Games.AsNoTracking().ToListAsync(cancellationToken);
+            return await _context.Games
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
         }
     }
 }
