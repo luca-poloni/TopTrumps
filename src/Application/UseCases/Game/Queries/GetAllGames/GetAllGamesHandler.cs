@@ -11,6 +11,9 @@ namespace Application.UseCases.Game.Queries.GetAllGames
         {
             var games = await _unitOfWork.GameRepository.GetAllAsNoTrackingAsync(cancellationToken);
 
+            if (games == default || !games.Any())
+                return [];
+
             var responses = new List<GetAllGamesResponse>();
 
             foreach (var game in games)
