@@ -49,7 +49,7 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
         }
 
         [Fact]
-        public async Task UpdateGame_With_NoExistingId_Should_ThrowArgumentException()
+        public async Task UpdateGame_With_NoExistingId_Should_GameNotFoundToUpdateException()
         {
             #region Arrange
             var request = new UpdateGameRequest { Id = Guid.NewGuid(), Name = "Cars", Description = "All cars of the world." };
@@ -62,7 +62,7 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
             #region Assert
             await action
                 .Should()
-                .ThrowAsync<ArgumentException>()
+                .ThrowAsync<GameNotFoundToUpdateException>()
                 .WithMessage("Game not found to update.");
             #endregion
         }

@@ -12,7 +12,7 @@ namespace Application.UseCases.Card.Commands.UpdateCard
             var card = await _unitOfWork.CardRepository.GetByIdAsync(request.Id, cancellationToken);
 
             if (card == default)
-                throw new ArgumentException("Card not found to update.");
+                throw new CardNotFoundToUpdateException();
 
             card.Update(request.Name, request.IsTopTrumps);
 

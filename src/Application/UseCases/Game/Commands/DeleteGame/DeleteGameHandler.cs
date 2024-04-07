@@ -12,7 +12,7 @@ namespace Application.UseCases.Game.Commands.DeleteGame
             var game = await _unitOfWork.GameRepository.GetByIdAsync(request.Id, cancellationToken);
 
             if (game == default)
-                throw new ArgumentException("Game not found to delete.");
+                throw new GameNotFoundToDeleteException();
 
             _unitOfWork.GameRepository.Delete(game);
 
