@@ -2,8 +2,5 @@
 
 namespace Domain.Core.Match
 {
-    public class HasNoMoreCardsToGiveException : DomainBaseException
-    {
-        public HasNoMoreCardsToGiveException() : base("Has no more cards to give.") { }
-    }
+    public class HasNoMoreCardsToGiveException() : DomainBaseException("Has no more cards to give.") { }
 }

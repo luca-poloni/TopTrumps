@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using Application.Common.Exceptions;
+using Domain.Common;
+using System.Net;
 using System.Text.Json;
 
 namespace WebAPI.Middlewares
@@ -39,7 +41,8 @@ namespace WebAPI.Middlewares
         {
             return exception switch
             {
-                ApplicationException => (int)HttpStatusCode.BadRequest,
+                DomainBaseException => (int)HttpStatusCode.BadRequest,
+                ApplicationBaseException => (int)HttpStatusCode.BadRequest,
                 ArgumentException => (int)HttpStatusCode.BadRequest,
                 _ => (int)HttpStatusCode.InternalServerError,
             };

@@ -2,8 +2,5 @@
 
 namespace Domain.Core.Match
 {
-    public class HasNoWinnerPlayerException : DomainBaseException
-    {
-        public HasNoWinnerPlayerException() : base("Has no winner player.") { }
-    }
+    public class HasNoWinnerPlayerException() : DomainBaseException("Has no winner player.") { }
 }
