@@ -2,8 +2,5 @@
 
 namespace Domain.Core.Round
 {
-    public class HasNoWinnerRoundCardException : DomainBaseException
-    {
-        public HasNoWinnerRoundCardException() : base("Has no winner round card.") { }
-    }
+    public class HasNoWinnerRoundCardException() : DomainBaseException("Has no winner round card.") { }
 }

@@ -2,8 +2,5 @@
 
 namespace Domain.Core.Feature
 {
-    public class PowerByCardNotFoundException : DomainBaseException
-    {
-        public PowerByCardNotFoundException() : base("Power by card not found.") { }
-    }
+    public class PowerByCardNotFoundException() : DomainBaseException("Power by card not found.") { }
 }
