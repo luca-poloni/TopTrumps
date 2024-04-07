@@ -48,7 +48,7 @@ namespace Application.IntegrationTests.UseCases.Game.Queries
         }
 
         [Fact]
-        public async Task GetGameById_With_NoExistingId_Should_ThrowArgumentException()
+        public async Task GetGameById_With_NoExistingId_Should_ThrowGameNotFoundToGetByIdException()
         {
             #region Arrange
             var request = new GetGameByIdRequest { Id = Guid.NewGuid() };
@@ -61,8 +61,8 @@ namespace Application.IntegrationTests.UseCases.Game.Queries
             #region Assert
             await action
                 .Should()
-                .ThrowAsync<ArgumentException>()
-                .WithMessage("Game not found.");
+                .ThrowAsync<GameNotFoundToGetByIdException>()
+                .WithMessage("Game not found to get by id.");
             #endregion
         }
     }

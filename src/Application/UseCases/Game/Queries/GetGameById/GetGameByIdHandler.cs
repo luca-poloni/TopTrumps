@@ -12,7 +12,7 @@ namespace Application.UseCases.Game.Queries.GetGameById
             var game = await _unitOfWork.GameRepository.GetByIdAsNoTrackingAsync(request.Id, cancellationToken);
 
             if (game == default)
-                throw new ArgumentException("Game not found.");
+                throw new GameNotFoundToGetByIdException();
 
             var response = new GetGameByIdResponse
             {

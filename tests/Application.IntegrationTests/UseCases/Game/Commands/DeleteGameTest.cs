@@ -47,7 +47,7 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
         }
 
         [Fact]
-        public async Task UpdateGame_With_NoExistingId_Should_ThrowArgumentException()
+        public async Task UpdateGame_With_NoExistingId_Should_ThrowGameNotFoundToDeleteException()
         {
             #region Arrange
             var request = new DeleteGameRequest { Id = Guid.NewGuid() };
@@ -60,7 +60,7 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
             #region Assert
             await action
                 .Should()
-                .ThrowAsync<ArgumentException>()
+                .ThrowAsync<GameNotFoundToDeleteException>()
                 .WithMessage("Game not found to delete.");
             #endregion
         }

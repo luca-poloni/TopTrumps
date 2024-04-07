@@ -54,7 +54,7 @@ namespace Application.IntegrationTests.UseCases.Card.Commands
         }
 
         [Fact]
-        public async Task UpdateCard_With_InvalidId_Should_ThrowArgumentException()
+        public async Task UpdateCard_With_NoExistingId_Should_ThrowCardNotFoundToUpdateException()
         {
             #region Arrange
             var request = new UpdateCardRequest { Id = Guid.NewGuid(), Name = "Cat", IsTopTrumps = false };
@@ -67,7 +67,7 @@ namespace Application.IntegrationTests.UseCases.Card.Commands
             #region Assert
             await action
                 .Should()
-                .ThrowAsync<ArgumentException>()
+                .ThrowAsync<CardNotFoundToUpdateException>()
                 .WithMessage("Card not found to update.");
             #endregion
         }
