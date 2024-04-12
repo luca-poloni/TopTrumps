@@ -11,10 +11,10 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
         public async Task UpdateGame_With_ValidParameters_Should_UpdatedGameProperties()
         {
             #region Arrange
-            var game = new GameEntity();
-            DbContext.Games.Add(game);
+            var gameMock = new GameEntity();
+            DbContext.Games.Add(gameMock);
             await DbContext.SaveChangesAsync();
-            var request = new UpdateGameRequest { Id = game.Id, Name = "Cars", Description = "All cars of the world." };
+            var request = new UpdateGameRequest { Id = gameMock.Id, Name = "Cars", Description = "All cars of the world." };
             #endregion
 
             #region Action

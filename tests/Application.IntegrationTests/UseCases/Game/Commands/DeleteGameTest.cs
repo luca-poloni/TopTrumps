@@ -11,10 +11,10 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
         public async Task DeleteGame_With_ValidId_Should_DeletedGame()
         {
             #region Arrange
-            var game = new GameEntity();
-            DbContext.Games.Add(game);
+            var gameMock = new GameEntity();
+            DbContext.Games.Add(gameMock);
             await DbContext.SaveChangesAsync();
-            var request = new DeleteGameRequest { Id = game.Id };
+            var request = new DeleteGameRequest { Id = gameMock.Id };
             #endregion
 
             #region Action
@@ -47,7 +47,7 @@ namespace Application.IntegrationTests.UseCases.Game.Commands
         }
 
         [Fact]
-        public async Task UpdateGame_With_NoExistingId_Should_ThrowGameNotFoundToDeleteException()
+        public async Task DeleteGame_With_NoExistingId_Should_ThrowGameNotFoundToDeleteException()
         {
             #region Arrange
             var request = new DeleteGameRequest { Id = Guid.NewGuid() };
