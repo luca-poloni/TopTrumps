@@ -1,5 +1,4 @@
 ﻿using Microsoft.OpenApi.Models;
-using WebAPI.Middlewares;
 
 namespace WebAPI.Dependencies
 {
