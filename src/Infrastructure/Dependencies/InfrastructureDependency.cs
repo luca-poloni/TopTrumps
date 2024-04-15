@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Constants;
 using Domain.Core.Card;
+using Domain.Core.Feature;
 using Domain.Core.Game;
 using Infrastructure.Context;
 using Infrastructure.Identity;
@@ -53,9 +54,9 @@ namespace Infrastructure.Dependencies
             services.AddSingleton(TimeProvider.System);
             services.AddTransient<IIdentityService, IdentityService>();
 
-            services.AddAuthorization(options =>
-                options.AddPolicy(Policies.CanPurge, policy =>
-                    policy.RequireRole(Roles.Administrator)));
+            services.AddAuthorizationBuilder()
+                .AddPolicy(Policies.CanPurge, policy =>
+                    policy.RequireRole(Roles.Administrator));
 
             return services;
         }
@@ -63,6 +64,7 @@ namespace Infrastructure.Dependencies
         private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddTransient<ICardRepository, CardRepository>();
+            services.AddTransient<IFeatureRepository, FeatureRepository>();
             services.AddTransient<IGameRepository, GameRepository>();
 
             return services;

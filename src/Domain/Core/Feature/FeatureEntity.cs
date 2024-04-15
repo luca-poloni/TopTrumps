@@ -21,5 +21,10 @@ namespace Domain.Core.Feature
 
             return power;
         }
+
+        public void Update(string name)
+        {
+            Name = name;
+        }
     }
 }
