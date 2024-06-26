@@ -8,13 +8,11 @@ namespace WebAPI.Endpoints.Game
 {
     public class GetGameByIdEndpoint(IMediator mediator) : EndpointBaseAsync.WithRequest<GetGameByIdRequest>.WithActionResult<GetGameByIdResponse>
     {
-        private readonly IMediator _mediator = mediator;
-
         [HttpGet("games/getById")]
         [SwaggerOperation(OperationId = "Games.GetById", Tags = ["Games"])]
         public override async Task<ActionResult<GetGameByIdResponse>> HandleAsync([FromQuery] GetGameByIdRequest request, CancellationToken cancellationToken = default)
         {
-            return await _mediator.Send(request, cancellationToken);
+            return await mediator.Send(request, cancellationToken);
         }
     }
 }

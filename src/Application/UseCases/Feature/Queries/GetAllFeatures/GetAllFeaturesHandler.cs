@@ -1,22 +1,21 @@
-﻿using Application.Common.Interfaces;
+﻿using Ardalis.SharedKernel;
+using Domain.Game;
+using Domain.Game.Specifications;
 using MediatR;
 
 namespace Application.UseCases.Feature.Queries.GetAllFeatures
 {
-    public class GetAllFeaturesHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllFeaturesRequest, IEnumerable<GetAllFeaturesResponse>>
+    public class GetAllFeaturesHandler(IRepository<GameAggregate> repository) : IRequestHandler<GetAllFeaturesRequest, IEnumerable<GetAllFeaturesResponse>>
     {
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
         public async Task<IEnumerable<GetAllFeaturesResponse>> Handle(GetAllFeaturesRequest request, CancellationToken cancellationToken)
         {
-            var features = await _unitOfWork.FeatureRepository.GetAllAsNoTrackingAsync(cancellationToken);
-
-            if (features == default || !features.Any())
-                return [];
+            var game = await repository
+                .FirstOrDefaultAsync(new GameByIdWithFeatureSpecification(request.GameId), cancellationToken) 
+                    ?? throw new ArgumentException("Game not found to get all features.");
 
             var responses = new List<GetAllFeaturesResponse>();
 
-            foreach (var feature in features)
+            foreach (var feature in game.Features)
             {
                 responses.Add(new GetAllFeaturesResponse 
                 { 

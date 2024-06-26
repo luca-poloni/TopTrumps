@@ -1,24 +1,20 @@
-﻿using Application.Common.Interfaces;
-using Domain.Core.Game;
+﻿using Ardalis.SharedKernel;
+using Domain.Game;
 using MediatR;
 
 namespace Application.UseCases.Game.Commands.CreateGame
 {
-    internal class CreateGameHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateGameRequest, CreateGameResponse>
+    internal sealed class CreateGameHandler(IRepository<GameAggregate> repository) : IRequestHandler<CreateGameRequest, CreateGameResponse>
     {
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
         public async Task<CreateGameResponse> Handle(CreateGameRequest request, CancellationToken cancellationToken)
         {
-            var game = new GameEntity
+            var game = new GameAggregate
             {
                 Name = request.Name,
                 Description = request.Description
             };
 
-            _unitOfWork.GameRepository.Add(game);
-
-            await _unitOfWork.CommitAsync(cancellationToken);
+            await repository.AddAsync(game, cancellationToken);
 
             var response = new CreateGameResponse
             {

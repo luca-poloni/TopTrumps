@@ -28,7 +28,7 @@ namespace Application.Dependencies
 
         private static IServiceCollection AddValidator(this IServiceCollection services)
         {
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(), includeInternalTypes: true);
 
             return services;
         }

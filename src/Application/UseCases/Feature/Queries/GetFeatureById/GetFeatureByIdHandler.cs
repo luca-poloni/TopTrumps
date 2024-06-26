@@ -1,18 +1,19 @@
-﻿using Application.Common.Interfaces;
+﻿using Ardalis.SharedKernel;
+using Domain.Game;
+using Domain.Game.Specifications;
 using MediatR;
 
 namespace Application.UseCases.Feature.Queries.GetFeatureById
 {
-    internal class GetFeatureByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetFeatureByIdRequest, GetFeatureByIdResponse>
+    internal class GetFeatureByIdHandler(IRepository<GameAggregate> repository) : IRequestHandler<GetFeatureByIdRequest, GetFeatureByIdResponse>
     {
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
         public async Task<GetFeatureByIdResponse> Handle(GetFeatureByIdRequest request, CancellationToken cancellationToken)
         {
-            var feature = await _unitOfWork.FeatureRepository.GetByIdAsNoTrackingAsync(request.Id, cancellationToken);
+            var game = await repository
+                .FirstOrDefaultAsync(new GameByIdWithFeatureSpecification(request.GameId), cancellationToken) 
+                    ?? throw new ArgumentException($"Game not found to get feature by id {request.Id}.");
 
-            if (feature == default)
-                throw new FeatureNotFoundToGetByIdException();
+            var feature = game.FeatureById(request.Id);
 
             var response = new GetFeatureByIdResponse 
             { 

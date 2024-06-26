@@ -6,11 +6,9 @@ namespace Application.Common.Behaviors
 {
     public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
-        private readonly IEnumerable<IValidator<TRequest>> _validators = validators;
-
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            if (_validators.Any())
+            if (validators.Any())
             {
                 var context = new ValidationContext<TRequest>(request);
 
@@ -40,7 +38,7 @@ namespace Application.Common.Behaviors
         private async Task<ValidationResult[]> ValidationResults(ValidationContext<TRequest> context, CancellationToken cancellationToken)
         {
             return await Task.WhenAll(
-                _validators.Select(v =>
+                validators.Select(v =>
                     v.ValidateAsync(context, cancellationToken)));
         }
 

@@ -1,22 +1,22 @@
-﻿using Application.Common.Interfaces;
+﻿using Ardalis.SharedKernel;
+using Domain.Game;
+using Domain.Game.Specifications;
 using MediatR;
 
 namespace Application.UseCases.Feature.Commands.DeleteFeature
 {
-    internal class DeleteFeatureHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteFeatureRequest>
+    internal class DeleteFeatureHandler(IRepository<GameAggregate> repository) : IRequestHandler<DeleteFeatureRequest>
     {
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
         public async Task Handle(DeleteFeatureRequest request, CancellationToken cancellationToken)
         {
-            var feature = await _unitOfWork.FeatureRepository.GetByIdAsync(request.Id, cancellationToken);
+            var game = await repository
+                .FirstOrDefaultAsync(new GameByIdWithFeatureSpecification(request.GameId), cancellationToken) 
+                    ?? throw new ArgumentException("Game not found to delete feature.");
 
-            if (feature == default)
-                throw new FeatureNotFoundToDeleteException();
+            game.RemoveFeature(request.Id);
 
-            _unitOfWork.FeatureRepository.Delete(feature);
-
-            await _unitOfWork.CommitAsync(cancellationToken);
+            await repository
+                .SaveChangesAsync(cancellationToken);
         }
     }
 }

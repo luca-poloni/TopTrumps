@@ -1,18 +1,18 @@
-﻿using Application.Common.Interfaces;
+﻿using Ardalis.SharedKernel;
+using Domain.Game;
+using Domain.Game.Specifications;
 using MediatR;
 
 namespace Application.UseCases.Card.Queries.GetCardById
 {
-    public class GetCardByIdHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetCardByIdRequest, GetCardByIdResponse>
+    public class GetCardByIdHandler(IRepository<GameAggregate> repository) : IRequestHandler<GetCardByIdRequest, GetCardByIdResponse>
     {
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
         public async Task<GetCardByIdResponse> Handle(GetCardByIdRequest request, CancellationToken cancellationToken)
         {
-            var card = await _unitOfWork.CardRepository.GetByIdAsNoTrackingAsync(request.Id, cancellationToken);
+            var game = await repository
+                .FirstOrDefaultAsync(new GameByIdWithCardSpecification(request.GameId), cancellationToken) ?? throw new ArgumentException($"Game not found to get card with id {request.Id}.");
 
-            if (card == default)
-                throw new CardNotFoundToGetByIdException();
+            var card = game.CardById(request.Id);
 
             var response = new GetCardByIdResponse
             {

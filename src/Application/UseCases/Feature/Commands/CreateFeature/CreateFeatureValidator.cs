@@ -2,7 +2,7 @@
 
 namespace Application.UseCases.Feature.Commands.CreateFeature
 {
-    public class CreateFeatureValidator : AbstractValidator<CreateFeatureRequest>
+    internal sealed class CreateFeatureValidator : AbstractValidator<CreateFeatureRequest>
     {
         public CreateFeatureValidator()
         {

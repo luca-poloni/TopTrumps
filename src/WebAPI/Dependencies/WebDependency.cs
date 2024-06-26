@@ -7,6 +7,7 @@ namespace WebAPI.Dependencies
     {
         public static IServiceCollection AddWebServices(this IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
             services.AddUser();
 
             return services;

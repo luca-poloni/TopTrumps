@@ -1,13 +1,7 @@
-﻿using Application.Common.Interfaces;
-using Domain.Constants;
-using Domain.Core.Card;
-using Domain.Core.Feature;
-using Domain.Core.Game;
+﻿using Ardalis.SharedKernel;
 using Infrastructure.Context;
-using Infrastructure.Identity;
 using Infrastructure.Interceptors;
 using Infrastructure.Repositories;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -20,9 +14,7 @@ namespace Infrastructure.Dependencies
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddContext(configuration);
-            services.AddIdentity();
             services.AddRepositories();
-            services.AddUnitOfWork();
 
             return services;
         }
@@ -35,6 +27,8 @@ namespace Infrastructure.Dependencies
             if (string.IsNullOrWhiteSpace(connectionString))
                 throw new ArgumentException($"Connection string '{connectionStringName}' not found.");
 
+            services.AddSingleton(TimeProvider.System);
+
             services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
 
             services.AddDbContext<ApplicationDbContext>((sp, options) => 
@@ -44,35 +38,10 @@ namespace Infrastructure.Dependencies
             return services;
         }
 
-        private static IServiceCollection AddIdentity(this IServiceCollection services)
-        {
-            services
-                .AddDefaultIdentity<ApplicationUser>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            services.AddSingleton(TimeProvider.System);
-            services.AddTransient<IIdentityService, IdentityService>();
-
-            services.AddAuthorizationBuilder()
-                .AddPolicy(Policies.CanPurge, policy =>
-                    policy.RequireRole(Roles.Administrator));
-
-            return services;
-        }
-
         private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddTransient<ICardRepository, CardRepository>();
-            services.AddTransient<IFeatureRepository, FeatureRepository>();
-            services.AddTransient<IGameRepository, GameRepository>();
-
-            return services;
-        }
-
-        private static IServiceCollection AddUnitOfWork(this IServiceCollection services)
-        {
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IRepository<>), typeof(ApplicationRepository<>));
+            services.AddScoped(typeof(IReadRepository<>), typeof(ApplicationRepository<>));
 
             return services;
         }

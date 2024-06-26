@@ -1,24 +1,24 @@
-﻿using Application.Common.Interfaces;
+﻿using Ardalis.SharedKernel;
+using Domain.Game;
+using Domain.Game.Specifications;
 using MediatR;
 
 namespace Application.UseCases.Feature.Commands.UpdateFeature
 {
-    internal class UpdateFeatureHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateFeatureRequest, UpdateFeatureResponse>
+    internal class UpdateFeatureHandler(IRepository<GameAggregate> repository) : IRequestHandler<UpdateFeatureRequest, UpdateFeatureResponse>
     {
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
         public async Task<UpdateFeatureResponse> Handle(UpdateFeatureRequest request, CancellationToken cancellationToken)
         {
-            var feature = await _unitOfWork.FeatureRepository.GetByIdAsync(request.Id, cancellationToken);
+            var game = await repository
+                .FirstOrDefaultAsync(new GameByIdWithFeatureSpecification(request.GameId), cancellationToken) 
+                    ?? throw new ArgumentException($"Game not found to update feature with id {request.Id}.");
 
-            if (feature == default)
-                throw new FeatureNotFoundToUpdateException();
+            var feature = game.FeatureById(request.Id);
 
             feature.Update(request.Name);
 
-            _unitOfWork.FeatureRepository.Update(feature);
-
-            await _unitOfWork.CommitAsync(cancellationToken);
+            await repository
+                .SaveChangesAsync(cancellationToken);
 
             var response = new UpdateFeatureResponse
             {

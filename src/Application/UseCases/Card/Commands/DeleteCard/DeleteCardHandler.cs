@@ -1,22 +1,21 @@
-﻿using Application.Common.Interfaces;
+﻿using Ardalis.SharedKernel;
+using Domain.Game;
+using Domain.Game.Specifications;
 using MediatR;
 
 namespace Application.UseCases.Card.Commands.DeleteCard
 {
-    internal class DeleteCardHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteCardRequest>
+    internal class DeleteCardHandler(IRepository<GameAggregate> repository) : IRequestHandler<DeleteCardRequest>
     {
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
         public async Task Handle(DeleteCardRequest request, CancellationToken cancellationToken)
         {
-            var card = await _unitOfWork.CardRepository.GetByIdAsync(request.Id, cancellationToken);
+            var game = await repository
+                .FirstOrDefaultAsync(new GameByIdWithCardSpecification(request.GameId), cancellationToken) 
+                    ?? throw new ArgumentException($"Game not found to delete card with id {request.Id}.");
 
-            if (card == default)
-                throw new CardNotFoundToDeleteException();
+            game.RemoveCard(request.Id);
 
-            _unitOfWork.CardRepository.Delete(card);
-
-            await _unitOfWork.CommitAsync(cancellationToken);
+            await repository.SaveChangesAsync(cancellationToken);
         }
     }
 }

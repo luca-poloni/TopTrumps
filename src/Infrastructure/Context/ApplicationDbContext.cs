@@ -1,22 +1,15 @@
-﻿using Domain.Core.Card;
-using Domain.Core.Feature;
-using Domain.Core.Game;
-using Domain.Core.Match;
-using Domain.Core.Player;
-using Domain.Core.Power;
-using Domain.Core.Round;
-using Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Domain.Game;
+using Domain.Game.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Infrastructure.Context
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
         public DbSet<CardEntity> Cards => Set<CardEntity>();
         public DbSet<FeatureEntity> Features => Set<FeatureEntity>();
-        public DbSet<GameEntity> Games => Set<GameEntity>();
+        public DbSet<GameAggregate> Games => Set<GameAggregate>();
         public DbSet<MatchEntity> Matches => Set<MatchEntity>();
         public DbSet<MatchEntity.MatchCardEntity> MatchCards => Set<MatchEntity.MatchCardEntity>();
         public DbSet<PlayerEntity> Players => Set<PlayerEntity>();

@@ -2,7 +2,7 @@
 
 namespace Application.UseCases.Game.Commands.UpdateGame
 {
-    public class UpdateGameValidator : AbstractValidator<UpdateGameRequest>
+    internal sealed class UpdateGameValidator : AbstractValidator<UpdateGameRequest>
     {
         public UpdateGameValidator()
         {

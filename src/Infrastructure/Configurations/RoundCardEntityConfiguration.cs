@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Domain.Core.Round;
+using Domain.Game.Entities;
 
 namespace Infrastructure.Configurations
 {

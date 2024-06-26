@@ -1,24 +1,19 @@
-﻿using Application.Common.Interfaces;
+﻿using Ardalis.SharedKernel;
+using Domain.Game;
 using MediatR;
 
 namespace Application.UseCases.Game.Commands.UpdateGame
 {
-    internal class UpdateGameHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateGameRequest, UpdateGameResponse>
+    internal sealed class UpdateGameHandler(IRepository<GameAggregate> repository) : IRequestHandler<UpdateGameRequest, UpdateGameResponse>
     {
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
         public async Task<UpdateGameResponse> Handle(UpdateGameRequest request, CancellationToken cancellationToken)
         {
-            var game = await _unitOfWork.GameRepository.GetByIdAsync(request.Id, cancellationToken);
-
-            if (game == default)
-                throw new GameNotFoundToUpdateException();
+            var game = await repository
+                .GetByIdAsync(request.Id, cancellationToken) ?? throw new ArgumentException("Game not found to update.");
 
             game.Update(request.Name, request.Description);
 
-            _unitOfWork.GameRepository.Update(game);
-
-            await _unitOfWork.CommitAsync(cancellationToken);
+            await repository.UpdateAsync(game, cancellationToken);
 
             var response = new UpdateGameResponse
             {

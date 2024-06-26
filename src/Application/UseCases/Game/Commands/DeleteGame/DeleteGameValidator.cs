@@ -2,7 +2,7 @@
 
 namespace Application.UseCases.Game.Commands.DeleteGame
 {
-    public class DeleteGameValidator : AbstractValidator<DeleteGameRequest>
+    internal sealed class DeleteGameValidator : AbstractValidator<DeleteGameRequest>
     {
         public DeleteGameValidator()
         {

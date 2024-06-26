@@ -6,15 +6,13 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Endpoints.Feature
 {
-    public class GetAllFeaturesEndpoint(IMediator mediator) : EndpointBaseAsync.WithoutRequest.WithActionResult<IEnumerable<GetAllFeaturesResponse>>
+    public class GetAllFeaturesEndpoint(IMediator mediator) : EndpointBaseAsync.WithRequest<GetAllFeaturesRequest>.WithActionResult<IEnumerable<GetAllFeaturesResponse>>
     {
-        private readonly IMediator _mediator = mediator;
-
         [HttpGet("features/getAll")]
         [SwaggerOperation(OperationId = "Features.GetAll", Tags = ["Features"])]
-        public override async Task<ActionResult<IEnumerable<GetAllFeaturesResponse>>> HandleAsync(CancellationToken cancellationToken = default)
+        public override async Task<ActionResult<IEnumerable<GetAllFeaturesResponse>>> HandleAsync([FromQuery] GetAllFeaturesRequest request, CancellationToken cancellationToken = default)
         {
-            return Ok(await _mediator.Send(new GetAllFeaturesRequest(), cancellationToken));
+            return Ok(await mediator.Send(request, cancellationToken));
         }
     }
 }

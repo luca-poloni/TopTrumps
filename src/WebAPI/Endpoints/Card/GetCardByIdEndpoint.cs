@@ -8,13 +8,11 @@ namespace WebAPI.Endpoints.Card
 {
     public class GetCardByIdEndpoint(IMediator mediator) : EndpointBaseAsync.WithRequest<GetCardByIdRequest>.WithActionResult<GetCardByIdResponse>
     {
-        private readonly IMediator _mediator = mediator;
-
         [HttpGet("cards/getById")]
         [SwaggerOperation(OperationId = "Cards.GetById", Tags = ["Cards"])]
         public override async Task<ActionResult<GetCardByIdResponse>> HandleAsync([FromQuery] GetCardByIdRequest request, CancellationToken cancellationToken = default)
         {
-            return await _mediator.Send(request, cancellationToken);
+            return await mediator.Send(request, cancellationToken);
         }
     }
 }

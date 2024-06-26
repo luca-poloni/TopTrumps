@@ -1,24 +1,21 @@
-﻿using Application.Common.Interfaces;
-using Domain.Core.Feature;
+﻿using Ardalis.SharedKernel;
+using Domain.Game;
+using Domain.Game.Specifications;
 using MediatR;
 
 namespace Application.UseCases.Feature.Commands.CreateFeature
 {
-    public class CreateFeatureHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateFeatureRequest, CreateFeatureResponse>
+    internal sealed class CreateFeatureHandler(IRepository<GameAggregate> repository) : IRequestHandler<CreateFeatureRequest, CreateFeatureResponse>
     {
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
         public async Task<CreateFeatureResponse> Handle(CreateFeatureRequest request, CancellationToken cancellationToken)
         {
-            var feature = new FeatureEntity
-            {
-                GameId = request.GameId,
-                Name = request.Name
-            };
+            var game = await repository
+                .FirstOrDefaultAsync(new GameByIdWithFeatureSpecification(request.GameId), cancellationToken) 
+                    ?? throw new ArgumentException("Game not found to create feature.");
 
-            _unitOfWork.FeatureRepository.Add(feature);
+            var feature = game.AddFeature(request.Name);
 
-            await _unitOfWork.CommitAsync(cancellationToken);
+            await repository.SaveChangesAsync(cancellationToken);
 
             var response = new CreateFeatureResponse
             {

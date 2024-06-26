@@ -1,24 +1,23 @@
-﻿using Application.Common.Interfaces;
+﻿using Ardalis.SharedKernel;
+using Domain.Game;
+using Domain.Game.Specifications;
 using MediatR;
 
 namespace Application.UseCases.Card.Commands.UpdateCard
 {
-    internal class UpdateCardHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateCardRequest, UpdateCardResponse>
+    internal class UpdateCardHandler(IRepository<GameAggregate> repository) : IRequestHandler<UpdateCardRequest, UpdateCardResponse>
     {
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
         public async Task<UpdateCardResponse> Handle(UpdateCardRequest request, CancellationToken cancellationToken)
         {
-            var card = await _unitOfWork.CardRepository.GetByIdAsync(request.Id, cancellationToken);
+            var game = await repository
+                .FirstOrDefaultAsync(new GameByIdWithCardSpecification(request.GameId), cancellationToken) 
+                    ?? throw new ArgumentException($"Game not found to update card with id {request.Id}.");
 
-            if (card == default)
-                throw new CardNotFoundToUpdateException();
+            var card = game.CardById(request.Id);
 
             card.Update(request.Name, request.IsTopTrumps);
 
-            _unitOfWork.CardRepository.Update(card);
-
-            await _unitOfWork.CommitAsync(cancellationToken);
+            await repository.SaveChangesAsync(cancellationToken);
 
             var response = new UpdateCardResponse
             {

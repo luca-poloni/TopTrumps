@@ -1,5 +1,4 @@
-﻿using Application.Common.Exceptions;
-using Domain.Common;
+﻿using Domain.Common;
 using System.Net;
 using System.Text.Json;
 
@@ -7,13 +6,11 @@ namespace WebAPI.Middlewares
 {
     public class ErrorHandlerMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate _next = next;
-
         public async Task Invoke(HttpContext context)
         {
             try
             {
-                await _next(context);
+                await next(context);
             }
             catch (Exception ex)
             {
@@ -42,7 +39,6 @@ namespace WebAPI.Middlewares
             return exception switch
             {
                 DomainBaseException => (int)HttpStatusCode.BadRequest,
-                ApplicationBaseException => (int)HttpStatusCode.BadRequest,
                 ArgumentException => (int)HttpStatusCode.BadRequest,
                 _ => (int)HttpStatusCode.InternalServerError,
             };
