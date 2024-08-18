@@ -10,7 +10,7 @@ namespace Application.UseCases.Card.Queries.GetCardById
         public async Task<GetCardByIdResponse> Handle(GetCardByIdRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameByIdWithCardSpecification(request.GameId), cancellationToken) ?? throw new ArgumentException($"Game not found to get card with id {request.Id}.");
+                .FirstOrDefaultAsync(new GameToGetCardsSpecification(request.GameId), cancellationToken) ?? throw new ArgumentException($"Game not found to get card with id {request.Id}.");
 
             var card = game.CardById(request.Id);
 

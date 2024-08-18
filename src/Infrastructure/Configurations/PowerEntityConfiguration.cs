@@ -13,6 +13,12 @@ namespace Infrastructure.Configurations
             #endregion
 
             #region Properties
+            builder.Property(p => p.CardId)
+                .IsRequired();
+
+            builder.Property(p => p.FeatureId)
+                .IsRequired();
+
             builder.Property(p => p.Value)
                 .IsRequired();
 
@@ -31,11 +37,6 @@ namespace Infrastructure.Configurations
             builder.HasOne(p => p.Card)
                 .WithMany(c => c.Powers)
                 .HasForeignKey(p => p.CardId)
-                .IsRequired();
-
-            builder.HasOne(p => p.Feature)
-                .WithMany(f => f.Powers)
-                .HasForeignKey(p => p.FeatureId)
                 .IsRequired();
             #endregion
         }

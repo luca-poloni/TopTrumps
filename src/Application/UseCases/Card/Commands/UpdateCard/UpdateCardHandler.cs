@@ -10,7 +10,7 @@ namespace Application.UseCases.Card.Commands.UpdateCard
         public async Task<UpdateCardResponse> Handle(UpdateCardRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameByIdWithCardSpecification(request.GameId), cancellationToken) 
+                .FirstOrDefaultAsync(new GameToGetCardsSpecification(request.GameId), cancellationToken) 
                     ?? throw new ArgumentException($"Game not found to update card with id {request.Id}.");
 
             var card = game.CardById(request.Id);

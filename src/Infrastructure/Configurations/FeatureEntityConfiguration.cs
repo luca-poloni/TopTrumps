@@ -33,11 +33,6 @@ namespace Infrastructure.Configurations
                 .WithMany(g => g.Features)
                 .HasForeignKey(f => f.GameId)
                 .IsRequired();
-
-            builder.HasMany(f => f.Powers)
-                .WithOne(p => p.Feature)
-                .HasForeignKey(p => p.FeatureId)
-                .OnDelete(DeleteBehavior.Restrict); 
             #endregion
         }
     }

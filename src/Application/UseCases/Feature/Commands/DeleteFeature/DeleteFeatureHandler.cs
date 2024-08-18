@@ -10,7 +10,7 @@ namespace Application.UseCases.Feature.Commands.DeleteFeature
         public async Task Handle(DeleteFeatureRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameByIdWithFeatureSpecification(request.GameId), cancellationToken) 
+                .FirstOrDefaultAsync(new GameToGetFeaturesSpecification(request.GameId), cancellationToken) 
                     ?? throw new ArgumentException("Game not found to delete feature.");
 
             game.RemoveFeature(request.Id);

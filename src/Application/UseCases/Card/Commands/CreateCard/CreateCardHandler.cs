@@ -10,7 +10,7 @@ namespace Application.UseCases.Card.Commands.CreateCard
         public async Task<CreateCardResponse> Handle(CreateCardRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameByIdWithCardSpecification(request.GameId), cancellationToken) 
+                .FirstOrDefaultAsync(new GameToGetCardsSpecification(request.GameId), cancellationToken) 
                     ?? throw new ArgumentException("Game not found to create card.");
 
             var card = game.AddCard(request.Name, request.IsTopTrumps);

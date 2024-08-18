@@ -1,6 +1,6 @@
 ﻿using Ardalis.SharedKernel;
-using Domain.Common;
 using Domain.Game.Exceptions;
+using Domain.Primitives;
 
 namespace Domain.Game.Entities
 {

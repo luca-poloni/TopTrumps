@@ -1,7 +1,7 @@
 ﻿using Ardalis.SharedKernel;
-using Domain.Common;
 using Domain.Game.Entities;
 using Domain.Game.Exceptions;
+using Domain.Primitives;
 
 namespace Domain.Game
 {
@@ -70,7 +70,13 @@ namespace Domain.Game
         public CardEntity CardById(Guid cardId)
         {
             return Cards
-                .SingleOrDefault(card => card.HasThisId(cardId)) ?? throw new FeatureByIdNotFoundException();
+                .SingleOrDefault(card => card.HasThisId(cardId)) ?? throw new CardByIdNotFoundException();
+        }
+
+        public CardEntity SingleCard()
+        {
+            return Cards
+                .SingleOrDefault() ?? throw new SingleCardNotFoundException();
         }
     }
 }

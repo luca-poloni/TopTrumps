@@ -10,7 +10,7 @@ namespace Application.UseCases.Feature.Commands.CreateFeature
         public async Task<CreateFeatureResponse> Handle(CreateFeatureRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameByIdWithFeatureSpecification(request.GameId), cancellationToken) 
+                .FirstOrDefaultAsync(new GameToGetFeaturesSpecification(request.GameId), cancellationToken) 
                     ?? throw new ArgumentException("Game not found to create feature.");
 
             var feature = game.AddFeature(request.Name);
