@@ -10,7 +10,7 @@ namespace Application.UseCases.Feature.Queries.GetFeatureById
         public async Task<GetFeatureByIdResponse> Handle(GetFeatureByIdRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameByIdWithFeatureSpecification(request.GameId), cancellationToken) 
+                .FirstOrDefaultAsync(new GameToGetFeaturesSpecification(request.GameId), cancellationToken) 
                     ?? throw new ArgumentException($"Game not found to get feature by id {request.Id}.");
 
             var feature = game.FeatureById(request.Id);

@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using Domain.Game.Exceptions;
+using Domain.Primitives;
 
 namespace Domain.Game.Entities
 {
@@ -13,7 +14,7 @@ namespace Domain.Game.Entities
 
         public uint? PowerValueByFeature(FeatureEntity feature)
         {
-            return Powers.SingleOrDefault(power => power.Feature == feature)?.Value;
+            return Powers.SingleOrDefault(power => power.HasThisFeature(feature))?.Value;
         }
 
         public void Update(string name, bool isTopTrumps)
@@ -25,6 +26,41 @@ namespace Domain.Game.Entities
         public bool HasThisId(Guid cardId)
         {
             return Id == cardId;
+        }
+
+        public PowerEntity AddPower(uint value, FeatureEntity feature)
+        {
+            var power = new PowerEntity
+            {
+                Value = value,
+                Card = this,
+                Feature = feature
+            };
+
+            Powers.Add(power);
+
+            return power;
+        }
+
+        public void RemovePower(PowerEntity power)
+        {
+            Powers.Remove(power);
+        }
+
+        public void RemoveSinglePower()
+        {
+            RemovePower(SinglePower());
+        }
+
+        public PowerEntity SinglePower()
+        {
+            return Powers
+                .SingleOrDefault() ?? throw new SinglePowerNotFoundException();
+        }
+
+        public bool HasNoPowers()
+        {
+            return Powers.Count == 0;
         }
     }
 }

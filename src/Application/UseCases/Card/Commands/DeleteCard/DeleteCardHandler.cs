@@ -10,7 +10,7 @@ namespace Application.UseCases.Card.Commands.DeleteCard
         public async Task Handle(DeleteCardRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameByIdWithCardSpecification(request.GameId), cancellationToken) 
+                .FirstOrDefaultAsync(new GameToGetCardsSpecification(request.GameId), cancellationToken) 
                     ?? throw new ArgumentException($"Game not found to delete card with id {request.Id}.");
 
             game.RemoveCard(request.Id);

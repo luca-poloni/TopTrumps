@@ -1,5 +1,5 @@
 ﻿using Ardalis.SharedKernel;
-using Domain.Common;
+using Domain.Primitives;
 
 namespace Domain.Game.Entities
 {

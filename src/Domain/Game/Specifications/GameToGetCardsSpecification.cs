@@ -2,9 +2,9 @@
 
 namespace Domain.Game.Specifications
 {
-    public class GameByIdWithCardSpecification : SingleResultSpecification<GameAggregate>
+    public class GameToGetCardsSpecification : SingleResultSpecification<GameAggregate>
     {
-        public GameByIdWithCardSpecification(Guid id)
+        public GameToGetCardsSpecification(Guid id)
         {
             Query
                 .Include(game => game.Cards)

@@ -10,7 +10,7 @@ namespace Application.UseCases.Feature.Commands.UpdateFeature
         public async Task<UpdateFeatureResponse> Handle(UpdateFeatureRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameByIdWithFeatureSpecification(request.GameId), cancellationToken) 
+                .FirstOrDefaultAsync(new GameToGetFeaturesSpecification(request.GameId), cancellationToken) 
                     ?? throw new ArgumentException($"Game not found to update feature with id {request.Id}.");
 
             var feature = game.FeatureById(request.Id);

@@ -1,4 +1,4 @@
-﻿using Domain.Common;
+﻿using Domain.Primitives;
 using System.Net;
 using System.Text.Json;
 

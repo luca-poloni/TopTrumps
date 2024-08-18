@@ -10,7 +10,7 @@ namespace Application.UseCases.Feature.Queries.GetAllFeatures
         public async Task<IEnumerable<GetAllFeaturesResponse>> Handle(GetAllFeaturesRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameByIdWithFeatureSpecification(request.GameId), cancellationToken) 
+                .FirstOrDefaultAsync(new GameToGetFeaturesSpecification(request.GameId), cancellationToken) 
                     ?? throw new ArgumentException("Game not found to get all features.");
 
             var responses = new List<GetAllFeaturesResponse>();

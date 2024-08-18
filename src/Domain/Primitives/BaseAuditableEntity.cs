@@ -1,6 +1,6 @@
 ﻿using Ardalis.SharedKernel;
 
-namespace Domain.Common
+namespace Domain.Primitives
 {
     public abstract class BaseAuditableEntity : EntityBase<Guid>
     {

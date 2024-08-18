@@ -1,8 +1,8 @@
 ﻿using Application.Common.Interfaces;
-using Domain.Common;
+using Domain.Primitives;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Interceptors
 {

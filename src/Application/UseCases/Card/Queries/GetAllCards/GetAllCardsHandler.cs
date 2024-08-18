@@ -10,7 +10,7 @@ namespace Application.UseCases.Card.Queries.GetAllCards
         public async Task<IEnumerable<GetAllCardsResponse>> Handle(GetAllCardsRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameByIdWithCardSpecification(request.GameId), cancellationToken) ?? throw new ArgumentException($"Game not found to get all cards.");
+                .FirstOrDefaultAsync(new GameToGetCardsSpecification(request.GameId), cancellationToken) ?? throw new ArgumentException($"Game not found to get all cards.");
 
             var responses = new List<GetAllCardsResponse>();
 
