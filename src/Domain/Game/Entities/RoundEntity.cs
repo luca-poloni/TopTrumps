@@ -15,19 +15,19 @@ namespace Domain.Game.Entities
             playerCards.ForEach(playerCard => RoundCards.Add(new RoundCardEntity(playerCard, this)));
         }
 
-        public PlayerEntity WinnerPlayerByFeature(FeatureEntity feature)
+        public PlayerEntity WinnerPlayer(FeatureEntity feature)
         {
             var winnerRoundCard = RoundCards.MaxBy(roundCard => roundCard.PlayerCard.MatchCard.Card.PowerValueByFeature(feature));
 
             if (winnerRoundCard == default)
-                throw new HasNoWinnerRoundCardException();
+                throw new HasNoWinnerPlayerException();
 
             return winnerRoundCard.PlayerCard.Player;
         }
 
-        public void GiveCardsToWinnerPlayer(PlayerEntity winnerPlayer)
+        public List<PlayerEntity.PlayerCardEntity> CardsToWinnerPlayer()
         {
-            winnerPlayer.TakePlayerCards(RoundCards.Select(roundCard => roundCard.PlayerCard).ToList());
+            return RoundCards.Select(roundCard => roundCard.PlayerCard).ToList();
         }
 
         public class RoundCardEntity() : EntityBase<Guid>

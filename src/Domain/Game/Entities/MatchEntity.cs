@@ -18,48 +18,36 @@ namespace Domain.Game.Entities
             Game.ShuffledCards().ForEach(card => MatchCards.Add(new MatchCardEntity(this, card)));
         }
 
-        public void GiveMatchCards(List<MatchCardEntity> matchCardsToPlayer)
-        {
-            var player = Players.FirstOrDefault(player => player.IsNotAvailable());
-
-            if (player == default)
-                throw new HasNoPlayerToGiveCardsException();
-
-            player.TakeCards(matchCardsToPlayer);
-        }
-
         public int MatchCardsPerPlayer()
         {
             return MatchCards.Count / Players.Count;
         }
 
-        public List<MatchCardEntity> GiveMatchCardsToPlayer(int matchCardsPerPlayer)
+        public void GiveMatchCardsToPlayers(int matchCardsPerPlayer)
         {
-            var matchCardsToGive = MatchCards.Where(matchCard => !matchCard.Used)?.Take(matchCardsPerPlayer)?.ToList();
+            foreach (var player in Players.Where(player => player.IsNotAvailable()))
+                player.TakeMatchCards(MatchCardsToPlayer(matchCardsPerPlayer));
+        }
+
+        private List<MatchCardEntity> MatchCardsToPlayer(int matchCardsPerPlayer)
+        {
+            var matchCardsToGive = MatchCards.Where(matchCard => matchCard.IsNotUsed())?.Take(matchCardsPerPlayer)?.ToList();
 
             if (matchCardsToGive == default || matchCardsToGive.Count == default)
                 throw new HasNoMoreCardsToGiveException();
 
-            matchCardsToGive.ForEach(matchCardToGive => matchCardToGive.Used = true);
+            matchCardsToGive.ForEach(matchCardToGive => matchCardToGive.UseCard());
 
             return matchCardsToGive;
         }
 
-        public PlayerEntity WinnerPlayerByCard(MatchCardEntity matchCard)
-        {
-            var winnerPlayer = Players.SingleOrDefault(player => player.IsWinnerCardBelongPlayer(matchCard));
-
-            if (winnerPlayer == default)
-                throw new HasNoWinnerPlayerException();
-
-            return winnerPlayer;
-        }
-
-        public void VerifyMatchIsFinish()
+        public bool MatchIsFinish()
         {
             var availablePlayers = AvailablePlayers();
 
             IsFinish = availablePlayers != default && availablePlayers.Count == 1;
+
+            return IsFinish;
         }
 
         private List<PlayerEntity> AvailablePlayers()
@@ -80,6 +68,16 @@ namespace Domain.Game.Entities
             {
                 Match = match;
                 Card = card;
+            }
+
+            public bool IsNotUsed()
+            {
+                return !Used;
+            }
+
+            public void UseCard()
+            {
+                Used = true;
             }
         }
     }

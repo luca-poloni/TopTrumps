@@ -25,7 +25,7 @@ namespace Domain.Game.Entities
             return PlayerCards.Any(cardPlayer => cardPlayer.MatchCard == matchCard);
         }
 
-        public void TakeCards(List<MatchEntity.MatchCardEntity> matchCards)
+        public void TakeMatchCards(List<MatchEntity.MatchCardEntity> matchCards)
         {
             matchCards.ForEach(card => PlayerCards.Add(new PlayerCardEntity(this, card)));
         }
