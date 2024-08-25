@@ -1,16 +1,16 @@
 ﻿using Ardalis.SharedKernel;
 using Domain.Game;
-using Domain.Game.Specifications;
+using Domain.Game.Specifications.AsNoTracking;
 using MediatR;
 
 namespace Application.UseCases.Power.Queries.GetAllPowersByCardId
 {
-    internal sealed class GetAllPowersByCardIdHandler(IRepository<GameAggregate> repository) : IRequestHandler<GetAllPowersByCardIdRequest, IEnumerable<GetAllPowersByCardIdResponse>>
+    internal sealed class GetAllPowersByCardIdHandler(IReadRepository<GameAggregate> repository) : IRequestHandler<GetAllPowersByCardIdRequest, IEnumerable<GetAllPowersByCardIdResponse>>
     {
         public async Task<IEnumerable<GetAllPowersByCardIdResponse>> Handle(GetAllPowersByCardIdRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameToGetAllPowersReadOnlySpecification(request.CardId), cancellationToken)
+                .SingleOrDefaultAsync(new GameWithCardAndAllPowersByCardIdAsNoTrackingSpecification(request.CardId), cancellationToken)
                     ?? throw new ArgumentException($"Game not found with '{request.CardId}' card id to get all powers.");
 
             var card = game.SingleCard();

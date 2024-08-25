@@ -1,6 +1,6 @@
 ﻿using Ardalis.SharedKernel;
 using Domain.Game;
-using Domain.Game.Specifications;
+using Domain.Game.Specifications.AsTracking;
 using MediatR;
 
 namespace Application.UseCases.Feature.Commands.CreateFeature
@@ -10,12 +10,13 @@ namespace Application.UseCases.Feature.Commands.CreateFeature
         public async Task<CreateFeatureResponse> Handle(CreateFeatureRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameToGetFeaturesSpecification(request.GameId), cancellationToken) 
+                .SingleOrDefaultAsync(new GameWithAllFeaturesByIdAsTrackingSpecification(request.GameId), cancellationToken) 
                     ?? throw new ArgumentException("Game not found to create feature.");
 
             var feature = game.AddFeature(request.Name);
 
-            await repository.SaveChangesAsync(cancellationToken);
+            await repository
+                .SaveChangesAsync(cancellationToken);
 
             var response = new CreateFeatureResponse
             {

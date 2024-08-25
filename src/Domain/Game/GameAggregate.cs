@@ -1,7 +1,7 @@
 ﻿using Ardalis.SharedKernel;
+using Domain.Common.Primitives;
 using Domain.Game.Entities;
 using Domain.Game.Exceptions;
-using Domain.Primitives;
 
 namespace Domain.Game
 {
@@ -37,15 +37,15 @@ namespace Domain.Game
             return feature;
         }
 
-        public void RemoveFeature(Guid featureId)
-        {
-            Features.Remove(FeatureById(featureId));
-        }
-
-        public FeatureEntity FeatureById(Guid featureId)
+        public FeatureEntity SingleFeature()
         {
             return Features
-                .SingleOrDefault(feature => feature.HasThisId(featureId)) ?? throw new FeatureByIdNotFoundException();
+                .SingleOrDefault() ?? throw new SingleFeatureNotFoundException();
+        }
+
+        public void RemoveSingleFeature()
+        {
+            Features.Remove(SingleFeature());
         }
 
         public CardEntity AddCard(string name, bool isTopTrumps)
@@ -62,21 +62,15 @@ namespace Domain.Game
             return card;
         }
 
-        public void RemoveCard(Guid cardId)
-        {
-            Cards.Remove(CardById(cardId));
-        }
-
-        public CardEntity CardById(Guid cardId)
-        {
-            return Cards
-                .SingleOrDefault(card => card.HasThisId(cardId)) ?? throw new CardByIdNotFoundException();
-        }
-
         public CardEntity SingleCard()
         {
             return Cards
                 .SingleOrDefault() ?? throw new SingleCardNotFoundException();
+        }
+
+        public void RemoveSingleCard()
+        {
+            Cards.Remove(SingleCard());
         }
     }
 }

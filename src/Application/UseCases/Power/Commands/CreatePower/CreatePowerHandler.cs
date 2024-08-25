@@ -1,6 +1,6 @@
 ﻿using Ardalis.SharedKernel;
 using Domain.Game;
-using Domain.Game.Specifications;
+using Domain.Game.Specifications.AsTracking;
 using MediatR;
 
 namespace Application.UseCases.Power.Commands.CreatePower
@@ -10,12 +10,11 @@ namespace Application.UseCases.Power.Commands.CreatePower
         public async Task<CreatePowerResponse> Handle(CreatePowerRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameToCreatePowerSpecification(request.CardId), cancellationToken)
-                    ?? throw new ArgumentException($"Game not found with '{request.CardId}' card id to create a new power.");
+                .SingleOrDefaultAsync(new GameWithCardAndFeatureByCardAndFeatureIdAsTrackingSpecification(request.CardId, request.FeatureId), cancellationToken)
+                    ?? throw new ArgumentException($"Game not found with '{request.CardId}' card id and '{request.FeatureId}' feature id to create a power.");
 
-            var power = game
-                .SingleCard()
-                    .AddPower(request.Value, game.FeatureById(request.FeatureId));
+            var power = game.SingleCard()
+                .AddPower(request.Value, game.SingleFeature());
 
             await repository
                 .SaveChangesAsync(cancellationToken);

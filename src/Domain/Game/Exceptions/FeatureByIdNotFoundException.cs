@@ -1,4 +1,4 @@
-﻿using Domain.Primitives;
+﻿using Domain.Common.Primitives;
 
 namespace Domain.Game.Exceptions
 {

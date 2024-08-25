@@ -1,6 +1,6 @@
 ﻿using Ardalis.SharedKernel;
 using Domain.Game;
-using Domain.Game.Specifications;
+using Domain.Game.Specifications.AsTracking;
 using MediatR;
 
 namespace Application.UseCases.Power.Commands.UpdatePower
@@ -10,7 +10,7 @@ namespace Application.UseCases.Power.Commands.UpdatePower
         public async Task<UpdatePowerResponse> Handle(UpdatePowerRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameToGetPowerSpecification(request.Id), cancellationToken)
+                .SingleOrDefaultAsync(new GameWithCardByPowerIdAsTrackingSpecification(request.Id), cancellationToken)
                     ?? throw new ArgumentException($"Game not found with power id {request.Id} to update power.");
 
             var power = game.SingleCard()

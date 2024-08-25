@@ -1,6 +1,6 @@
 ﻿using Ardalis.SharedKernel;
 using Domain.Game;
-using Domain.Game.Specifications;
+using Domain.Game.Specifications.AsTracking;
 using MediatR;
 
 namespace Application.UseCases.Feature.Commands.UpdateFeature
@@ -10,10 +10,10 @@ namespace Application.UseCases.Feature.Commands.UpdateFeature
         public async Task<UpdateFeatureResponse> Handle(UpdateFeatureRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameToGetFeaturesSpecification(request.GameId), cancellationToken) 
+                .SingleOrDefaultAsync(new GameWithFeatureByFeatureIdAsTrackingSpecification(request.Id), cancellationToken) 
                     ?? throw new ArgumentException($"Game not found to update feature with id {request.Id}.");
 
-            var feature = game.FeatureById(request.Id);
+            var feature = game.SingleFeature();
 
             feature.Update(request.Name);
 

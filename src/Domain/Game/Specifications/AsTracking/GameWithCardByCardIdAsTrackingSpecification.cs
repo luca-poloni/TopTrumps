@@ -1,14 +1,13 @@
 ﻿using Ardalis.Specification;
 
-namespace Domain.Game.Specifications
+namespace Domain.Game.Specifications.AsTracking
 {
-    public class GameToCreatePowerSpecification : SingleResultSpecification<GameAggregate>
+    public class GameWithCardByCardIdAsTrackingSpecification : SingleResultSpecification<GameAggregate>
     {
-        public GameToCreatePowerSpecification(Guid cardId)
+        public GameWithCardByCardIdAsTrackingSpecification(Guid cardId)
         {
             Query
                 .Include(game => game.Cards.Where(card => card.Id == cardId))
-                .Include(game => game.Features)
                 .Where(game => game.Cards.Any(card => card.Id == cardId));
         }
     }

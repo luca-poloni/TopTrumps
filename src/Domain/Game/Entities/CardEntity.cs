@@ -1,5 +1,5 @@
-﻿using Domain.Game.Exceptions;
-using Domain.Primitives;
+﻿using Domain.Common.Primitives;
+using Domain.Game.Exceptions;
 
 namespace Domain.Game.Entities
 {

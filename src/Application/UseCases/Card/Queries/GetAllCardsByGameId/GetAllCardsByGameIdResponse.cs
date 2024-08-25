@@ -1,6 +1,6 @@
-﻿namespace Application.UseCases.Card.Queries.GetAllCards
+﻿namespace Application.UseCases.Card.Queries.GetAllCardsByGameId
 {
-    public record GetAllCardsResponse
+    public record GetAllCardsByGameIdResponse
     {
         public Guid Id { get; set; } = default;
         public Guid GameId { get; set; } = default;

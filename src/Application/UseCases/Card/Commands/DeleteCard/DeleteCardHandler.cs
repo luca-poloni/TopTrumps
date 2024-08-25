@@ -1,6 +1,6 @@
 ﻿using Ardalis.SharedKernel;
 using Domain.Game;
-using Domain.Game.Specifications;
+using Domain.Game.Specifications.AsTracking;
 using MediatR;
 
 namespace Application.UseCases.Card.Commands.DeleteCard
@@ -10,12 +10,13 @@ namespace Application.UseCases.Card.Commands.DeleteCard
         public async Task Handle(DeleteCardRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameToGetCardsSpecification(request.GameId), cancellationToken) 
-                    ?? throw new ArgumentException($"Game not found to delete card with id {request.Id}.");
+                .SingleOrDefaultAsync(new GameWithCardByCardIdAsTrackingSpecification(request.Id), cancellationToken) 
+                    ?? throw new ArgumentException($"Game not found with {request.Id} card id to delete card.");
 
-            game.RemoveCard(request.Id);
+            game.RemoveSingleCard();
 
-            await repository.SaveChangesAsync(cancellationToken);
+            await repository
+                .SaveChangesAsync(cancellationToken);
         }
     }
 }

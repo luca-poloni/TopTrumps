@@ -1,6 +1,6 @@
 ﻿using Ardalis.SharedKernel;
 using Domain.Game;
-using Domain.Game.Specifications;
+using Domain.Game.Specifications.AsTracking;
 using MediatR;
 
 namespace Application.UseCases.Card.Commands.UpdateCard
@@ -10,14 +10,15 @@ namespace Application.UseCases.Card.Commands.UpdateCard
         public async Task<UpdateCardResponse> Handle(UpdateCardRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameToGetCardsSpecification(request.GameId), cancellationToken) 
-                    ?? throw new ArgumentException($"Game not found to update card with id {request.Id}.");
+                .SingleOrDefaultAsync(new GameWithCardByCardIdAsTrackingSpecification(request.Id), cancellationToken) 
+                    ?? throw new ArgumentException($"Game not found to update card with {request.Id} card id.");
 
-            var card = game.CardById(request.Id);
+            var card = game.SingleCard();
 
             card.Update(request.Name, request.IsTopTrumps);
 
-            await repository.SaveChangesAsync(cancellationToken);
+            await repository
+                .SaveChangesAsync(cancellationToken);
 
             var response = new UpdateCardResponse
             {

@@ -1,6 +1,5 @@
 ﻿using Ardalis.SharedKernel;
 using Domain.Game;
-using Domain.Game.Specifications;
 using MediatR;
 
 namespace Application.UseCases.Card.Commands.CreateCard
@@ -10,12 +9,14 @@ namespace Application.UseCases.Card.Commands.CreateCard
         public async Task<CreateCardResponse> Handle(CreateCardRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameToGetCardsSpecification(request.GameId), cancellationToken) 
-                    ?? throw new ArgumentException("Game not found to create card.");
+                .GetByIdAsync(request.GameId, cancellationToken) 
+                    ?? throw new ArgumentException($"Game not found with '{request.GameId}' id to create card.");
 
-            var card = game.AddCard(request.Name, request.IsTopTrumps);
+            var card = game
+                .AddCard(request.Name, request.IsTopTrumps);
 
-            await repository.SaveChangesAsync(cancellationToken);
+            await repository
+                .SaveChangesAsync(cancellationToken);
 
             var response = new CreateCardResponse
             {

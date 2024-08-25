@@ -5,6 +5,5 @@ namespace Application.UseCases.Card.Queries.GetCardById
     public record GetCardByIdRequest : IRequest<GetCardByIdResponse>
     {
         public Guid Id { get; set; } = default;
-        public Guid GameId { get; set; } = default;
     }
 }

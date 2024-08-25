@@ -1,6 +1,6 @@
-﻿namespace Application.UseCases.Feature.Queries.GetAllFeatures
+﻿namespace Application.UseCases.Feature.Queries.GetAllFeaturesByGameId
 {
-    public record GetAllFeaturesResponse
+    public record GetAllFeaturesByGameIdResponse
     {
         public Guid Id { get; set; } = default;
         public Guid GameId { get; set; } = default;

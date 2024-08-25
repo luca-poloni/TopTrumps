@@ -1,6 +1,6 @@
 ﻿using Ardalis.SharedKernel;
 using Domain.Game;
-using Domain.Game.Specifications;
+using Domain.Game.Specifications.AsTracking;
 using MediatR;
 
 namespace Application.UseCases.Feature.Commands.DeleteFeature
@@ -10,10 +10,10 @@ namespace Application.UseCases.Feature.Commands.DeleteFeature
         public async Task Handle(DeleteFeatureRequest request, CancellationToken cancellationToken)
         {
             var game = await repository
-                .FirstOrDefaultAsync(new GameToGetFeaturesSpecification(request.GameId), cancellationToken) 
-                    ?? throw new ArgumentException("Game not found to delete feature.");
+                .SingleOrDefaultAsync(new GameWithFeatureByFeatureIdAsTrackingSpecification(request.Id), cancellationToken) 
+                    ?? throw new ArgumentException($"Game not found to delete feature with id {request.Id}.");
 
-            game.RemoveFeature(request.Id);
+            game.RemoveSingleFeature();
 
             await repository
                 .SaveChangesAsync(cancellationToken);
