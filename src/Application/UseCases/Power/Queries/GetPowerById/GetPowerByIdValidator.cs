@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.UseCases.Power.Queries.GetPowerByCardId
+namespace Application.UseCases.Power.Queries.GetPowerById
 {
     internal sealed class GetPowerByIdValidator : AbstractValidator<GetPowerByIdRequest>
     {

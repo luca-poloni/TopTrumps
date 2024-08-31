@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.UseCases.Power.Queries.GetPowerByCardId
+namespace Application.UseCases.Power.Queries.GetPowerById
 {
     public record GetPowerByIdRequest : IRequest<GetPowerByIdResponse>
     {

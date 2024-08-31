@@ -1,5 +1,4 @@
-﻿using Application.UseCases.Power.Queries.GetPowerByCardId;
-using Ardalis.SharedKernel;
+﻿using Ardalis.SharedKernel;
 using Domain.Game;
 using Domain.Game.Specifications.AsNoTracking;
 using MediatR;

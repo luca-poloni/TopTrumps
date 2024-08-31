@@ -1,4 +1,4 @@
-﻿using Application.UseCases.Power.Queries.GetPowerByCardId;
+﻿using Application.UseCases.Power.Queries.GetPowerById;
 using Ardalis.ApiEndpoints;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

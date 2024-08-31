@@ -13,6 +13,11 @@ namespace Domain.Game.Entities
         public List<RoundEntity> Rounds { get; set; } = [];
         public List<MatchCardEntity> MatchCards { get; set; } = [];
 
+        public void Update(bool isFinish)
+        {
+            IsFinish = isFinish;
+        }
+
         public void AddMatchCards()
         {
             Game.ShuffledCards().ForEach(card => MatchCards.Add(new MatchCardEntity(this, card)));

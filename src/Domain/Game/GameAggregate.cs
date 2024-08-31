@@ -72,5 +72,29 @@ namespace Domain.Game
         {
             Cards.Remove(SingleCard());
         }
+
+        public MatchEntity AddMatch(bool isFinish)
+        {
+            var match = new MatchEntity
+            {
+                GameId = Id,
+                IsFinish = isFinish
+            };
+
+            Matches.Add(match);
+
+            return match;
+        }
+
+        public MatchEntity SingleMatch()
+        {
+            return Matches
+                .SingleOrDefault() ?? throw new SingleMatchNotFoundException();
+        }
+
+        public void RemoveSingleMatch()
+        {
+            Matches.Remove(SingleMatch());
+        }
     }
 }
