@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.UseCases.Player.Queries.GetPlayerById
 {
-    internal sealed class GetPlayerByIdHandler(IRepository<GameAggregate> repository) : IRequestHandler<GetPlayerByIdRequest, GetPlayerByIdResponse>
+    internal sealed class GetPlayerByIdHandler(IReadRepository<GameAggregate> repository) : IRequestHandler<GetPlayerByIdRequest, GetPlayerByIdResponse>
     {
         public async Task<GetPlayerByIdResponse> Handle(GetPlayerByIdRequest request, CancellationToken cancellationToken)
         {
