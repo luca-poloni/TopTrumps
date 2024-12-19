@@ -60,6 +60,30 @@ namespace Domain.Game.Entities
             return Players.Where(player => player.IsAvailable()).ToList();
         }
 
+        public PlayerEntity AddPlayer(string name)
+        {
+            var player = new PlayerEntity
+            {
+                MatchId = Id,
+                Name = name
+            };
+
+            Players.Add(player);
+
+            return player;
+        }
+
+        public PlayerEntity SinglePlayer()
+        {
+            return Players
+                .SingleOrDefault() ?? throw new SinglePlayerNotFoundException();
+        }
+
+        public void RemoveSinglePlayer()
+        {
+            Players.Remove(SinglePlayer());
+        }
+
         public class MatchCardEntity() : EntityBase<Guid>
         {
             public Guid MatchId { get; set; } = default;

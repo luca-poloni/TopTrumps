@@ -10,6 +10,11 @@ namespace Domain.Game.Entities
         public MatchEntity Match { get; set; } = null!;
         public List<PlayerCardEntity> PlayerCards { get; set; } = [];
 
+        public void Update(string name)
+        {
+            Name = name;
+        }
+
         public bool IsAvailable()
         {
             return PlayerCards.Count > 0;
