@@ -12,7 +12,7 @@ namespace Application.UseCases.Match.Commands.CreateMatch
                 .GetByIdAsync(request.GameId, cancellationToken) 
                     ?? throw new ArgumentException($"Game not found with '{request.GameId}' id to create match.");
 
-            var match = game.AddMatch(request.IsFinish);
+            var match = game.AddMatch();
 
             await repository
                 .SaveChangesAsync(cancellationToken);

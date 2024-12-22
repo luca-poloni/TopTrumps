@@ -1,4 +1,4 @@
-﻿using Application.UseCases.Match.Actions.PlayGame;
+﻿using Application.UseCases.Match.Actions.PlayMatch;
 using Ardalis.ApiEndpoints;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

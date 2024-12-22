@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Application.UseCases.Match.Actions.PlayMatch
+namespace Application.UseCases.Round.Commands.DeleteRound
 {
-    internal sealed class PlayMatchValidator : AbstractValidator<PlayMatchRequest>
+    internal sealed class DeleteRoundValidator : AbstractValidator<DeleteRoundRequest>
     {
-        public PlayMatchValidator()
+        public DeleteRoundValidator()
         {
             RuleFor(request => request.Id)
                 .NotEmpty()

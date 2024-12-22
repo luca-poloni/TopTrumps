@@ -11,7 +11,7 @@ namespace Application.UseCases.Player.Queries.GetAllPlayersByMatchId
         {
             var game = await repository
                 .SingleOrDefaultAsync(new GameWithAllPlayersByMatchIdAsNoTrackingSpecification(request.MatchId), cancellationToken)
-                    ?? throw new ArgumentException($"Game not found with '{request.MatchId}' player id to get all player by player id.");
+                    ?? throw new ArgumentException($"Game not found with '{request.MatchId}' match id to get all player by match id.");
 
             var responses = new List<GetAllPlayersByMatchIdResponse>();
 

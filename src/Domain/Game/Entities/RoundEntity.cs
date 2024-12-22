@@ -7,22 +7,31 @@ namespace Domain.Game.Entities
     public class RoundEntity : BaseAuditableEntity
     {
         public Guid MatchId { get; set; } = default;
+        public Guid? WinnerPlayerId { get; set; } 
         public MatchEntity Match { get; set; } = null!;
+        public PlayerEntity? WinnerPlayer { get; set; }
         public List<RoundCardEntity> RoundCards { get; set; } = [];
+
+        public void Update(Guid? winnerPlayerId)
+        {
+            WinnerPlayerId = winnerPlayerId;
+        }
 
         public void TakeCards(List<PlayerEntity.PlayerCardEntity> playerCards)
         {
             playerCards.ForEach(playerCard => RoundCards.Add(new RoundCardEntity(playerCard, this)));
         }
 
-        public PlayerEntity WinnerPlayer(FeatureEntity feature)
+        public PlayerEntity Winner(FeatureEntity feature)
         {
             var winnerRoundCard = RoundCards.MaxBy(roundCard => roundCard.PlayerCard.MatchCard.Card.PowerValueByFeature(feature));
 
             if (winnerRoundCard == default)
                 throw new HasNoWinnerPlayerException();
 
-            return winnerRoundCard.PlayerCard.Player;
+            WinnerPlayer = winnerRoundCard.PlayerCard.Player;
+
+            return WinnerPlayer;
         }
 
         public List<PlayerEntity.PlayerCardEntity> CardsToWinnerPlayer()
