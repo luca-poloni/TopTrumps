@@ -9,24 +9,41 @@ namespace Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<PlayerEntity.PlayerCardEntity> builder)
         {
             #region Primary Key
-            builder.HasKey(pc => pc.Id);
+            builder
+                .HasKey(pc => pc.Id);
+            #endregion
+
+            #region Properties
+            builder
+                .Property(pc => pc.Id);
+
+            builder
+                .Property(pc => pc.PlayerId)
+                .IsRequired();
+
+            builder
+                .Property(pc => pc.MatchCardId)
+                .IsRequired();
             #endregion
 
             #region Relationships
-            builder.HasOne(pc => pc.Player)
+            builder
+                .HasOne(pc => pc.Player)
                 .WithMany(p => p.PlayerCards)
                 .HasForeignKey(pc => pc.PlayerId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne(pc => pc.MatchCard)
+            builder
+                .HasOne(pc => pc.MatchCard)
                 .WithMany(mc => mc.PlayerCards)
                 .HasForeignKey(pc => pc.MatchCardId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasMany(pc => pc.RoundCards)
+            builder
+                .HasMany(pc => pc.RoundCards)
                 .WithOne(rc => rc.PlayerCard)
                 .HasForeignKey(rc => rc.PlayerCardId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
             #endregion
         }
     }

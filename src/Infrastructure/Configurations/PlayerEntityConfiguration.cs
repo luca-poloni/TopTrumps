@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Domain.Game.Entities;
 using Microsoft.EntityFrameworkCore;
-using Domain.Game.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Configurations
 {
@@ -9,34 +9,55 @@ namespace Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<PlayerEntity> builder)
         {
             #region Primary Key
-            builder.HasKey(p => p.Id);
+            builder
+                .HasKey(p => p.Id);
             #endregion
 
             #region Properties
-            builder.Property(p => p.Name)
+            builder
+                .Property(p => p.Id);
+
+            builder
+                .Property(p => p.MatchId)
                 .IsRequired();
 
-            builder.Property(p => p.Created)
+            builder
+                .Property(p => p.Name)
                 .IsRequired();
 
-            builder.Property(p => p.CreatedBy);
-
-            builder.Property(p => p.LastModified)
+            builder
+                .Property(p => p.Created)
                 .IsRequired();
 
-            builder.Property(p => p.LastModifiedBy);
+            builder
+                .Property(p => p.CreatedBy);
+
+            builder
+                .Property(p => p.LastModified)
+                .IsRequired();
+
+            builder
+                .Property(p => p.LastModifiedBy);
             #endregion
 
             #region Relationships
-            builder.HasOne(p => p.Match)
+            builder
+                .HasOne(p => p.Match)
                 .WithMany(m => m.Players)
                 .HasForeignKey(p => p.MatchId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasMany(p => p.PlayerCards)
+            builder
+                .HasMany(p => p.PlayerCards)
                 .WithOne(pc => pc.Player)
                 .HasForeignKey(pc => pc.PlayerId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder
+                .HasMany(m => m.WinnerRounds)
+                .WithOne(r => r.WinnerPlayer)
+                .HasForeignKey(r => r.WinnerPlayerId)
+                .OnDelete(DeleteBehavior.NoAction);
             #endregion
         }
     }

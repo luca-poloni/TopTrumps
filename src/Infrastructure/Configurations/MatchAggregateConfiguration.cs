@@ -9,44 +9,61 @@ namespace Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<MatchEntity> builder)
         {
             #region Primary Key
-            builder.HasKey(m => m.Id);
+            builder
+                .HasKey(m => m.Id);
             #endregion
 
             #region Properties
-            builder.Property(m => m.IsFinish)
+            builder
+                .Property(m => m.Id);
+
+            builder
+                .Property(m => m.GameId)
                 .IsRequired();
 
-            builder.Property(m => m.Created)
+            builder
+                .Property(m => m.IsFinish)
                 .IsRequired();
 
-            builder.Property(m => m.CreatedBy);
-
-            builder.Property(m => m.LastModified)
+            builder
+                .Property(m => m.Created)
                 .IsRequired();
 
-            builder.Property(m => m.LastModifiedBy);
+            builder
+                .Property(m => m.CreatedBy);
+
+            builder
+                .Property(m => m.LastModified)
+                .IsRequired();
+
+            builder
+                .Property(m => m.LastModifiedBy);
             #endregion
 
             #region Relationships
-            builder.HasOne(m => m.Game)
+            builder
+                .HasOne(m => m.Game)
                 .WithMany(g => g.Matches)
                 .HasForeignKey(m => m.GameId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasMany(m => m.Players)
+            builder
+                .HasMany(m => m.Players)
                 .WithOne(p => p.Match)
                 .HasForeignKey(p => p.MatchId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasMany(m => m.Rounds)
+            builder
+                .HasMany(m => m.Rounds)
                 .WithOne(r => r.Match)
                 .HasForeignKey(r => r.MatchId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasMany(m => m.MatchCards)
+            builder
+                .HasMany(m => m.MatchCards)
                 .WithOne(mc => mc.Match)
                 .HasForeignKey(mc => mc.MatchId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
             #endregion
         }
     }

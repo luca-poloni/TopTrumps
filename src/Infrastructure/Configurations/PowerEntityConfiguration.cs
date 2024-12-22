@@ -9,35 +9,53 @@ namespace Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<PowerEntity> builder)
         {
             #region Primary Key
-            builder.HasKey(p => p.Id);
+            builder
+                .HasKey(p => p.Id);
             #endregion
 
             #region Properties
-            builder.Property(p => p.CardId)
+            builder
+                .Property(p => p.Id);
+
+            builder
+                .Property(p => p.CardId)
                 .IsRequired();
 
-            builder.Property(p => p.FeatureId)
+            builder
+                .Property(p => p.FeatureId)
                 .IsRequired();
 
-            builder.Property(p => p.Value)
+            builder
+                .Property(p => p.Value)
                 .IsRequired();
 
-            builder.Property(p => p.Created)
+            builder
+                .Property(p => p.Created)
                 .IsRequired();
 
-            builder.Property(p => p.CreatedBy);
+            builder
+                .Property(p => p.CreatedBy);
 
-            builder.Property(p => p.LastModified)
+            builder
+                .Property(p => p.LastModified)
                 .IsRequired();
 
-            builder.Property(p => p.LastModifiedBy);
+            builder
+                .Property(p => p.LastModifiedBy);
             #endregion
 
             #region Relationships
-            builder.HasOne(p => p.Card)
+            builder
+                .HasOne(p => p.Card)
                 .WithMany(c => c.Powers)
                 .HasForeignKey(p => p.CardId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder
+                .HasOne(p => p.Feature)
+                .WithMany(f => f.Powers)
+                .HasForeignKey(p => p.FeatureId)
+                .OnDelete(DeleteBehavior.NoAction);
             #endregion
         }
     }

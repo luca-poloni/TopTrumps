@@ -9,31 +9,54 @@ namespace Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<RoundEntity> builder)
         {
             #region Primary Key
-            builder.HasKey(r => r.Id);
+            builder
+                .HasKey(r => r.Id);
             #endregion
 
             #region Properties
-            builder.Property(r => r.Created)
+            builder
+                .Property(r => r.Id);
+
+            builder
+                .Property(r => r.MatchId)
                 .IsRequired();
 
-            builder.Property(r => r.CreatedBy);
+            builder
+                .Property(r => r.WinnerPlayerId);
 
-            builder.Property(r => r.LastModified)
+            builder
+                .Property(r => r.Created)
                 .IsRequired();
 
-            builder.Property(r => r.LastModifiedBy);
+            builder
+                .Property(r => r.CreatedBy);
+
+            builder
+                .Property(r => r.LastModified)
+                .IsRequired();
+
+            builder
+                .Property(r => r.LastModifiedBy);
             #endregion
 
             #region Relationships
-            builder.HasOne(r => r.Match)
+            builder
+                .HasOne(r => r.Match)
                 .WithMany(m => m.Rounds)
                 .HasForeignKey(r => r.MatchId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasMany(r => r.RoundCards)
+            builder
+                .HasOne(r => r.WinnerPlayer)
+                .WithMany(p => p.WinnerRounds)
+                .HasForeignKey(r => r.WinnerPlayerId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder
+                .HasMany(r => r.RoundCards)
                 .WithOne(rc => rc.Round)
                 .HasForeignKey(rc => rc.RoundId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
             #endregion
         }
     }

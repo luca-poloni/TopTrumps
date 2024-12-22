@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-
 namespace Infrastructure.Configurations
 {
     public class FeatureEntityConfiguration : IEntityTypeConfiguration<FeatureEntity>
@@ -10,29 +9,49 @@ namespace Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<FeatureEntity> builder)
         {
             #region Primary Key
-            builder.HasKey(f => f.Id);
+            builder
+                .HasKey(f => f.Id);
             #endregion
 
             #region Properties
-            builder.Property(f => f.Name)
+            builder
+                .Property(f => f.Id);
+
+            builder
+                .Property(f => f.GameId)
                 .IsRequired();
 
-            builder.Property(f => f.Created)
+            builder
+                .Property(f => f.Name)
                 .IsRequired();
 
-            builder.Property(f => f.CreatedBy);
-
-            builder.Property(f => f.LastModified)
+            builder
+                .Property(f => f.Created)
                 .IsRequired();
 
-            builder.Property(f => f.LastModifiedBy);
+            builder
+                .Property(f => f.CreatedBy);
+
+            builder
+                .Property(f => f.LastModified)
+                .IsRequired();
+
+            builder
+                .Property(f => f.LastModifiedBy);
             #endregion
 
             #region Relationships
-            builder.HasOne(f => f.Game)
+            builder
+                .HasOne(f => f.Game)
                 .WithMany(g => g.Features)
                 .HasForeignKey(f => f.GameId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder
+                .HasMany(f => f.Powers)
+                .WithOne(p => p.Feature)
+                .HasForeignKey(p => p.FeatureId)
+                .OnDelete(DeleteBehavior.NoAction);
             #endregion
         }
     }
