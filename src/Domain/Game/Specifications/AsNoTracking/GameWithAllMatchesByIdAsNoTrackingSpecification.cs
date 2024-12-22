@@ -6,7 +6,7 @@ namespace Domain.Game.Specifications.AsNoTracking
     {
         public GameWithAllMatchesByIdAsNoTrackingSpecification(Guid id)
         {
-            base.Query
+            Query
                 .Include(game => game.Matches)
                 .Where(game => game.Id == id)
                 .AsNoTracking();

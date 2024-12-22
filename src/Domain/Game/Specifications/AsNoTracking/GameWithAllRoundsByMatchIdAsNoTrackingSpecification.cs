@@ -2,13 +2,13 @@
 
 namespace Domain.Game.Specifications.AsNoTracking
 {
-    public class GameWithAllPlayersByMatchIdAsNoTrackingSpecification : SingleResultSpecification<GameAggregate>
+    public class GameWithAllRoundsByMatchIdAsNoTrackingSpecification : SingleResultSpecification<GameAggregate>
     {
-        public GameWithAllPlayersByMatchIdAsNoTrackingSpecification(Guid matchId)
+        public GameWithAllRoundsByMatchIdAsNoTrackingSpecification(Guid matchId)
         {
             Query
                 .Include(game => game.Matches.Where(match => match.Id == matchId))
-                .ThenInclude(match => match.Players)
+                .ThenInclude(match => match.Rounds)
                 .Where(game => game.Matches.Any(match => match.Id == matchId))
                 .AsNoTracking();
         }

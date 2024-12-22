@@ -46,7 +46,12 @@ namespace Domain.Game.Entities
             return matchCardsToGive;
         }
 
-        public bool MatchIsFinish()
+        public List<PlayerEntity.PlayerCardEntity> PickUpPlayerCardFromPlayers()
+        {
+            return Players.Select(player => player.PickUpPlayerCard()).ToList();
+        }
+
+        public bool IsFinishAfterRound()
         {
             var availablePlayers = AvailablePlayers();
 
@@ -82,6 +87,29 @@ namespace Domain.Game.Entities
         public void RemoveSinglePlayer()
         {
             Players.Remove(SinglePlayer());
+        }
+
+        public RoundEntity AddRound()
+        {
+            var round = new RoundEntity
+            {
+                MatchId = Id
+            };
+
+            Rounds.Add(round);
+
+            return round;
+        }
+
+        public RoundEntity SingleRound()
+        {
+            return Rounds
+                .SingleOrDefault() ?? throw new SingleRoundNotFoundException();
+        }
+
+        public void RemoveSingleRound()
+        {
+            Rounds.Remove(SingleRound());
         }
 
         public class MatchCardEntity() : EntityBase<Guid>

@@ -73,12 +73,11 @@ namespace Domain.Game
             Cards.Remove(SingleCard());
         }
 
-        public MatchEntity AddMatch(bool isFinish)
+        public MatchEntity AddMatch()
         {
             var match = new MatchEntity
             {
-                GameId = Id,
-                IsFinish = isFinish
+                GameId = Id
             };
 
             Matches.Add(match);

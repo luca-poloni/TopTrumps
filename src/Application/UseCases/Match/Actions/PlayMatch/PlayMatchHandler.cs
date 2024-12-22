@@ -3,7 +3,7 @@ using Domain.Game;
 using Domain.Game.Specifications.AsTracking;
 using MediatR;
 
-namespace Application.UseCases.Match.Actions.PlayGame
+namespace Application.UseCases.Match.Actions.PlayMatch
 {
     internal sealed class PlayMatchHandler(IRepository<GameAggregate> repository) : IRequestHandler<PlayMatchRequest>
     {
@@ -19,7 +19,7 @@ namespace Application.UseCases.Match.Actions.PlayGame
 
             match.AddMatchCards();
 
-            var matchCardsPerPlayer =  match.MatchCardsPerPlayer();
+            var matchCardsPerPlayer = match.MatchCardsPerPlayer();
 
             match.GiveMatchCardsToPlayers(matchCardsPerPlayer);
 

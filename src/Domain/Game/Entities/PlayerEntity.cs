@@ -1,5 +1,6 @@
 ﻿using Ardalis.SharedKernel;
 using Domain.Common.Primitives;
+using Domain.Game.Exceptions;
 
 namespace Domain.Game.Entities
 {
@@ -9,6 +10,7 @@ namespace Domain.Game.Entities
         public string Name { get; set; } = null!;
         public MatchEntity Match { get; set; } = null!;
         public List<PlayerCardEntity> PlayerCards { get; set; } = [];
+        public List<RoundEntity> WinnerRounds { get; set; } = [];
 
         public void Update(string name)
         {
@@ -37,7 +39,16 @@ namespace Domain.Game.Entities
 
         public void TakePlayerCards(List<PlayerCardEntity> playerCards)
         {
-            playerCards.ForEach(cardPlayer => cardPlayer.ChangePlayerTo(this));
+            PlayerCards.AddRange(playerCards);
+        }
+
+        public PlayerCardEntity PickUpPlayerCard()
+        {
+            var playerCard = PlayerCards.SingleOrDefault() ?? throw new SinglePlayerCardNotFoundException();
+
+            PlayerCards.Remove(playerCard);
+
+            return playerCard;
         }
 
         public class PlayerCardEntity() : EntityBase<Guid>
@@ -52,11 +63,6 @@ namespace Domain.Game.Entities
             {
                 Player = player;
                 MatchCard = matchCard;
-            }
-
-            public void ChangePlayerTo(PlayerEntity player)
-            {
-                Player = player;
             }
         }
     }
