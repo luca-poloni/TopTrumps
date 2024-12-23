@@ -35,7 +35,7 @@ namespace WebAPI.Dependencies
                 if (context.ApiDescription.RelativePath != null && context.ApiDescription.RelativePath.StartsWith("auth"))
                 {
                     operation.Tags.Clear();
-                    operation.Tags.Add(new OpenApiTag { Name = "Authentication" }); 
+                    operation.Tags.Add(new OpenApiTag { Name = "Authentications" }); 
                 }
             }
         }
