@@ -24,6 +24,17 @@ namespace Infrastructure.Configurations
             builder
                 .Property(pc => pc.MatchCardId)
                 .IsRequired();
+
+            builder
+                .Property(pc => pc.Created)
+                .IsRequired();
+
+            builder
+                .Property(pc => pc.LastModified)
+                .IsRequired();
+
+            builder
+                .Property(pc => pc.Deleted);
             #endregion
 
             #region Relationships
@@ -44,6 +55,11 @@ namespace Infrastructure.Configurations
                 .WithOne(rc => rc.PlayerCard)
                 .HasForeignKey(rc => rc.PlayerCardId)
                 .OnDelete(DeleteBehavior.NoAction);
+            #endregion
+
+            #region Filters
+            builder
+                .HasQueryFilter(pc => !pc.Deleted.HasValue);
             #endregion
         }
     }

@@ -1,5 +1,4 @@
-﻿using Ardalis.SharedKernel;
-using Domain.Common.Primitives;
+﻿using Domain.Common.Primitives;
 using Domain.Game.Exceptions;
 
 namespace Domain.Game.Entities
@@ -51,7 +50,7 @@ namespace Domain.Game.Entities
             return playerCard;
         }
 
-        public class PlayerCardEntity() : EntityBase<Guid>
+        public class PlayerCardEntity() : BaseAuditableDateEntity
         {
             public Guid PlayerId { get; set; } = default;
             public Guid MatchCardId { get; set; } = default;

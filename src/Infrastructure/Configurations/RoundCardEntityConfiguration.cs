@@ -24,6 +24,17 @@ namespace Infrastructure.Configurations
             builder
                 .Property(rc => rc.PlayerCardId)
                 .IsRequired();
+
+            builder
+                .Property(rc => rc.Created)
+                .IsRequired();
+
+            builder
+                .Property(rc => rc.LastModified)
+                .IsRequired();
+
+            builder
+                .Property(rc => rc.Deleted);
             #endregion
 
             #region Relationships
@@ -40,6 +51,11 @@ namespace Infrastructure.Configurations
                 .WithMany(c => c.RoundCards)
                 .HasForeignKey(rc => rc.PlayerCardId)
                 .OnDelete(DeleteBehavior.NoAction);
+            #endregion
+
+            #region Filters
+            builder
+                .HasQueryFilter(rc => !rc.Deleted.HasValue);
             #endregion
         }
     }

@@ -1,5 +1,4 @@
-﻿using Ardalis.SharedKernel;
-using Domain.Common.Primitives;
+﻿using Domain.Common.Primitives;
 using Domain.Game.Exceptions;
 
 namespace Domain.Game.Entities
@@ -39,7 +38,7 @@ namespace Domain.Game.Entities
             return RoundCards.Select(roundCard => roundCard.PlayerCard).ToList();
         }
 
-        public class RoundCardEntity() : EntityBase<Guid>
+        public class RoundCardEntity() : BaseAuditableDateEntity
         {
             public Guid RoundId { get; set; } = default;
             public Guid PlayerCardId { get; set; } = default;

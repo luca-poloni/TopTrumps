@@ -1,57 +1,58 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Common.Primitives;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Infrastructure.Interceptors
 {
-    public class AuditableEntityInterceptor(IUser user, TimeProvider dateTime) : SaveChangesInterceptor
+    internal sealed class AuditableEntityInterceptor(IUser user, TimeProvider timeProvider) : SaveChangesInterceptor
     {
         public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
         {
-            UpdateEntities(eventData.Context);
+            if (eventData.IsValid())
+                UpdateEntities(eventData.Context);
 
             return base.SavingChanges(eventData, result);
         }
 
         public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
         {
-            UpdateEntities(eventData.Context);
+            if (eventData.IsValid())
+                UpdateEntities(eventData.Context);
 
             return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
 
-        public void UpdateEntities(DbContext? context)
+        private void UpdateEntities(DbContext? context)
         {
-            if (context == default) 
+            if (context is null)
                 return;
+
+            var utcNow = timeProvider.GetUtcNow();
 
             foreach (var entry in context.ChangeTracker.Entries<BaseAuditableEntity>())
             {
-                if (entry.State is EntityState.Added or EntityState.Modified || entry.HasChangedOwnedEntities())
+                switch (entry.State)
                 {
-                    var utcNow = dateTime.GetUtcNow();
-
-                    if (entry.State == EntityState.Added)
-                    {
+                    case EntityState.Added:
                         entry.Entity.CreatedBy = user.Id;
                         entry.Entity.Created = utcNow;
-                    }
-
-                    entry.Entity.LastModifiedBy = user.Id;
-                    entry.Entity.LastModified = utcNow;
+                        break;
+                    case EntityState.Deleted:
+                        entry.State = EntityState.Modified;
+                        entry.Entity.DeletedBy = user.Id;
+                        entry.Entity.Deleted = utcNow;
+                        break;
                 }
+
+                entry.Entity.LastModifiedBy = user.Id;
+                entry.Entity.LastModified = utcNow;
             }
         }
     }
 
     public static class Extensions
     {
-        public static bool HasChangedOwnedEntities(this EntityEntry entry) =>
-            entry.References.Any(r =>
-                r.TargetEntry != null &&
-                r.TargetEntry.Metadata.IsOwned() &&
-                (r.TargetEntry.State == EntityState.Added || r.TargetEntry.State == EntityState.Modified));
+        public static bool IsValid(this DbContextEventData? eventData) => eventData?.Context is not null;
     }
 }

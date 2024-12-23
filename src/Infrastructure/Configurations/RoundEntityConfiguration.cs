@@ -37,6 +37,12 @@ namespace Infrastructure.Configurations
 
             builder
                 .Property(r => r.LastModifiedBy);
+
+            builder
+                .Property(r => r.Deleted);
+
+            builder
+                .Property(r => r.DeletedBy);
             #endregion
 
             #region Relationships
@@ -57,6 +63,11 @@ namespace Infrastructure.Configurations
                 .WithOne(rc => rc.Round)
                 .HasForeignKey(rc => rc.RoundId)
                 .OnDelete(DeleteBehavior.NoAction);
+            #endregion
+
+            #region Filters
+            builder
+                .HasQueryFilter(r => !r.Deleted.HasValue);
             #endregion
         }
     }

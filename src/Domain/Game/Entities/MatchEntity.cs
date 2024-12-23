@@ -1,5 +1,4 @@
-﻿using Ardalis.SharedKernel;
-using Domain.Common.Primitives;
+﻿using Domain.Common.Primitives;
 using Domain.Game.Exceptions;
 
 namespace Domain.Game.Entities
@@ -112,7 +111,7 @@ namespace Domain.Game.Entities
             Rounds.Remove(SingleRound());
         }
 
-        public class MatchCardEntity() : EntityBase<Guid>
+        public class MatchCardEntity() : BaseAuditableDateEntity
         {
             public Guid MatchId { get; set; } = default;
             public Guid CardId { get; set; } = default;

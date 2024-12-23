@@ -15,25 +15,36 @@ namespace Infrastructure.Configurations
 
             #region Properties
             builder
-                .Property(f => f.Id);
+                .Property(mc => mc.Id);
 
             builder
-                .Property(f => f.MatchId)
+                .Property(mc => mc.MatchId)
                 .IsRequired();
 
             builder
-                .Property(f => f.CardId)
+                .Property(mc => mc.CardId)
                 .IsRequired();
 
             builder
                 .Property(mc => mc.Used)
                 .IsRequired();
+
+            builder
+                .Property(mc => mc.Created)
+                .IsRequired();
+
+            builder
+                .Property(mc => mc.LastModified)
+                .IsRequired();
+
+            builder
+                .Property(mc => mc.Deleted);
             #endregion
 
             #region Relationships
             builder
                 .HasOne(mc => mc.Match)
-                .WithMany(m => m.MatchCards)
+                .WithMany(mc => mc.MatchCards)
                 .HasForeignKey(mc => mc.MatchId)
                 .OnDelete(DeleteBehavior.NoAction);
 
@@ -48,6 +59,11 @@ namespace Infrastructure.Configurations
                 .WithOne(pc => pc.MatchCard)
                 .HasForeignKey(pc => pc.MatchCardId)
                 .OnDelete(DeleteBehavior.NoAction);
+            #endregion
+
+            #region Filters
+            builder
+                .HasQueryFilter(mc => !mc.Deleted.HasValue);
             #endregion
         }
     }
