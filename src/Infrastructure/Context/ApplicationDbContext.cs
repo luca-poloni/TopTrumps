@@ -1,11 +1,14 @@
 ﻿using Domain.Game;
 using Domain.Game.Entities;
+using Infrastructure.Identity;
+using Infrastructure.Users;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Infrastructure.Context
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUserIdentity, ApplicationRoleIdentity, string>(options)
     {
         public DbSet<CardEntity> Cards => Set<CardEntity>();
         public DbSet<FeatureEntity> Features => Set<FeatureEntity>();

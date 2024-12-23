@@ -1,6 +1,7 @@
 ﻿using Application.UseCases.Game.Queries.GetAllGames;
 using Ardalis.ApiEndpoints;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -8,6 +9,7 @@ namespace WebAPI.Endpoints.Game
 {
     public class GetAllGamesEndpoint(IMediator mediator) : EndpointBaseAsync.WithoutRequest.WithActionResult<IEnumerable<GetAllGamesResponse>>
     {
+        [Authorize(Roles = "Admin")]
         [HttpGet("games/getAll")]
         [SwaggerOperation(OperationId = "Games.GetAll", Tags = ["Games"])]
         public override async Task<ActionResult<IEnumerable<GetAllGamesResponse>>> HandleAsync(CancellationToken cancellationToken = default)

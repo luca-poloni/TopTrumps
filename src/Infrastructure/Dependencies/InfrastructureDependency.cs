@@ -1,7 +1,12 @@
 ﻿using Ardalis.SharedKernel;
 using Infrastructure.Context;
+using Infrastructure.Identity;
 using Infrastructure.Interceptors;
 using Infrastructure.Repositories;
+using Infrastructure.Users;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +19,7 @@ namespace Infrastructure.Dependencies
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddContext(configuration);
+            services.AddIdentity();
             services.AddRepositories();
 
             return services;
@@ -31,9 +37,19 @@ namespace Infrastructure.Dependencies
 
             services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
 
-            services.AddDbContext<ApplicationDbContext>((sp, options) => 
+            services.AddDbContext<ApplicationDbContext>((sp, options) =>
                 options.UseSqlServer(connectionString)
                     .AddInterceptors(sp.GetRequiredService<ISaveChangesInterceptor>()));
+
+            return services;
+        }
+
+        private static IServiceCollection AddIdentity(this IServiceCollection services)
+        {
+            services.AddIdentityApiEndpoints<ApplicationUserIdentity>()
+                .AddRoles<ApplicationRoleIdentity>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                        .AddDefaultTokenProviders();
 
             return services;
         }
@@ -44,6 +60,14 @@ namespace Infrastructure.Dependencies
             services.AddScoped(typeof(IReadRepository<>), typeof(ApplicationRepository<>));
 
             return services;
+        }
+
+        public static WebApplication MapApplicationIdentity(this WebApplication app)
+        {
+            app.MapGroup("/auth")
+                .MapIdentityApi<ApplicationUserIdentity>();
+
+            return app;
         }
     }
 }

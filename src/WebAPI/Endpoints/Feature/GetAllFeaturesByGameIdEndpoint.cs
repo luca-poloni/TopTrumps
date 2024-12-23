@@ -1,6 +1,7 @@
 ﻿using Application.UseCases.Feature.Queries.GetAllFeaturesByGameId;
 using Ardalis.ApiEndpoints;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -8,6 +9,7 @@ namespace WebAPI.Endpoints.Feature
 {
     public class GetAllFeaturesByGameIdEndpoint(IMediator mediator) : EndpointBaseAsync.WithRequest<GetAllFeaturesByGameIdRequest>.WithActionResult<IEnumerable<GetAllFeaturesByGameIdResponse>>
     {
+        [Authorize(Roles = "Admin")]
         [HttpGet("features/getAllByGameId")]
         [SwaggerOperation(OperationId = "Features.GetAllByGameId", Tags = ["Features"])]
         public override async Task<ActionResult<IEnumerable<GetAllFeaturesByGameIdResponse>>> HandleAsync([FromQuery] GetAllFeaturesByGameIdRequest request, CancellationToken cancellationToken = default)

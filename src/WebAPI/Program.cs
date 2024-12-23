@@ -17,6 +17,7 @@ app.UseSwaggerWebApplication();
 app.UseHttpsRedirection();
 app.UseMiddlewares();
 app.MapControllers();
+app.MapApplicationIdentity();
 app.Run();
 
 public partial class Program { }

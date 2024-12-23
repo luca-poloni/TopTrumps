@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace WebAPI.Dependencies
 {
@@ -10,6 +11,7 @@ namespace WebAPI.Dependencies
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TopTrumps", Version = "v1" });
                 c.EnableAnnotations();
+                c.OperationFilter<AuthenticationOperationFilter>();
             });
 
             return services;
@@ -24,6 +26,18 @@ namespace WebAPI.Dependencies
             }
 
             return app;
+        }
+
+        public class AuthenticationOperationFilter : IOperationFilter
+        {
+            public void Apply(OpenApiOperation operation, OperationFilterContext context)
+            {
+                if (context.ApiDescription.RelativePath != null && context.ApiDescription.RelativePath.StartsWith("auth"))
+                {
+                    operation.Tags.Clear();
+                    operation.Tags.Add(new OpenApiTag { Name = "Authentication" }); 
+                }
+            }
         }
     }
 }
