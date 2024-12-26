@@ -36,6 +36,7 @@ namespace Infrastructure.Dependencies
             services.AddSingleton(TimeProvider.System);
 
             services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+            services.AddScoped<ISaveChangesInterceptor, AuditableDateEntityInterceptor>();
 
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
                 options.UseSqlServer(connectionString)
