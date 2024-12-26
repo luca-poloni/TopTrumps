@@ -15,7 +15,7 @@ namespace Application.UseCases.Match.Commands.UpdateMatch
 
             var match = game.SingleMatch();
 
-            match.Update(request.IsFinish);
+            match.Update(request.WinnerPlayerId);
 
             await repository
                 .SaveChangesAsync(cancellationToken);
@@ -24,7 +24,7 @@ namespace Application.UseCases.Match.Commands.UpdateMatch
             {
                 Id = match.Id,
                 GameId = match.GameId,
-                IsFinish = match.IsFinish
+                WinnerPlayerId = match.WinnerPlayerId
             };
         }
     }

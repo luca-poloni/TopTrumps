@@ -21,7 +21,7 @@ namespace Application.UseCases.Match.Commands.CreateMatch
             {
                 Id = match.Id,
                 GameId = match.GameId,
-                IsFinish = match.IsFinish
+                WinnerPlayerId = match.WinnerPlayerId
             };
         }
     }

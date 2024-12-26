@@ -10,6 +10,7 @@ namespace Domain.Game.Entities
         public MatchEntity Match { get; set; } = null!;
         public List<PlayerCardEntity> PlayerCards { get; set; } = [];
         public List<RoundEntity> WinnerRounds { get; set; } = [];
+        public List<MatchEntity> WinnerMatches { get; set; } = [];
 
         public void Update(string name)
         {

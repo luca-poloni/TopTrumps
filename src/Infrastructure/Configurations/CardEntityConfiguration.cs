@@ -54,20 +54,17 @@ namespace Infrastructure.Configurations
             builder
                 .HasOne(c => c.Game)
                 .WithMany(g => g.Cards)
-                .HasForeignKey(c => c.GameId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(c => c.GameId);
 
             builder
                 .HasMany(c => c.Powers)
                 .WithOne(p => p.Card)
-                .HasForeignKey(p => p.CardId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(p => p.CardId);
 
             builder
                 .HasMany(c => c.MatchCards)
                 .WithOne(cp => cp.Card)
-                .HasForeignKey(cp => cp.CardId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(cp => cp.CardId);
             #endregion
 
             #region Filters

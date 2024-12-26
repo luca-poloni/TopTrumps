@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241223191542_Initial")]
+    [Migration("20241226020742_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -125,18 +125,20 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsFinish")
-                        .HasColumnType("bit");
-
                     b.Property<DateTimeOffset>("LastModified")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("WinnerPlayerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GameId");
+
+                    b.HasIndex("WinnerPlayerId");
 
                     b.ToTable("Matches");
                 });
@@ -632,7 +634,14 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("Domain.Game.Entities.PlayerEntity", "WinnerPlayer")
+                        .WithMany("WinnerMatches")
+                        .HasForeignKey("WinnerPlayerId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.Navigation("Game");
+
+                    b.Navigation("WinnerPlayer");
                 });
 
             modelBuilder.Entity("Domain.Game.Entities.MatchEntity+MatchCardEntity", b =>
@@ -820,6 +829,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Game.Entities.PlayerEntity", b =>
                 {
                     b.Navigation("PlayerCards");
+
+                    b.Navigation("WinnerMatches");
 
                     b.Navigation("WinnerRounds");
                 });

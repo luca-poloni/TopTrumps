@@ -41,16 +41,13 @@ namespace Infrastructure.Configurations
             builder
                 .HasOne(rc => rc.Round)
                 .WithMany(r => r.RoundCards)
-                .HasForeignKey(rc => rc.RoundId)
-                .HasForeignKey(rc => rc.RoundId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(rc => rc.RoundId);
 
 
             builder
                 .HasOne(rc => rc.PlayerCard)
                 .WithMany(c => c.RoundCards)
-                .HasForeignKey(rc => rc.PlayerCardId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(rc => rc.PlayerCardId);
             #endregion
 
             #region Filters

@@ -50,14 +50,12 @@ namespace Infrastructure.Configurations
             builder
                 .HasOne(f => f.Game)
                 .WithMany(g => g.Features)
-                .HasForeignKey(f => f.GameId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(f => f.GameId);
 
             builder
                 .HasMany(f => f.Powers)
                 .WithOne(p => p.Feature)
-                .HasForeignKey(p => p.FeatureId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(p => p.FeatureId);
             #endregion
 
             #region Filters

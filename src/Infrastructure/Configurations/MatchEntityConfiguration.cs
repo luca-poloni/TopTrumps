@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Configurations
 {
-    public class MatchAggregateConfiguration : IEntityTypeConfiguration<MatchEntity>
+    public class MatchEntityConfiguration : IEntityTypeConfiguration<MatchEntity>
     {
         public void Configure(EntityTypeBuilder<MatchEntity> builder)
         {
@@ -22,8 +22,7 @@ namespace Infrastructure.Configurations
                 .IsRequired();
 
             builder
-                .Property(m => m.IsFinish)
-                .IsRequired();
+                .Property(m => m.WinnerPlayerId);
 
             builder
                 .Property(m => m.Created)
@@ -50,26 +49,27 @@ namespace Infrastructure.Configurations
             builder
                 .HasOne(m => m.Game)
                 .WithMany(g => g.Matches)
-                .HasForeignKey(m => m.GameId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(m => m.GameId);
+
+            builder
+                .HasOne(m => m.WinnerPlayer)
+                .WithMany(p => p.WinnerMatches)
+                .HasForeignKey(m => m.WinnerPlayerId);
 
             builder
                 .HasMany(m => m.Players)
                 .WithOne(p => p.Match)
-                .HasForeignKey(p => p.MatchId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(p => p.MatchId);
 
             builder
                 .HasMany(m => m.Rounds)
                 .WithOne(r => r.Match)
-                .HasForeignKey(r => r.MatchId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(r => r.MatchId);
 
             builder
                 .HasMany(m => m.MatchCards)
                 .WithOne(mc => mc.Match)
-                .HasForeignKey(mc => mc.MatchId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(mc => mc.MatchId);
             #endregion
 
             #region Filters

@@ -30,23 +30,36 @@ namespace Infrastructure.Interceptors
 
             var utcNow = timeProvider.GetUtcNow();
 
+            foreach (var entry in context.ChangeTracker.Entries<BaseAuditableDateEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.Created = utcNow;
+                        break;
+                    case EntityState.Deleted:
+                        entry.State = EntityState.Modified;
+                        entry.Entity.Deleted = utcNow;
+                        break;
+                }
+
+                entry.Entity.LastModified = utcNow;
+            }
+
             foreach (var entry in context.ChangeTracker.Entries<BaseAuditableEntity>())
             {
                 switch (entry.State)
                 {
                     case EntityState.Added:
                         entry.Entity.CreatedBy = user.Id;
-                        entry.Entity.Created = utcNow;
                         break;
                     case EntityState.Deleted:
                         entry.State = EntityState.Modified;
                         entry.Entity.DeletedBy = user.Id;
-                        entry.Entity.Deleted = utcNow;
                         break;
                 }
 
                 entry.Entity.LastModifiedBy = user.Id;
-                entry.Entity.LastModified = utcNow;
             }
         }
     }

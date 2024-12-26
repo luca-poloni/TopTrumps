@@ -6,15 +6,16 @@ namespace Domain.Game.Entities
     public class MatchEntity : BaseAuditableEntity
     {
         public Guid GameId { get; set; } = default;
-        public bool IsFinish { get; set; } = default;
+        public Guid? WinnerPlayerId { get; set; }
         public GameAggregate Game { get; set; } = null!;
+        public PlayerEntity? WinnerPlayer { get; set; }
         public List<PlayerEntity> Players { get; set; } = [];
         public List<RoundEntity> Rounds { get; set; } = [];
         public List<MatchCardEntity> MatchCards { get; set; } = [];
 
-        public void Update(bool isFinish)
+        public void Update(Guid winnerPlayerId)
         {
-            IsFinish = isFinish;
+            WinnerPlayerId = winnerPlayerId;
         }
 
         public void AddMatchCards()
@@ -50,13 +51,18 @@ namespace Domain.Game.Entities
             return Players.Select(player => player.PickUpPlayerCard()).ToList();
         }
 
-        public bool IsFinishAfterRound()
+        public PlayerEntity? Winner()
         {
             var availablePlayers = AvailablePlayers();
 
-            IsFinish = availablePlayers != default && availablePlayers.Count == 1;
+            var isNotFinish = availablePlayers == default || availablePlayers.Count > 1;
 
-            return IsFinish;
+            if (isNotFinish)
+                return default;
+
+            WinnerPlayer = availablePlayers?.SingleOrDefault();
+
+            return WinnerPlayer;
         }
 
         private List<PlayerEntity> AvailablePlayers()

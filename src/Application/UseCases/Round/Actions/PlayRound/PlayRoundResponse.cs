@@ -2,7 +2,7 @@
 {
     public record PlayRoundResponse
     {
-        public Guid WinnerPlayerId { get; set; } 
-        public bool MatchIsFinish { get; set; }
+        public Guid WinnerRoundPlayerId { get; set; } 
+        public Guid? WinnerMatchPlayerId { get; set; }
     }
 }

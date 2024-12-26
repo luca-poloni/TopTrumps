@@ -9,6 +9,10 @@ namespace Application.UseCases.Match.Commands.UpdateMatch
             RuleFor(request => request.Id)
                 .NotEmpty()
                 .WithMessage("The id can't be empty.");
+
+            RuleFor(request => request.WinnerPlayerId)
+                .NotEmpty()
+                .WithMessage("The winenr player id can't be empty.");
         }
     }
 }

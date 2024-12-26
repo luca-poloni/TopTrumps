@@ -18,19 +18,19 @@ namespace Application.UseCases.Round.Actions.PlayRound
 
             round.TakeCards(match.PickUpPlayerCardFromPlayers());
 
-            var winnerPlayer = round.Winner(game.SingleFeature());
+            var winnerRoundPlayer = round.Winner(game.SingleFeature());
 
-            winnerPlayer.TakePlayerCards(round.CardsToWinnerPlayer());
+            winnerRoundPlayer.TakePlayerCards(round.CardsToWinnerPlayer());
 
-            var matchIsFinish = match.IsFinishAfterRound();
+            var winnerMatchPlayer = match.Winner();
 
             await repository
                 .SaveChangesAsync(cancellationToken);
 
             return new PlayRoundResponse
             {
-                WinnerPlayerId = winnerPlayer.Id,
-                MatchIsFinish = matchIsFinish
+                WinnerRoundPlayerId = winnerRoundPlayer.Id,
+                WinnerMatchPlayerId = winnerMatchPlayer?.Id
             };
         }
     }

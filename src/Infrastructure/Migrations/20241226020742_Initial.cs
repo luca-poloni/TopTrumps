@@ -226,30 +226,6 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Matches",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsFinish = table.Column<bool>(type: "bit", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    Deleted = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Matches", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Matches_Games_GameId",
-                        column: x => x.GameId,
-                        principalTable: "Games",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Powers",
                 columns: table => new
                 {
@@ -299,10 +275,29 @@ namespace Infrastructure.Migrations
                         column: x => x.CardId,
                         principalTable: "Cards",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Matches",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WinnerPlayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    Deleted = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Matches", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MatchCards_Matches_MatchId",
-                        column: x => x.MatchId,
-                        principalTable: "Matches",
+                        name: "FK_Matches_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
                         principalColumn: "Id");
                 });
 
@@ -485,6 +480,11 @@ namespace Infrastructure.Migrations
                 column: "GameId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Matches_WinnerPlayerId",
+                table: "Matches",
+                column: "WinnerPlayerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PlayerCards_MatchCardId",
                 table: "PlayerCards",
                 column: "MatchCardId");
@@ -528,11 +528,33 @@ namespace Infrastructure.Migrations
                 name: "IX_Rounds_WinnerPlayerId",
                 table: "Rounds",
                 column: "WinnerPlayerId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_MatchCards_Matches_MatchId",
+                table: "MatchCards",
+                column: "MatchId",
+                principalTable: "Matches",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Matches_Players_WinnerPlayerId",
+                table: "Matches",
+                column: "WinnerPlayerId",
+                principalTable: "Players",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Matches_Games_GameId",
+                table: "Matches");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Players_Matches_MatchId",
+                table: "Players");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -573,16 +595,16 @@ namespace Infrastructure.Migrations
                 name: "MatchCards");
 
             migrationBuilder.DropTable(
-                name: "Players");
+                name: "Cards");
 
             migrationBuilder.DropTable(
-                name: "Cards");
+                name: "Games");
 
             migrationBuilder.DropTable(
                 name: "Matches");
 
             migrationBuilder.DropTable(
-                name: "Games");
+                name: "Players");
         }
     }
 }
