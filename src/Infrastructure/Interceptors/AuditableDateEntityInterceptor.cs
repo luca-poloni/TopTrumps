@@ -1,11 +1,10 @@
-﻿using Application.Common.Interfaces;
-using Domain.Common.Primitives;
+﻿using Domain.Common.Primitives;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Infrastructure.Interceptors
 {
-    internal sealed class AuditableEntityInterceptor(IUser user) : SaveChangesInterceptor
+    internal sealed class AuditableDateEntityInterceptor(TimeProvider timeProvider) : SaveChangesInterceptor
     {
         public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
         {
@@ -26,20 +25,22 @@ namespace Infrastructure.Interceptors
             if (context is null)
                 return;
 
-            foreach (var entry in context.ChangeTracker.Entries<BaseAuditableEntity>())
+            var utcNow = timeProvider.GetUtcNow();
+
+            foreach (var entry in context.ChangeTracker.Entries<BaseAuditableDateEntity>())
             {
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = user.Id;
+                        entry.Entity.Created = utcNow;
                         break;
                     case EntityState.Deleted:
                         entry.State = EntityState.Modified;
-                        entry.Entity.DeletedBy = user.Id;
+                        entry.Entity.Deleted = utcNow;
                         break;
                 }
 
-                entry.Entity.LastModifiedBy = user.Id;
+                entry.Entity.LastModified = utcNow;
             }
         }
     }
